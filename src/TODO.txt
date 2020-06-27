@@ -1,0 +1,1 @@
+- ?profile=polymir, ?profile=euterpe pour paramétrer l'interface mieux que le tableau de triplets

@@ -1,0 +1,97 @@
+@import '~sanitize.css';
+@import '~sanitize.css/forms.css';
+@import '~sanitize.css/typography.css';
+
+/* FONTS */
+
+/* @import url(https://indestructibletype.com/fonts/Jost.css); */
+/* @import url(https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css); */
+
+/* code {
+  font-family: 'Fira Code', monospace;
+}
+
+@supports (font-variation-settings: normal) {
+  code {
+    font-family: 'Fira Code VF', monospace;
+  }
+}
+*/
+
+:root {
+  --in: 0s;
+  --mono-font: 'Fira Code VF';
+  --out: 0.5s;
+  --teal: #1693a5;
+}
+
+/* BASE */
+
+body {
+  font-family: Jost;
+}
+
+/* BASE ELEMENTS */
+
+a {
+  color: var(--teal);
+  text-decoration: none !important;
+  transition-duration: var(--out);
+  transition-property: color;
+}
+
+a:hover {
+  color: darkturquoise;
+  cursor: default;
+  transition-duration: var(--in);
+  transition-property: color;
+}
+
+/* RESOURCE */
+
+.resource {
+  font-family: 'Fira Code VF';
+}
+
+table.resource {
+  border-collapse: collapse;
+}
+table.resource,
+table.resource th,
+table.resource td {
+  border: 1px solid #eee;
+}
+table.resource th:nth-child(1),
+table.resource td:nth-child(1) {
+  border-left: 1px solid lightgray;
+}
+table.resource td:nth-child(1) {
+  color: dimgray;
+}
+table.resource td {
+  padding: 0.19em 0.69em;
+  vertical-align: top;
+}
+table.resource th:nth-child(1),
+table.resource td:nth-child(1) {
+  word-break: keep-all;
+}
+table.resource td:nth-child(2) {
+  /* width: 100%; */
+}
+table.resource p {
+  margin: 0;
+}
+table.resource td.p {
+  text-align: right;
+}
+
+table.resource th {
+  color: #333;
+  font-family: Jost;
+  font-weight: normal;
+  letter-spacing: 2px;
+  padding: 0.69em;
+  text-align: left;
+  text-transform: uppercase;
+}
