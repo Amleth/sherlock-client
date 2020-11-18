@@ -1,0 +1,1 @@
+export const SERVICE_BASE_URI = () => window.location.protocol + '//' + window.location.hostname + /api/
