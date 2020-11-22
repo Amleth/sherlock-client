@@ -9,19 +9,19 @@ const Home = () => {
         margin: auto;
         max-width: 800px;
       `}>
-      {makeHex(111, 0, 0, 'DarkTurquoise')}
+      {/* {makeHex(69, 0, 0, 'DarkTurquoise')} */}
       <ul>
         <li>
           <Link to='/about'>About</Link>
         </li>
-        <li>
+        {/* <li>
           <Link to='/meiscores'>MEI Scores</Link>
-        </li>
-        <li>
+        </li> */}
+        {/* <li>
           <Link to='/skosconceptschemes'>SKOS ConceptSchemes</Link>
-        </li>
+        </li> */}
         <li>
-          <Link to='/sparql'>SPARQL endpoint test</Link>
+          <Link to='/yasgui'>Yasgui</Link>
         </li>
       </ul>
     </div>

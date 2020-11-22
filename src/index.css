@@ -2,6 +2,18 @@
 @import '~sanitize.css/forms.css';
 @import '~sanitize.css/typography.css';
 
+/* YASGUI */
+
+.yasgui {
+  border-top: 2px solid darkturquoise !important;
+}
+
+.yasgui .autocompleteWrapper {
+  display: none !important;
+}
+
+/* BASE */
+
 :root {
   --in: 0s;
   --mono-font: 'Fira Code';
@@ -10,8 +22,6 @@
   --teal: #1693a5;
   --resource-margin: 0.69em;
 }
-
-/* BASE */
 
 body {
   font-family: Jost;
@@ -178,6 +188,6 @@ a:hover {
   vertical-align: super;
 }
 
-.resource .oLabels {
+.resource .labels {
   padding-left: 20px;
 }

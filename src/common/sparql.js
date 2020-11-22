@@ -22,7 +22,7 @@ export const fetchSparqlQuery = async query => {
     redirect: 'follow',
     body: `query=${encodeURIComponent(query)}`,
   })
-  return res.json()
+  return await res.json()
 }
 
 export const sparqlEndpoint = async query => {

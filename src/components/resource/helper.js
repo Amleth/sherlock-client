@@ -80,36 +80,40 @@ export function separateSparqlResults(bindings) {
 /**
  * Restructure SPARQL bindings by sorting & grouping them.
  */
-export function restructureSparqlResults(results) {
-  // sort bindings by p.value, object lang, o_label, o.value
+export function restructureSparqlResults(results, key) {
+  // sort bindings by p.value, object lang, <key>_label, key.value
   const sortFn = (b1, b2) => {
     const predicateCompare = b1.p.value.localeCompare(b2.p.value)
     if (predicateCompare !== 0) return predicateCompare
 
-    if (b1.o['xml:lang'] && b2.o['xml:lang'])
-      return b1.o['xml:lang'].localeCompare(b2.o['xml:lang'])
+    if (b1[key]['xml:lang'] && b2[key]['xml:lang'])
+      return b1[key]['xml:lang'].localeCompare(b2[key]['xml:lang'])
 
-    const oCompare = b1.o.value.localeCompare(b2.o.value)
-    if (oCompare !== 0) return oCompare
+    const keyCompare = b1[key].value.localeCompare(b2[key].value)
+    if (keyCompare !== 0) return keyCompare
 
     if (
-      b1.hasOwnProperty('o_label') &&
-      b1.o_label['xml:lang'] &&
-      b2.hasOwnProperty('o_label') &&
-      b2.o_label['xml:lang']
+      b1.hasOwnProperty(key + '_label') &&
+      b1[key + '_label']['xml:lang'] &&
+      b2.hasOwnProperty(key + '_label') &&
+      b2[key + '_label']['xml:lang']
     )
-      return b1.o_label['xml:lang'].localeCompare(b2.o_label['xml:lang'])
+      return b1[key + '_label']['xml:lang'].localeCompare(
+        b2[key + '_label']['xml:lang'],
+      )
 
-    if (b1.hasOwnProperty('o_label') && b2.hasOwnProperty('o_label'))
-      return b1.o_label.value.localeCompare(b2.o_label.value)
-    if (b1.hasOwnProperty('o_label') && !b2.hasOwnProperty('o_label')) return -1
-    if (!b1.hasOwnProperty('o_label') && b2.hasOwnProperty('o_label')) return 1
+    if (b1.hasOwnProperty(key + '_label') && b2.hasOwnProperty(key + '_label'))
+      return b1[key + '_label'].value.localeCompare(b2[key + '_label'].value)
+    if (b1.hasOwnProperty(key + '_label') && !b2.hasOwnProperty(key + '_label'))
+      return -1
+    if (!b1.hasOwnProperty(key + '_label') && b2.hasOwnProperty(key + '_label'))
+      return 1
   }
 
   return lodash(results)
     .sort(sortFn)
     .groupBy('p.value')
-    .mapValues(b => lodash.groupBy(b, 'o.value'))
+    .mapValues(b => lodash.groupBy(b, key + '.value'))
     .value()
 }
 

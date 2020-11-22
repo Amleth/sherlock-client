@@ -6,7 +6,7 @@ import {
 } from './helper'
 import { sparqlEndpoint } from '../../common/sparql'
 
-const query = resourceUri => `
+const outcomingPredicatesQuery = resourceUri => `
 PREFIX dcterms: <http://purl.org/dc/terms/>
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -33,25 +33,66 @@ WHERE {
   }
 }
 `
-
+const incomingPredicatesQuery = resourceUri => `
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+SELECT *
+WHERE {
+  {
+    GRAPH ?g {
+      ?s ?p <${resourceUri}> .
+      OPTIONAL {
+        GRAPH ?spl_g {
+          ?s ?s_p_label ?s_label .
+          FILTER (?s_p_label IN (
+            skos:prefLabel,
+            dcterms:title,
+            foaf:name,
+            rdfs:label
+          ))
+        }
+      }
+    }
+    FILTER (!isBlank(?s))
+  }
+}
+`
 const C = ({ resourceUri }) => {
   resourceUri = decodeURIComponent(resourceUri)
 
-  // i => results carrying triples which denote the identity of the resource
-  // s => results carrying triples of which the resource is subject
-
-  const [iResults, setIResults] = useState({})
-  const [sResults, setSResults] = useState({})
+  const [
+    outcomingIdentityPredicatesResults,
+    setOutcomingIdentityPredicatesResults,
+  ] = useState({})
+  const [outcomingPredicatesResults, setOutcomingPredicatesResults] = useState(
+    {},
+  )
+  const [incomingPredicatesResults, setIncomingPredicatesResults] = useState({})
 
   useEffect(() => {
-    ;(async () => {
-      const res = await sparqlEndpoint(query(resourceUri))
-      let { i, s } = separateSparqlResults(res.results.bindings)
-      i = restructureSparqlResults(i)
-      setIResults(i)
-      s = restructureSparqlResults(s)
-      setSResults(s)
-    })()
+    sparqlEndpoint(outcomingPredicatesQuery(resourceUri)).then(
+      outcomingPredicatesRes => {
+        let { i, s } = separateSparqlResults(
+          outcomingPredicatesRes.results.bindings,
+        )
+        i = restructureSparqlResults(i, 'o')
+        setOutcomingIdentityPredicatesResults(i)
+        s = restructureSparqlResults(s, 'o')
+        setOutcomingPredicatesResults(s)
+      },
+    )
+    sparqlEndpoint(incomingPredicatesQuery(resourceUri)).then(
+      incomingPredicatesRes => {
+        const _ = restructureSparqlResults(
+          incomingPredicatesRes.results.bindings,
+          's',
+        )
+        setIncomingPredicatesResults(_)
+      },
+    )
   }, [resourceUri])
 
   return (
@@ -65,20 +106,25 @@ const C = ({ resourceUri }) => {
         'prédicat',
         'objet',
         'graphe',
-        iResults,
+        outcomingIdentityPredicatesResults,
+        'o',
       )}
       {formatSection(
         'Triplets dont la ressource est sujet',
         'prédicat',
         'objet',
         'graphe',
-        sResults,
+        outcomingPredicatesResults,
+        'o',
       )}
-      <section>
-        <header>
-          <h2>Triplets dont la ressource est objet</h2>
-        </header>
-      </section>
+      {formatSection(
+        'Triplets dont la ressource est objet',
+        'prédicat',
+        'sujet',
+        'graphe',
+        incomingPredicatesResults,
+        's',
+      )}
     </div>
   )
 }
@@ -91,7 +137,7 @@ export default C
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-function formatSection(title, col1, col2, col3, results) {
+function formatSection(title, col1, col2, col3, results, key) {
   return (
     <section>
       <header>
@@ -105,22 +151,22 @@ function formatSection(title, col1, col2, col3, results) {
             <th>{col3}</th>
           </tr>
         </thead>
-        <tbody>{formatResults(results)}</tbody>
+        <tbody>{formatResults(results, key)}</tbody>
       </table>
     </section>
   )
 }
 
-function formatResults(results) {
+function formatResults(results, key) {
   let i = 0
   return Object.entries(results).map(([p, data]) =>
-    Object.entries(data).map(([o, bindings]) => {
-      switch (bindings[0].o.type) {
+    Object.entries(data).map(([k, bindings]) => {
+      switch (bindings[0][key].type) {
         case 'literal':
           return (
             <tr key={i++}>
               <td>{formatBinding(bindings[0].p)}</td>
-              <td>{formatBinding(bindings[0].o)}</td>
+              <td>{formatBinding(bindings[0][key])}</td>
               <td>{formatBinding(bindings[0].g)}</td>
             </tr>
           )
@@ -130,10 +176,10 @@ function formatResults(results) {
               <tr key={i++}>
                 <td>{formatBinding(bindings[0].p)}</td>
                 <td>
-                  <div>{formatBinding(bindings[0].o)}</div>
-                  {bindings[0].hasOwnProperty('o_label') && (
-                    <div className='oLabels'>
-                      {formatBinding(bindings[0].o_label)}
+                  <div>{formatBinding(bindings[0][key])}</div>
+                  {bindings[0].hasOwnProperty(key + '_label') && (
+                    <div className='labels'>
+                      {formatBinding(bindings[0][key + '_label'])}
                     </div>
                   )}
                 </td>
@@ -145,11 +191,13 @@ function formatResults(results) {
               <tr key={i++}>
                 <td>{formatBinding(bindings[0].p)}</td>
                 <td>
-                  <div>{formatBinding(bindings[0].o)}</div>
-                  <div className='oLabels'>
+                  <div>{formatBinding(bindings[0][key])}</div>
+                  <div className='labels'>
                     {bindings
                       .map(_ => (
-                        <span key={i++}>{formatBinding(_.o_label)}</span>
+                        <span key={i++}>
+                          {formatBinding(_[key + '_label'])}
+                        </span>
                       ))
                       .reduce((prev, curr) => [
                         prev,
