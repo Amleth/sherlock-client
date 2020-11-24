@@ -5,6 +5,7 @@ import {
   separateSparqlResults,
 } from './helper'
 import { sparqlEndpoint } from '../../common/sparql'
+import { Selector } from '../viewers/Selector'
 
 const outcomingPredicatesQuery = resourceUri => `
 PREFIX dcterms: <http://purl.org/dc/terms/>
@@ -109,6 +110,13 @@ const C = ({ resourceUri }) => {
         outcomingIdentityPredicatesResults,
         'o',
       )}
+      <section>
+        <header>
+          <h2>Visualisations disponibles</h2>
+          {Object.keys(outcomingPredicatesResults).length > 0 &&
+            Selector(outcomingPredicatesResults)}
+        </header>
+      </section>
       {formatSection(
         'Triplets dont la ressource est sujet',
         'prédicat',
