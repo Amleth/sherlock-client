@@ -113,9 +113,9 @@ const C = ({ resourceUri }) => {
       <section>
         <header>
           <h2>Visualisations disponibles</h2>
-          {Object.keys(outcomingPredicatesResults).length > 0 &&
-            Selector(outcomingPredicatesResults)}
         </header>
+        {Object.keys(outcomingPredicatesResults).length > 0 &&
+          Selector(outcomingPredicatesResults)}
       </section>
       {formatSection(
         'Triplets dont la ressource est sujet',
