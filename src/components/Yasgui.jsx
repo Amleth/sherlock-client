@@ -4,7 +4,7 @@ import '@triply/yasgui/build/yasgui.min.css'
 
 function C() {
   useEffect(() => {
-    const yg = new Yasgui(document.getElementById('yasgui'), {
+    new Yasgui(document.getElementById('yasgui'), {
       requestConfig: {
         endpoint: process.env.REACT_APP_SHEROCK_SPARQL_ENDPOINT,
         method: 'POST',

@@ -4,10 +4,8 @@ import About from './components/sherlock/About'
 import DescribeSherlockId from './components/resource/DescribeSherlockId'
 import DescribeUri from './components/resource/DescribeUri'
 import Yasgui from './components/Yasgui'
-// import MeiScores from './view/components/MeiScores'
-// import SkosConceptSchemes from './view/components/SkosConceptSchemes'
-// import Resource from './view/components/Resource'
-// import ResourceNS from './view/components/ResourceNS'
+import Mei from './components/viewers/Mei'
+
 const App = () => {
   return (
     <Router basename={'/' + process.env.REACT_APP_BASENAME}>
@@ -21,10 +19,7 @@ const App = () => {
       <Route path='/id/:id' component={DescribeSherlockId} exact />
       <Route path='/describe/:uri' component={DescribeUri} exact />
       <Route path='/yasgui' component={Yasgui} exact />
-      {/* <Route path='/skosconceptschemes' component={SkosConceptSchemes} exact />
-      <Route path='/meiscores' component={MeiScores} exact />
-      <Route path='/ns/:path*' component={ResourceNS} exact />
-      <Route path='/sparql' component={Test} exact /> */}
+      <Route path='/mei' component={Mei} exact />
     </Router>
   )
 }

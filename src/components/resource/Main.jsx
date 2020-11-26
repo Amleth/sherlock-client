@@ -114,8 +114,10 @@ const C = ({ resourceUri }) => {
         <header>
           <h2>Visualisations disponibles</h2>
         </header>
-        {Object.keys(outcomingPredicatesResults).length > 0 &&
-          Selector(outcomingPredicatesResults)}
+        <div style={{ textAlign: 'center' }}>
+          {Object.keys(outcomingPredicatesResults).length > 0 &&
+            Selector(resourceUri, outcomingPredicatesResults)}
+        </div>
       </section>
       {formatSection(
         'Triplets dont la ressource est sujet',
