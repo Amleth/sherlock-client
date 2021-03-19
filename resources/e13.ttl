@@ -1,0 +1,64 @@
+@base <http://data-iremus.huma-num.fr/id/> .
+
+@prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<a5e2214b-4159-4039-8b36-01af2778f05c>
+    a crm:E21_Person ;
+    crm:P1_is_identified_by "Blip" ;
+    <http://caca> <7354a934-95ba-46d4-b6b1-0fb83ea43f64> ;
+    .
+
+<1392f71e-1ba1-45d9-b2ea-98fe3afdf78f>
+    a crm:E21_Person ;
+    crm:P1_is_identified_by "Blop" ;
+    .
+
+<7354a934-95ba-46d4-b6b1-0fb83ea43f64>
+    a crm:E1_CRM_Entity ;
+    crm:P1_is_identified_by "Cette chose là" ;
+    crm:P2_has_type <fcb2bb9b-1985-4a8a-8352-54b47bec0b5a> ;
+    .
+
+<2b754e95-c8ad-4b35-853c-349d3d382cd0>
+    a crm:E55_Type ;
+    crm:P1_is_identified_by "Couleur" ;
+    .
+
+<63b9e010-2f59-49eb-b39e-643e7867d69b>
+    crm:P1_is_identified_by "Bleu" ;
+    .
+
+<6c59ba96-9ff8-404c-93b0-982c28493b78>
+    crm:P1_is_identified_by "Rouge" ;
+    .
+
+<821bc6f3-f3d5-4482-9735-fa69f70c823c>
+    a crm:E13_Attribute_Assignment ;
+    dcterms:created "2020-12-27T08:27:41+0000"^^xsd:dateTime ;
+    crm:P14_carried_out_by <1392f71e-1ba1-45d9-b2ea-98fe3afdf78f> ;
+    crm:P140_assigned_attribute_to <7354a934-95ba-46d4-b6b1-0fb83ea43f64> ;
+    crm:P177_assigned_property_type <2b754e95-c8ad-4b35-853c-349d3d382cd0> ;
+    crm:P141_assigned <63b9e010-2f59-49eb-b39e-643e7867d69b> ;
+    .
+
+<64d456a7-df2b-4b87-9d99-b5a583791e6f>
+    a crm:E13_Attribute_Assignment ;
+    dcterms:created "2021-03-15T16:13:22+0000"^^xsd:dateTime ;
+    crm:P14_carried_out_by <a5e2214b-4159-4039-8b36-01af2778f05c> ;
+    crm:P140_assigned_attribute_to <7354a934-95ba-46d4-b6b1-0fb83ea43f64> ;
+    crm:P177_assigned_property_type <2b754e95-c8ad-4b35-853c-349d3d382cd0> ;
+    crm:P141_assigned <6c59ba96-9ff8-404c-93b0-982c28493b78> ;
+    .
+
+<7ec5d3ac-5c03-4c00-8952-c12e31abf9ac>
+    a crm:E13_Attribute_Assignment ;
+    dcterms:created "2021-03-15T16:13:22+0000"^^xsd:dateTime ;
+    crm:P14_carried_out_by <a5e2214b-4159-4039-8b36-01af2778f05c> ;
+    crm:P140_assigned_attribute_to <76f87e71-d39f-4a8b-b18d-11df8419466a> ;
+    crm:P177_assigned_property_type <http://pipi> ;
+    crm:P141_assigned <7354a934-95ba-46d4-b6b1-0fb83ea43f64> ;
+    .

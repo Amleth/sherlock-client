@@ -1,0 +1,88 @@
+:root {
+  --resource-margin: 0.69em;
+  --bar-size: 80px;
+}
+
+h1 + div {
+  border-top: 1px solid #666;
+  font-family: var(--mono-font);
+  font-size: 1.11em;
+  height: var(--bar-size);
+  padding-top: 9px;
+}
+
+h2 {
+  color: #ddd;
+  font-size: 150%;
+  font-weight: 300;
+  letter-spacing: 6px;
+  margin: 0 0 40px 0;
+  padding: 0;
+  text-transform: uppercase;
+}
+
+section + section {
+  margin-top: 40px;
+}
+
+/* TABLEAUX */
+
+table {
+  border-collapse: collapse;
+  font-family: var(--mono-font);
+  width: 100%;
+}
+th,
+td {
+  vertical-align: top;
+  word-break: keep-all;
+}
+th {
+  border-bottom: 1px solid #333;
+  border-top: 1px solid #000;
+  color: #ddd;
+  font-family: Jost;
+  font-weight: normal;
+  letter-spacing: 3px;
+  padding: var(--resource-margin);
+  text-align: left;
+  text-transform: lowercase;
+}
+td {
+  padding: 0.11em var(--resource-margin);
+}
+td:nth-child(2) {
+  width: 100%;
+}
+th:nth-child(1),
+td:nth-child(1) {
+  border-left: none;
+}
+th:nth-child(3),
+td:nth-child(3) {
+  border-right: none;
+}
+td {
+  border: 1px solid #333;
+}
+
+/* CONTENU */
+
+.textValue {
+  color: #eee;
+  font-family: var(--text-font);
+}
+.label-separator {
+  color: lightgray;
+}
+.xml-lang {
+  color: lightgray;
+  font-family: var(--text-font);
+  position: relative;
+  font-size: 0.8em;
+  line-height: 1em;
+  vertical-align: super;
+}
+.labels {
+  padding-left: 20px;
+}

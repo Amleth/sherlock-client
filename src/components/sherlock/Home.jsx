@@ -1,6 +1,5 @@
-import { css } from '@emotion/css'
+import { css } from '@emotion/react'
 import { Link } from 'react-router-dom'
-import { makeHex } from '../../style'
 
 const Home = () => {
   return (
@@ -8,11 +7,12 @@ const Home = () => {
       className={css`
         margin: auto;
         max-width: 800px;
-      `}>
+      `}
+    >
       {/* {makeHex(69, 0, 0, 'DarkTurquoise')} */}
       <ul>
         <li>
-          <Link to='/about'>About</Link>
+          <Link to="/about">À propos</Link>
         </li>
         {/* <li>
           <Link to='/meiscores'>MEI Scores</Link>
@@ -21,7 +21,7 @@ const Home = () => {
           <Link to='/skosconceptschemes'>SKOS ConceptSchemes</Link>
         </li> */}
         <li>
-          <Link to='/yasgui'>Yasgui</Link>
+          <Link to="/yasgui">Yasgui</Link>
         </li>
       </ul>
     </div>

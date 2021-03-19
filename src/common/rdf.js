@@ -3,6 +3,7 @@
 //
 
 export const BIBO_BASE = 'http://purl.org/ontology/bibo/'
+export const LRMOO_BASE = 'http://www.cidoc-crm.org/lrmoo/'
 export const CIDOC_CRM = 'http://www.cidoc-crm.org/cidoc-crm/'
 export const CRMDIG = 'http://www.ics.forth.gr/isl/CRMdig/'
 export const DC_BASE = 'http://purl.org/dc/elements/1.1/'
@@ -31,6 +32,7 @@ export const RDF_PREFIXES = {
   [IREMUS_RESOURCE_BASE]: '',
   [IREMUS_NS_BASE]: 'ns',
   [MUSRAD30_BASE]: 'musrad30',
+  [LRMOO_BASE]: 'lrmoo',
   [OWL_BASE]: 'owl',
   [RDF_BASE]: 'rdf',
   [RDFS_BASE]: 'rdfs',
@@ -44,6 +46,7 @@ export const PRIORITIZED_RDF_PREFIXES = Object.entries(RDF_PREFIXES).sort(
 )
 
 export const LABEL_PREDICATES = [
+  CIDOC_CRM + 'P1_is_identified_by',
   DC_BASE + 'title',
   DCTERMS_BASE + 'title',
   FOAF_BASE + 'familyName',
@@ -87,3 +90,10 @@ export const LANGS_ORDER = ['fr', 'en', 'it', 'de', 'es']
 //   else res = a_.localeCompare(b_)
 //   return res
 // }
+
+export function getCode(uri) {
+  if (uri.startsWith(CIDOC_CRM)) {
+    return uri.split('/').slice(-1)[0].split('_')[0]
+  }
+  return null
+}

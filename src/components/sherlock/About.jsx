@@ -1,4 +1,4 @@
-import { css } from '@emotion/css'
+import { css } from '@emotion/react'
 
 const About = () => {
   return (
@@ -6,7 +6,8 @@ const About = () => {
       className={css`
         margin: 3em auto;
         max-width: 666px;
-      `}>
+      `}
+    >
       {/* <span role='img' aria-label='night'>
         🌆
       </span>
@@ -20,20 +21,17 @@ const About = () => {
         🌌
       </span> */}
       Nous sommes l'
-      <a href='https://www.iremus.cnrs.fr' target='_blank' rel='noreferrer'>
+      <a href="https://www.iremus.cnrs.fr" target="_blank" rel="noreferrer">
         IReMus
       </a>{' '}
       🎵, UMR 8223{' '}
-      <a href='http://www.cnrs.fr' target='_blank' rel='noreferrer'>
+      <a href="http://www.cnrs.fr" target="_blank" rel="noreferrer">
         CNRS
       </a>
       .
       <br />
       SHERLOCK est financé par l'appel à projets Émergence 2019—2021 de{' '}
-      <a
-        href='https://www.sorbonne-universite.fr'
-        target='_blank'
-        rel='noreferrer'>
+      <a href="https://www.sorbonne-universite.fr" target="_blank" rel="noreferrer">
         Sorbonne Université
       </a>
       .

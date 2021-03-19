@@ -1,10 +1,10 @@
 import { useParams } from 'react-router-dom'
-import Main from './Main'
+import Resource from './Resource'
 
 const C = () => {
   const { id } = useParams()
 
-  return <Main resourceUri={'http://data-iremus.huma-num.fr/id/' + id} />
+  return <Resource resourceUri={'http://data-iremus.huma-num.fr/id/' + id} />
 }
 
 export default C

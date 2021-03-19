@@ -1,66 +1,8 @@
 import lodash from 'lodash'
-import React from 'react'
 import {
-  DATA_IREMUS_BASE,
-  IREMUS_RESOURCE_BASE,
-  RDF_PREFIXES,
+  CIDOC_CRM,
   RESOURCE_IDENTITY_PREDICATES,
 } from '../../common/rdf'
-
-const APP_BASE_URI =
-  window.location.protocol +
-  '//' +
-  window.location.hostname +
-  ':' +
-  window.location.port +
-  '/' +
-  process.env.REACT_APP_BASENAME +
-  '/'
-
-////////////////////////////////////////////////////////////////////////////////
-//
-// FORMATING
-//
-////////////////////////////////////////////////////////////////////////////////
-
-export const formatBinding = b => {
-  if (b.type === 'uri') {
-    let label = b.value
-    for (const prefix in RDF_PREFIXES) {
-      if (b.value.startsWith(prefix)) {
-        label =
-          (RDF_PREFIXES[prefix] ? RDF_PREFIXES[prefix] + ':' : '') +
-          b.value.substr(prefix.length)
-        break
-      }
-    }
-    let href = b.value
-    if (href.startsWith(DATA_IREMUS_BASE))
-      href = href.replace(DATA_IREMUS_BASE, APP_BASE_URI)
-    return b.value.startsWith(IREMUS_RESOURCE_BASE) ? (
-      <a href={href}>{label}</a>
-    ) : (
-      <a href={href} target='_blank' rel='noreferrer'>
-        {label}
-      </a>
-    )
-  } else {
-    return (
-      <React.Fragment>
-        <span className='textValue'>{b.value}</span>
-        {b.hasOwnProperty('xml:lang') && (
-          <span className='xml-lang'>@{b['xml:lang']}</span>
-        )}
-      </React.Fragment>
-    )
-  }
-}
-
-////////////////////////////////////////////////////////////////////////////////
-//
-// RESTRUCTURING BINDINGS
-//
-////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Separate SPARQL results in two lists:
@@ -75,6 +17,16 @@ export function separateSparqlResults(bindings) {
     RESOURCE_IDENTITY_PREDICATES.includes(b.p.value) ? i.push(b) : s.push(b)
 
   return { i, s }
+}
+
+export function separateOutcomingE13Results(bindings) {
+  const s = []
+  const e13 = []
+
+  for (const b of bindings)
+    b.p.value === (CIDOC_CRM + 'P140_assigned_attribute_to') ? e13.push(b) : s.push(b)
+
+  return { s, e13 }
 }
 
 /**
@@ -114,6 +66,13 @@ export function restructureSparqlResults(results, key) {
     .sort(sortFn)
     .groupBy('p.value')
     .mapValues(b => lodash.groupBy(b, key + '.value'))
+    .value()
+}
+
+export function restructureSparqlE13Results(results) {
+  return lodash(results)
+    .groupBy('s.value')
+    .mapValues(b => lodash.groupBy(b, 'p.value'))
     .value()
 }
 

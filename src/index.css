@@ -1,6 +1,34 @@
 @import '~sanitize.css';
 @import '~sanitize.css/forms.css';
 @import '~sanitize.css/typography.css';
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300&family=Jost:ital,wght@0,200;0,300;0,400;1,200;1,300;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,200;0,300;0,400;1,200;1,300;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Alegreya:ital@0;1&display=swap');
+
+:root {
+  --text-font: 'Alegreya';
+  --mono-font: 'Fira Code';
+}
+
+body {
+  background-color: black;
+  color: white;
+  font-family: Jost;
+}
+
+a {
+  color: #0bb;
+  text-decoration: none !important;
+  transition-duration: 0.5s;
+  transition-property: color;
+}
+
+a:hover {
+  color: aqua;
+  cursor: default;
+  transition-duration: 0s;
+  transition-property: color;
+}
 
 /* YASGUI */
 
@@ -8,186 +36,6 @@
   border-top: 2px solid darkturquoise !important;
 }
 
-.yasgui .autocompleteWrapper {
+/* .yasgui .autocompleteWrapper {
   display: none !important;
-}
-
-/* BASE */
-
-:root {
-  --in: 0s;
-  --mono-font: 'Fira Code';
-  --text-font: 'Alegreya';
-  --out: 0.5s;
-  --teal: #1693a5;
-  --resource-margin: 0.69em;
-}
-
-body {
-  font-family: Jost;
-}
-
-/* BASE ELEMENTS */
-
-a {
-  color: var(--teal);
-  text-decoration: none !important;
-  transition-duration: var(--out);
-  transition-property: color;
-}
-
-a:hover {
-  color: darkturquoise;
-  cursor: default;
-  transition-duration: var(--in);
-  transition-property: color;
-}
-
-/* SHERLOCK *******************************************************************/
-
-#root > header {
-  align-items: center;
-  /* background: black; */
-  /* background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url(https://www.esa.int/extension/pillars/design/pillars/images/nebula.jpg);
-  background-size: cover; */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  min-height: 150px;
-  text-align: center;
-}
-
-#root > header h1 {
-  color: #555;
-  font-weight: normal;
-  letter-spacing: 11px;
-  text-transform: uppercase;
-  transition: color var(--out);
-}
-#root > header h1:hover {
-  color: DarkTurquoise;
-  transition: color var(--in);
-}
-
-/* RESOURCE *******************************************************************/
-
-.resource {
-  padding: 0 30px 30px 30px;
-}
-
-/* H1 */
-
-.resource > header {
-  border-bottom: 2px solid darkturquoise;
-  border-top: 2px solid darkturquoise;
-  /* background: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)),
-    url(https://www.esa.int/extension/pillars/design/pillars/images/nebula.jpg)
-      no-repeat fixed center; */
-}
-.resource > header {
-  align-items: center;
-  background-color: rgba(0, 255, 255, 0.02);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 15px var(--resource-margin);
-}
-.resource > header > div {
-  color: silver;
-  margin-bottom: 15px;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-}
-.resource > header > h1 {
-  color: darkturquoise;
-  font-family: var(--mono-font);
-  font-size: 1.11em;
-  font-weight: normal;
-  text-align: center;
-  margin: 0;
-}
-
-/* H2 */
-
-.resource > section > header {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 0 var(--resource-margin);
-}
-.resource > section > header > h2 {
-  font-weight: normal;
-  text-align: center;
-}
-.resource > section > header > h2 {
-  color: darkcyan;
-  font-size: 1.33em;
-  letter-spacing: 8px;
-  margin-top: 3em;
-  text-transform: uppercase;
-}
-
-/* Tableau */
-
-.resource table {
-  border-collapse: collapse;
-  font-family: 'Fira Code';
-  width: 100%;
-}
-.resource th,
-.resource td {
-  border: 1px solid #f1f1f1;
-  vertical-align: top;
-  word-break: keep-all;
-}
-.resource th {
-  border-bottom: 1px solid lightgray;
-  border-top: 1px solid lightgray;
-  color: silver;
-  font-family: Jost;
-  font-weight: normal;
-  letter-spacing: 3px;
-  padding: var(--resource-margin);
-  text-align: center;
-  text-transform: lowercase;
-}
-.resource td {
-  padding: 0.11em var(--resource-margin);
-}
-
-.resource td:nth-child(2) {
-  width: 100%;
-}
-.resource th:nth-child(1),
-.resource td:nth-child(1) {
-  border-left: none;
-}
-.resource th:nth-child(3),
-.resource td:nth-child(3) {
-  border-right: none;
-}
-
-/* Contenu */
-
-.resource .textValue {
-  color: dimgray;
-  font-family: var(--text-font);
-}
-.resource .label-separator {
-  color: lightgray;
-}
-.resource .xml-lang {
-  color: lightgray;
-  font-family: var(--text-font);
-
-  position: relative;
-  font-size: 0.8em;
-  line-height: 1em;
-  vertical-align: super;
-}
-
-.resource .labels {
-  padding-left: 20px;
-}
+} */
