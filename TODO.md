@@ -1,0 +1,2 @@
+- identité des o : indiquer le label du P2
+- truc qui tourne style par défaut CRA

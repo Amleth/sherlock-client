@@ -1,6 +1,6 @@
 import lodash from 'lodash'
 import {
-  CIDOC_CRM,
+  CRM_BASE,
   RESOURCE_IDENTITY_PREDICATES,
 } from '../../common/rdf'
 
@@ -24,7 +24,7 @@ export function separateOutcomingE13Results(bindings) {
   const e13 = []
 
   for (const b of bindings)
-    b.p.value === (CIDOC_CRM + 'P140_assigned_attribute_to') ? e13.push(b) : s.push(b)
+    b.p.value === (CRM_BASE + 'P140_assigned_attribute_to') ? e13.push(b) : s.push(b)
 
   return { s, e13 }
 }

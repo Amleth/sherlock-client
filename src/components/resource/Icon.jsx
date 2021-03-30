@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { randomColor } from '../../style'
-import { BAR_SIZE } from './style'
+import { BAR_SIZE } from './Resource.css'
 
 export const style = (backgroundColor) => css`
   background-color: ${backgroundColor || '#' + randomColor()};

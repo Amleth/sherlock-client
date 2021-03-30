@@ -30,7 +30,7 @@ const C = ({ resourceUri }) => {
   return (
     <>
       {Object.entries(outcomingIdentityPredicatesResults).length > 0 && formatSection('Identité de la ressource', 'prédicat', 'objet', 'graphe', outcomingIdentityPredicatesResults, 'o', codes)}
-      {Object.entries(outcomingPredicatesResults).length > 0 && formatSection('Triplets dont la ressource est sujet', 'prédicat', 'objet', 'graphe', outcomingPredicatesResults, 'o')}
+      {Object.entries(outcomingPredicatesResults).length > 0 && formatSection('Triplets <ressource—prédicat—objet>', 'prédicat', 'objet', 'graphe', outcomingPredicatesResults, 'o')}
     </>
   )
 }

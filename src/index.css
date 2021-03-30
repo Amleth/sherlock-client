@@ -17,17 +17,21 @@ body {
 }
 
 a {
-  color: #0bb;
+  background-color: transparent;
+  color: #0dd;
   text-decoration: none !important;
   transition-duration: 0.5s;
-  transition-property: color;
+  transition-property: background-color;
+  /* transition-property: color; */
 }
 
 a:hover {
-  color: aqua;
+  background-color: aqua;
+  color: black;
   cursor: default;
   transition-duration: 0s;
-  transition-property: color;
+  transition-property: background-color;
+  /* transition-property: color; */
 }
 
 /* YASGUI */

@@ -4,8 +4,8 @@
 
 export const BIBO_BASE = 'http://purl.org/ontology/bibo/'
 export const LRMOO_BASE = 'http://www.cidoc-crm.org/lrmoo/'
-export const CIDOC_CRM = 'http://www.cidoc-crm.org/cidoc-crm/'
-export const CRMDIG = 'http://www.ics.forth.gr/isl/CRMdig/'
+export const CRM_BASE = 'http://www.cidoc-crm.org/cidoc-crm/'
+export const CRMDIG_BASE = 'http://www.ics.forth.gr/isl/CRMdig/'
 export const DC_BASE = 'http://purl.org/dc/elements/1.1/'
 export const DCTERMS_BASE = 'http://purl.org/dc/terms/'
 export const FOAF_BASE = 'http://xmlns.com/foaf/0.1/'
@@ -22,8 +22,8 @@ export const SCHEMAORG_BASE = 'http://schema.org/'
 export const SKOS_BASE = 'http://www.w3.org/2004/02/skos/core#'
 
 export const RDF_PREFIXES = {
-  [CIDOC_CRM]: 'crm',
-  [CRMDIG]: 'crmdig',
+  [CRM_BASE]: 'crm',
+  [CRMDIG_BASE]: 'crmdig',
   [BIBO_BASE]: 'bibo',
   [DC_BASE]: 'dc',
   [DCTERMS_BASE]: 'dcterms',
@@ -46,7 +46,7 @@ export const PRIORITIZED_RDF_PREFIXES = Object.entries(RDF_PREFIXES).sort(
 )
 
 export const LABEL_PREDICATES = [
-  CIDOC_CRM + 'P1_is_identified_by',
+  CRM_BASE + 'P1_is_identified_by',
   DC_BASE + 'title',
   DCTERMS_BASE + 'title',
   FOAF_BASE + 'familyName',
@@ -62,6 +62,7 @@ export const RESOURCE_IDENTITY_PREDICATES = [
   RDF_BASE + 'type',
   DCTERMS_BASE + 'creator',
   SKOS_BASE + 'inScheme',
+  RDFS_BASE + 'subClassOf'
 ]
 
 //
@@ -92,7 +93,7 @@ export const LANGS_ORDER = ['fr', 'en', 'it', 'de', 'es']
 // }
 
 export function getCode(uri) {
-  if (uri.startsWith(CIDOC_CRM)) {
+  if (uri.startsWith(CRM_BASE) || uri.startsWith(CRMDIG_BASE)) {
     return uri.split('/').slice(-1)[0].split('_')[0]
   }
   return null

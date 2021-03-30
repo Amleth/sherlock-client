@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import Yasgui from '@triply/yasgui'
 import '@triply/yasgui/build/yasgui.min.css'
 
-const q =
-  'SELECT (COUNT(*) as ?triples) ?g WHERE { GRAPH ?g { ?s ?p ?o } } GROUP BY ?g'
+const q = 'SELECT (COUNT(*) as ?triples) ?g WHERE { GRAPH ?g { ?s ?p ?o } } GROUP BY ?g'
 
-function C() {
+function YasguiC() {
   window.localStorage.removeItem('yagui__config')
 
   useEffect(() => {
@@ -19,7 +19,12 @@ function C() {
     return () => {}
   }, [])
 
-  return <div id='yasgui' />
+  return (
+    <>
+      <Link to="/">🏠</Link>
+      <div id="yasgui" />
+    </>
+  )
 }
 
-export default C
+export default YasguiC

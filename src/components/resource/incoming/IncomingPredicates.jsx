@@ -15,7 +15,7 @@ const C = ({ resourceUri }) => {
     })
   }, [resourceUri])
 
-  return formatSection('Triplets dont la ressource est objet', 'prédicat', 'sujet', 'graphe', data, 's')
+  return formatSection('Triplets <sujet—prédicat—ressource>', 'prédicat', 'sujet', 'graphe', data, 's')
 }
 
 export default C

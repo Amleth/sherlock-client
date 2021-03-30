@@ -6,34 +6,22 @@ import Icon from './Icon'
 import IconLink from './IconLink'
 import IncomingPredicates from './incoming/IncomingPredicates'
 import OutcomingPredicates from './outcoming/OutcomingPredicates'
-import { BAR_SIZE, MARGIN } from './style'
-import { COLOR_MI_MAGENTA, COLOR_MI_ORANGE, COLOR_MI_TEAL } from '../../style'
+import { COLOR_MI_MAGENTA, COLOR_MI_ORANGE, COLOR_MI_TEAL, COLOR_MI_YELLOW } from '../../style'
+import { bar, MARGIN, resource, root } from './Resource.css'
 
-export const PANEL_Spo = 'Spo'
-export const PANEL_E13 = 'E13'
-export const PANEL_spO = 'spO'
+export const VIEW_PO = 'po'
+export const VIEW_E13 = 'e13'
+export const VIEW_PS = 'ps'
+export const VIEW_P106 = 'p106'
 
-const C = ({ resourceUri }) => {
+const C = ({ resourceUri, view }) => {
   resourceUri = decodeURIComponent(resourceUri)
 
-  const [selectedPanel, setSelectedPanel] = useState(PANEL_Spo)
+  const [selectedView, setSelectedView] = useState(view || VIEW_PO)
 
   return (
-    <div
-      css={css`
-        display: flex;
-        flex-direction: row;
-      `}
-    >
-      <div
-        css={css`
-          background-color: #222;
-          display: flex;
-          flex-direction: column;
-          height: 100vh;
-          position: fixed;
-        `}
-      >
+    <div css={root}>
+      <div css={bar}>
         <IconLink backgroundColor="black" uri="/">
           <span
             css={css`
@@ -43,7 +31,7 @@ const C = ({ resourceUri }) => {
             ⌂
           </span>
         </IconLink>
-        <Icon backgroundColor={COLOR_MI_ORANGE} onPress={(e) => setSelectedPanel(PANEL_Spo)}>
+        <Icon backgroundColor={COLOR_MI_ORANGE} onPress={(e) => setSelectedView(VIEW_PO)}>
           <span>S</span>
           <span
             css={css`
@@ -53,10 +41,16 @@ const C = ({ resourceUri }) => {
             po
           </span>
         </Icon>
-        <Icon backgroundColor={COLOR_MI_TEAL} onPress={(e) => setSelectedPanel(PANEL_E13)}>
-          E13
+        <Icon backgroundColor={COLOR_MI_TEAL} onPress={(e) => setSelectedView(VIEW_E13)}>
+          <span
+            css={css`
+              font-size: 0.8em;
+            `}
+          >
+            E13
+          </span>
         </Icon>
-        <Icon backgroundColor={COLOR_MI_MAGENTA} onPress={(e) => setSelectedPanel(PANEL_spO)}>
+        <Icon backgroundColor={COLOR_MI_MAGENTA} onPress={(e) => setSelectedView(VIEW_PS)}>
           <span
             css={css`
               color: rgba(0, 0, 0, 0.3);
@@ -66,42 +60,46 @@ const C = ({ resourceUri }) => {
           </span>
           <span>O</span>
         </Icon>
-      </div>
-      <div
-        css={css`
-          margin: 0 ${MARGIN}px 0 ${BAR_SIZE + MARGIN}px;
-        `}
-      >
-        <h1
-          css={css`
-            color: #ddd;
-            font-size: 200%;
-            font-weight: 300;
-            height: var(--bar-size);
-            letter-spacing: 6px;
-            margin: 0;
-            padding: 0;
-            padding-top: 30px;
-            text-transform: uppercase;
-          `}
-        >
-          Ressource
-        </h1>
-        <div>
+        <Icon backgroundColor={COLOR_MI_YELLOW} onPress={(e) => setSelectedView(VIEW_P106)}>
           <span
             css={css`
-              color: #666;
-              margin-right: 10px;
-              &:after {
-                content: '⬡';
-              }
+              font-size: 0.82em;
             `}
-          ></span>
-          <span>{resourceUri}</span>
+          >
+            P106
+          </span>
+        </Icon>
+      </div>
+      <div css={resource}>
+        <header
+          css={css`
+            border-bottom: 2px dashed #222;
+          `}
+        >
+          <h1>Ressource</h1>
+          <div>
+            <span
+              css={css`
+                color: #666;
+                margin-right: 10px;
+                &:after {
+                  content: '⬡';
+                }
+              `}
+            ></span>
+            <span>{resourceUri}</span>
+          </div>
+        </header>
+        <div
+          css={css`
+            // background-color: blue;
+            margin-top: ${MARGIN / 2}px;
+          `}
+        >
+          {selectedView === VIEW_PO && <OutcomingPredicates resourceUri={resourceUri} />}
+          {selectedView === VIEW_E13 && <E13 resourceUri={resourceUri} />}
+          {selectedView === VIEW_PS && <IncomingPredicates resourceUri={resourceUri} />}
         </div>
-        {selectedPanel === PANEL_Spo && <OutcomingPredicates resourceUri={resourceUri} />}
-        {selectedPanel === PANEL_E13 && <E13 resourceUri={resourceUri} />}
-        {selectedPanel === PANEL_spO && <IncomingPredicates resourceUri={resourceUri} />}
       </div>
     </div>
     // {Object.keys(outcomingPredicatesResults).length > 0 && Selector(outcomingPredicatesResults)}

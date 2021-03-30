@@ -1,7 +1,8 @@
-import { css, cx } from '@emotion/css'
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
 import { useState, useEffect } from 'react'
-import { formatGraphName, formatInt, hex, formatString } from '../common'
-import { APP_MARGIN, h1, h2, makeH1 } from '../style'
+// import { formatGraphName, formatInt, hex, formatString } from '../common'
+import { APP_MARGIN } from '../style'
 import { fetchSparqlQuery, PREFIXES } from '../../model/sparql'
 
 const QUERY = `${PREFIXES}
@@ -17,16 +18,22 @@ const MeiScores = () => {
   const [data, setData] = useState([])
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       let res = await fetchSparqlQuery(QUERY)
-      setData(res);
-    })();
-  }, []);
+      setData(res)
+    })()
+  }, [])
 
-  return <div className={css`margin: ${APP_MARGIN}px;`}>
-    {makeH1('MEI Scores')}
-    <pre>{JSON.stringify(data, null, 2)}</pre>
-  </div>
+  return (
+    <div
+      className={css`
+        margin: ${APP_MARGIN}px;
+      `}
+    >
+      <h1>MEI score</h1>
+      <pre>{JSON.stringify(data, null, 2)}</pre>
+    </div>
+  )
 }
 
 export default MeiScores
