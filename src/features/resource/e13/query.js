@@ -8,8 +8,9 @@ PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 SELECT *
 WHERE {
   {
+    BIND (<${resourceUri}> AS ?id)
     GRAPH ?g {
-      ?s crm:P140_assigned_attribute_to <${resourceUri}> .
+      ?s crm:P140_assigned_attribute_to ?id .
       ?s rdf:type crm:E13_Attribute_Assignment .
       ?s ?p ?o .
       OPTIONAL {
@@ -29,7 +30,7 @@ WHERE {
   UNION
   {
     GRAPH ?g {
-      ?s crm:P141_assigned <${resourceUri}> .
+      ?s crm:P141_assigned ?id .
       ?s rdf:type crm:E13_Attribute_Assignment .
       ?s ?p ?o .
       OPTIONAL {

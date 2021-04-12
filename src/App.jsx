@@ -1,10 +1,10 @@
 import { BrowserRouter as Router, Route } from 'react-router-dom'
-import Home from './components/sherlock/Home'
-import About from './components/sherlock/About'
-import DescribeSherlockId from './components/resource/DescribeSherlockId'
-import DescribeUri from './components/resource/DescribeUri'
-import YasguiC from './components/YasguiC'
-import Mei from './components/viewers/Mei'
+import Home from './Home'
+import About from './About'
+import DescribeSherlockId from './features/resource/DescribeSherlockId'
+import DescribeUri from './features/resource/DescribeUri'
+import YasguiC from './features/yasgui/YasguiC'
+import Mei from './features/meiviewer/Mei'
 
 const App = () => {
   return (

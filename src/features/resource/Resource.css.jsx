@@ -157,5 +157,7 @@ export const header = css`
 
 export const codes = css`
   display: flex;
-  padding-left: 10px;
+  > div {
+    margin-left: 8px;
+  }
 `

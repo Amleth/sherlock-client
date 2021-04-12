@@ -8,8 +8,9 @@ PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 SELECT *
 WHERE {
   {
+    BIND (<${resourceUri}> as ID)
     GRAPH ?g {
-      ?s ?p <${resourceUri}> .
+      ?s ?p ?id .
       OPTIONAL {
         GRAPH ?spl_g {
           ?s ?s_p_label ?s_label .
@@ -19,6 +20,14 @@ WHERE {
             foaf:name,
             rdfs:label
           ))
+        }
+      }
+      OPTIONAL {
+        GRAPH ?s_e41_g {
+          ?s crm:P1_is_identified_by ?e41 .
+          ?e41 rdf:type ?e41_type .
+          FILTER (?e41_type IN (crm:E41_Appellation, crm:E42_Identifier))
+          ?e41 rdfs:label ?s_label .
         }
       }
     }

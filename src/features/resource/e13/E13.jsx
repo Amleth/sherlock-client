@@ -15,8 +15,8 @@ const C = ({ resourceUri }) => {
   const [data, setData] = useState({})
 
   useEffect(() => {
-    sparqlEndpoint(Q(resourceUri)).then((outcomingE13Res) => {
-      const _ = restructureSparqlE13Results(outcomingE13Res.results.bindings)
+    sparqlEndpoint(Q(resourceUri)).then((outgoingE13Res) => {
+      const _ = restructureSparqlE13Results(outgoingE13Res.results.bindings)
       setData(_)
     })
   }, [resourceUri])

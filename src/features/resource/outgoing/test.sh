@@ -1,0 +1,1 @@
+curl --data-urlencode "query@$1" http://localhost:3030/iremus/sparql

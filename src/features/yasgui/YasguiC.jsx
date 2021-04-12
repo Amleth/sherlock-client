@@ -1,3 +1,5 @@
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
 import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import Yasgui from '@triply/yasgui'
@@ -22,7 +24,13 @@ function YasguiC() {
   return (
     <>
       <Link to="/">🏠</Link>
-      <div id="yasgui" />
+      <div
+        css={css`
+          background-color: white;
+          color: black;
+        `}
+        id="yasgui"
+      />
     </>
   )
 }

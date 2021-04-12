@@ -10,7 +10,8 @@ export const DC_BASE = 'http://purl.org/dc/elements/1.1/'
 export const DCTERMS_BASE = 'http://purl.org/dc/terms/'
 export const FOAF_BASE = 'http://xmlns.com/foaf/0.1/'
 export const HEMEF_BASE = 'http://data-iremus.huma-num.fr/ns/hemef#'
-export const DATA_IREMUS_BASE = 'http://data-iremus.huma-num.fr/'
+export const DATA_IREMUS_FILES_BASE = 'http://data-iremus.huma-num.fr/files/'
+export const DATA_IREMUS_ID_BASE = 'http://data-iremus.huma-num.fr/id/'
 export const IREMUS_RESOURCE_BASE = 'http://data-iremus.huma-num.fr/id/'
 export const IREMUS_NS_BASE = 'http://data-iremus.huma-num.fr/ns/'
 export const IREMUS_GRAPH_BASE = 'http://data-iremus.huma-num.fr/graph/'
@@ -30,7 +31,7 @@ export const RDF_PREFIXES = {
   [FOAF_BASE]: 'foaf',
   [HEMEF_BASE]: 'hemef',
   [IREMUS_RESOURCE_BASE]: '',
-  [IREMUS_NS_BASE]: 'ns',
+  [IREMUS_NS_BASE]: '',
   [MUSRAD30_BASE]: 'musrad30',
   [LRMOO_BASE]: 'lrmoo',
   [OWL_BASE]: 'owl',

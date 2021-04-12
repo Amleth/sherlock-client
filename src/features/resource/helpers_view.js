@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react'
 import { css } from '@emotion/react'
-import { DATA_IREMUS_BASE, RDF_PREFIXES } from '../../common/rdf'
+import React from 'react'
+import { DATA_IREMUS_FILES_BASE, DATA_IREMUS_ID_BASE, RDF_PREFIXES } from '../../common/rdf'
 import { COLOR_MI_ORANGE } from '../../style.js'
 import { codes as codesCss, header, HEADER_HEIGHT } from './Resource.css'
 
@@ -113,8 +113,10 @@ export const formatBinding = b => {
             }
         }
         let href = b.value
-        if (href.startsWith(DATA_IREMUS_BASE)) {
-            href = href.replace(DATA_IREMUS_BASE, APP_BASE_URI)
+        if (href.startsWith(DATA_IREMUS_ID_BASE)) {
+            href = href.replace(DATA_IREMUS_ID_BASE, APP_BASE_URI + 'id/')
+        }
+        else if (href.startsWith(DATA_IREMUS_FILES_BASE)) {
         }
         else {
             href = APP_BASE_URI + 'describe/' + encodeURIComponent(href)
