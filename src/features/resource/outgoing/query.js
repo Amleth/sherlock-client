@@ -8,7 +8,7 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 SELECT *
 WHERE {
-  BIND(<${resourceUri}> AS  ?s)
+  BIND(<${resourceUri}> AS ?s)
   GRAPH ?g {
     ?s ?p ?o .
     OPTIONAL {

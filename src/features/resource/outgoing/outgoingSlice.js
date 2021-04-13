@@ -3,6 +3,7 @@ import { createAsyncThunk, createEntityAdapter, createSlice } from '@reduxjs/too
 import { sparqlEndpoint } from '../../../common/sparql'
 import { restructureSparqlResults, separateSparqlResults } from '../helpers_rdf'
 import query from './query'
+import { identityAdded } from '../identity/identitySlice'
 
 const a = createEntityAdapter()
 
@@ -11,13 +12,14 @@ const initialState = a.getInitialState({
 })
 
 export const fetchOutgoing = createAsyncThunk('outgoing/fetchOutgoing', async (uri, thunkAPI) => {
-    const data = thunkAPI.getState().outgoing.ids[uri]
-    if (data) return data
+    const existingData = thunkAPI.getState().outgoing.ids[uri]
+    if (existingData) return existingData
     const response = await sparqlEndpoint(query(uri))
     let { i, s } = separateSparqlResults(response.results.bindings)
     i = restructureSparqlResults(i, 'o')
-    s = restructureSparqlResults(s, 'o')
-    return { id: uri, identity: i, outgoing: s }
+    thunkAPI.dispatch(identityAdded({ id: uri, data: i }))
+    const data = restructureSparqlResults(s, 'o')
+    return { id: uri, data }
 })
 
 export const outgoingSlice = createSlice({

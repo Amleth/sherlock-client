@@ -6,10 +6,19 @@ export const MARGIN = 80
 const RESOURCE_MARGIN = '0.69em'
 export const HEADER_HEIGHT = 35
 const TABLE_BORDER_COLOUR = '#034'
+const TREE_WIDTH = 300
 
 export const root = css`
   display: flex;
   flex-direction: row;
+`
+
+export const tree = css`
+  background-color: white;
+  color: blue;
+  height: 100vh;
+  position: fixed;
+  width: ${TREE_WIDTH}px;
 `
 
 export const bar = css`
@@ -18,10 +27,11 @@ export const bar = css`
   flex-direction: column;
   height: 100vh;
   position: fixed;
+  right: 0;
 `
 
 export const resource = css`
-    margin: 0 ${MARGIN}px 0 ${BAR_SIZE + MARGIN}px;
+    margin: 0 ${MARGIN + BAR_SIZE}px 0 ${TREE_WIDTH + MARGIN}px;
     margin-bottom: 111px;
 
     h1 {
