@@ -1,10 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit'
+import incomingReducer from './features/resource/incoming/incomingSlice'
 import outgoingReducer from './features/resource/outgoing/outgoingSlice'
-import identityReducer from './features/resource/identity/identitySlice'
+import settingsReducer from './features/settings/settingsSlice'
+import treeReducer from './features/tree/treeSlice'
 
 export default configureStore({
     reducer: {
+        incoming: incomingReducer,
         outgoing: outgoingReducer,
-        identity: identityReducer
+        settings: settingsReducer,
+        tree: treeReducer
     },
 })

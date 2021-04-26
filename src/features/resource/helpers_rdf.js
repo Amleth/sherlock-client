@@ -76,6 +76,10 @@ export function restructureSparqlE13Results(results) {
     .value()
 }
 
+export const getIdentity = data => Object.fromEntries(
+  Object.entries(data).filter(([k, v]) => RESOURCE_IDENTITY_PREDICATES.includes(k))
+)
+
 /**
  * Compare 2 SPARQL results according to three bindings.
  */

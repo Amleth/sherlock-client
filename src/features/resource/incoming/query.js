@@ -8,7 +8,7 @@ PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 SELECT *
 WHERE {
   {
-    BIND (<${resourceUri}> as ID)
+    BIND (<${resourceUri}> as ?id)
     GRAPH ?g {
       ?s ?p ?id .
       OPTIONAL {

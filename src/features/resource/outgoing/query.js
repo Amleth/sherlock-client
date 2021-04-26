@@ -1,4 +1,3 @@
-// http://localhost:3000/sherlock/id/c03eb5af-ba10-44df-92eb-32b5360af09f
 const Q = resourceUri => `
 PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
 PREFIX dcterms: <http://purl.org/dc/terms/>

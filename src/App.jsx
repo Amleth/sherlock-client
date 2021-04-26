@@ -4,7 +4,7 @@ import About from './About'
 import DescribeSherlockId from './features/resource/DescribeSherlockId'
 import DescribeUri from './features/resource/DescribeUri'
 import YasguiC from './features/yasgui/YasguiC'
-import Mei from './features/meiviewer/Mei'
+import Mei from './features/viewers/mei/Mei'
 
 const App = () => {
   return (

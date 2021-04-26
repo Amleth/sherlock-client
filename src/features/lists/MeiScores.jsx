@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { useState, useEffect } from 'react'
-// import { formatGraphName, formatInt, hex, formatString } from '../common'
 import { APP_MARGIN } from '../style'
 import { fetchSparqlQuery, PREFIXES } from '../../model/sparql'
 

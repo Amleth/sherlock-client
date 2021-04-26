@@ -1,21 +1,24 @@
 /** @jsxImportSource @emotion/react */
-import { useState, useEffect } from 'react'
-import { sparqlEndpoint } from '../../../common/sparql'
-import Q from './query'
-import { restructureSparqlResults } from '../helpers_rdf'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+
+import { fetchIncoming } from './incomingSlice'
 import { formatSection } from '../helpers_view'
 
 const C = ({ resourceUri }) => {
-  const [data, setData] = useState({})
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    sparqlEndpoint(Q(resourceUri)).then((res) => {
-      const _ = restructureSparqlResults(res.results.bindings, 's')
-      setData(_)
-    })
-  }, [resourceUri])
+    dispatch(fetchIncoming(resourceUri))
+  }, [dispatch, resourceUri])
 
-  return formatSection('Triplets <sujet—prédicat—ressource>', 'prédicat', 'sujet', 'graphe', data, 's')
+  const incoming = useSelector(state => state.incoming.entities[resourceUri])
+
+  return !incoming ? (
+    <div style={{ fontFamily: 'monospace' }}>🐌</div>
+  ) : (
+    formatSection('Triplets entrants', 'prédicat', 'sujet', 'graphe', incoming.data, 's')
+  )
 }
 
 export default C

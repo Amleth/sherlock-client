@@ -1,9 +1,12 @@
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
+import React, { useState } from 'react'
+import { useLocation } from 'react-router-dom'
+import useScript from '../../../common/useScript'
+
 // https://www.verovio.org/javascript.xhtml
 // https://www.verovio.org/mei-viewer.xhtml
 // https://betterprogramming.pub/4-ways-of-adding-external-js-files-in-reactjs-823f85de3668
-
-import React, { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
 
 function C() {
   const query = new URLSearchParams(useLocation().search)
@@ -11,12 +14,8 @@ function C() {
 
   const [score, setScore] = useState(null)
 
-  useEffect(() => {
-    const script = document.createElement('script')
-    script.src = 'https://www.verovio.org/javascript/develop/verovio-toolkit.js'
-    script.async = true
-    document.body.appendChild(script)
-
+  const { verovio } = useScript('https://www.verovio.org/javascript/develop/verovio-toolkit.js', 'verovio')
+  if (verovio && !score) {
     const tk = new window.verovio.toolkit()
 
     fetch(mei_uri, {
@@ -37,21 +36,24 @@ function C() {
           tk.renderData(res, {
             svgHtml5: true,
             svgViewBox: true,
-          }),
+          })
         )
       })
-
-    return () => {
-      document.body.removeChild(script)
-    }
-  }, [mei_uri])
+  }
 
   return (
     <>
-      <div>MEI</div>
-      <div>{query.get('sherlock_uri')}</div>
-      <div>{query.get('mei_uri')}</div>
-      <div className='verovio' dangerouslySetInnerHTML={{ __html: score }} />
+      <header>
+        <div>{query.get('sherlock_uri')}</div>
+        <div>{query.get('mei_uri')}</div>
+      </header>
+      <div
+        css={css`
+          background-color: white;
+        `}
+        className="verovio"
+        dangerouslySetInnerHTML={{ __html: score }}
+      />
     </>
   )
 }

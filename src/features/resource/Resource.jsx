@@ -1,123 +1,79 @@
 /** @jsxImportSource @emotion/react */
-import { useEffect, useState } from 'react'
 import { css } from '@emotion/react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 
+import { renderBar } from './bar'
 import E13 from './e13/E13'
-import Icon from './Icon'
-import IconLink from './IconLink'
 import Incoming from './incoming/Incoming'
 import { fetchOutgoing } from './outgoing/outgoingSlice'
+import { isTreeDisplayedToggled } from '../settings/settingsSlice'
 import Outgoing from './outgoing/Outgoing'
-import Tree from './tree/Tree'
-import { COLOR_MI_MAGENTA, COLOR_MI_ORANGE, COLOR_MI_TEAL, COLOR_MI_YELLOW } from '../../style'
-import { bar, MARGIN, resource, root } from './Resource.css'
+import Tree from '../tree/Tree'
+
+import { resource, root, TREE_WIDTH } from './Resource.css'
+import { findVierwers } from '../../common/viewerSelector'
 
 export const VIEW_PO = 'po'
 export const VIEW_E13 = 'e13'
 export const VIEW_PS = 'ps'
-export const VIEW_P106 = 'p106'
 
 const C = ({ resourceUri, view }) => {
+  const history = useHistory()
   const dispatch = useDispatch()
   const [selectedView, setSelectedView] = useState(view || VIEW_PO)
 
-  useEffect(() => {
-    dispatch(fetchOutgoing(resourceUri))
-  }, [dispatch, resourceUri])
+  const tree = useSelector(state => state.settings.isTreeDisplayed)
+  const focusedResourceUri = useSelector(state => state.settings.focusedResourceUri) || resourceUri
 
-  const identity = useSelector((state) => state.identity.entities[resourceUri])
-  const outgoing = useSelector((state) => state.outgoing.entities[resourceUri])
+  useEffect(() => {
+    dispatch(fetchOutgoing(focusedResourceUri))
+  }, [dispatch, focusedResourceUri])
+  const outgoing = useSelector(state => state.outgoing.entities[focusedResourceUri])
+  let viewers = []
+  if (outgoing) viewers = findVierwers(outgoing.data)
 
   return (
     <div css={root}>
-      <Tree identity={identity} outgoing={outgoing} />
-      <div css={resource}>
-        <header
-          css={css`
-            border-bottom: 2px dashed #222;
-          `}
-        >
-          <h1>Ressource</h1>
-          <div
-            css={css`
-              display: flex;
-            `}
-          >
-            <span
-              css={css`
-                color: #666;
-                margin-right: 10px;
-                &:after {
-                  content: '⬡';
-                }
-              `}
-            ></span>
-            <span>{resourceUri}</span>
-          </div>
-        </header>
+      {tree && (
         <div
           css={css`
-            // background-color: blue;
-            margin-top: ${MARGIN / 2}px;
+            background-color: white;
+            height: 100vh;
+            overflow-y: scroll;
+            position: fixed;
+            width: ${TREE_WIDTH}px;
           `}
         >
-          {selectedView === VIEW_PO && <Outgoing identity={identity} outgoing={outgoing} />}
-          {selectedView === VIEW_E13 && <E13 resourceUri={resourceUri} />}
-          {selectedView === VIEW_PS && <Incoming resourceUri={resourceUri} />}
+          <Tree uri={resourceUri} />
         </div>
-      </div>
-      <div css={bar}>
-        <IconLink backgroundColor="black" uri="/">
-          <span
-            css={css`
-              font-size: 55px;
-            `}
-          >
-            ⌂
-          </span>
-        </IconLink>
-        <Icon backgroundColor={COLOR_MI_ORANGE} onPress={(e) => setSelectedView(VIEW_PO)}>
-          <span>S</span>
-          <span
-            css={css`
-              color: rgba(0, 0, 0, 0.3);
-            `}
-          >
-            po
-          </span>
-        </Icon>
-        <Icon backgroundColor={COLOR_MI_TEAL} onPress={(e) => setSelectedView(VIEW_E13)}>
-          <span
-            css={css`
-              font-size: 0.8em;
-            `}
-          >
-            E13
-          </span>
-        </Icon>
-        <Icon backgroundColor={COLOR_MI_MAGENTA} onPress={(e) => setSelectedView(VIEW_PS)}>
-          <span
-            css={css`
-              color: rgba(0, 0, 0, 0.3);
-            `}
-          >
-            sp
-          </span>
-          <span>O</span>
-        </Icon>
-        {/* <Icon backgroundColor={COLOR_MI_YELLOW} onPress={(e) => setSelectedView(VIEW_P106)}>
-          <span
-            css={css`
-              font-size: 0.82em;
-            `}
-          >
-            P106
-          </span>
-        </Icon> */}
+      )}
+      <div
+        css={[
+          resource,
+          css`
+            margin-left: ${tree ? TREE_WIDTH : 0}px;
+          `,
+        ]}
+      >
+        <header
+          css={css`
+            width: calc(100% - ${tree ? TREE_WIDTH : 0}px);
+          `}
+        >
+          <h1>{focusedResourceUri}</h1>
+          {renderBar(history, outgoing, focusedResourceUri, setSelectedView, viewers, () =>
+            dispatch(isTreeDisplayedToggled())
+          )}
+        </header>
+        <main>
+          {selectedView === VIEW_PO && <Outgoing resourceUri={focusedResourceUri} />}
+          {selectedView === VIEW_E13 && <E13 resourceUri={focusedResourceUri} />}
+          {selectedView === VIEW_PS && <Incoming resourceUri={focusedResourceUri} />}
+        </main>
       </div>
     </div>
-    // {Object.keys(outgoingResults).length > 0 && Selector(outgoingResults)}
   )
 }
 
