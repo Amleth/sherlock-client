@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getResourcesByPredicateAndLinkedResource, pathUnfoldStatusChanged } from './treeSlice'
 import IriTreeItem from './IriTreeItem'
 import LiteralTreeItem from './LiteralTreeItem'
+import {formatUri} from "../../common/rdf";
 
 const PredicateTreeItem = ({ path, predicate, relatedUri }) => {
   const dispatch = useDispatch()
@@ -22,7 +23,7 @@ const PredicateTreeItem = ({ path, predicate, relatedUri }) => {
         }}
         labelIcon={computeLabelIcon(predicate)}
         labelInfo={predicate.c.value}
-        labelText={predicate.p.value}
+        labelText={formatUri(predicate.p.value)}
         nodeId={`${path}${predicate.p.value},${predicate.direction.value},`}
       >
         {canShowItem(predicate, unfoldedPaths, path) &&
