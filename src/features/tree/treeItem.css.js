@@ -1,4 +1,5 @@
 import {makeStyles} from "@material-ui/core/styles";
+import {COLOR_MI_MAGENTA, COLOR_MI_ORANGE} from "../../style";
 
 export const useTreeItemStyles = makeStyles((theme) => ({
     root: {
@@ -42,9 +43,22 @@ export const useTreeItemStyles = makeStyles((theme) => ({
     },
     labelIcon: {
         marginRight: theme.spacing(1),
-    },
+},
     labelText: {
         fontWeight: 'inherit',
         flexGrow: 1,
     },
+    outPredicateIcon: {
+        whiteSpace: 'nowrap',
+        marginRight: theme.spacing(1),
+        color: COLOR_MI_ORANGE
+    },
+    inPredicateIcon: {
+        whiteSpace: 'nowrap',
+        marginRight: theme.spacing(1),
+        color: COLOR_MI_MAGENTA
+    },
+    labelInfo: {
+        whiteSpace: 'nowrap',
+    }
 }));

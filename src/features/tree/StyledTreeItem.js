@@ -2,6 +2,20 @@ import TreeItem from "@material-ui/lab/TreeItem";
 import React from "react";
 import Typography from "@material-ui/core/Typography";
 import { useTreeItemStyles } from "./treeItem.css";
+import {ArrowLeft, ArrowRight, Label} from "@material-ui/icons";
+
+function computeLabelIcon(LabelIcon, classes) {
+    if (LabelIcon === ArrowRight) {
+        return <Typography className={classes.outPredicateIcon}>
+            OUT
+        </Typography>
+    } else if (LabelIcon === ArrowLeft) {
+        return <Typography className={classes.inPredicateIcon}>
+            IN
+        </Typography>
+    }
+    return <LabelIcon color="inherit" className={classes.labelIcon}/>
+}
 
 function StyledTreeItem(props) {
     const classes = useTreeItemStyles();
@@ -11,11 +25,11 @@ function StyledTreeItem(props) {
         <TreeItem
             label={
                 <div className={classes.labelRoot}>
-                    <LabelIcon color="inherit" className={classes.labelIcon} />
+                    {computeLabelIcon(LabelIcon, classes)}
                     <Typography variant="body2" className={classes.labelText}>
                         {labelText}
                     </Typography>
-                    <Typography variant="caption" color="inherit">
+                    <Typography variant="caption" color="inherit" className={classes.labelInfo}>
                         {labelInfo}
                     </Typography>
                 </div>
