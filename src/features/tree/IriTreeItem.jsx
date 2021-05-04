@@ -16,8 +16,8 @@ const IriTreeItem = ({ path, uri }) => {
   return canShowItem(resource, unfoldedPaths, path) ? (
     <StyledTreeItem
       onIconClick={() => {
-        dispatch(getResourcePredicates(resource.id))
         dispatch(pathUnfoldStatusChanged(`${path}${resource.id},`))
+        dispatch(getResourcePredicates(resource.id))
       }}
       onLabelClick={e => {
         e.preventDefault()

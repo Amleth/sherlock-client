@@ -36,7 +36,7 @@ export const renderBar = (history, outgoing, resourceUri, setSelectedView, viewe
         🌴
       </div>
       <div title={"définir une nouvelle racine"} css={s(COLOR_MI_GREEN)} onClick={e => {history.push('/describe/' + encodeURIComponent(resourceUri))}}>
-        🔎
+        🌱
       </div>
       <div css={s(COLOR_MI_ORANGE)} onClick={e => setSelectedView(VIEW_PO)}>
         Spo

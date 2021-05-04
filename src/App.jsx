@@ -5,6 +5,10 @@ import DescribeSherlockId from './features/resource/DescribeSherlockId'
 import DescribeUri from './features/resource/DescribeUri'
 import YasguiC from './features/yasgui/YasguiC'
 import Mei from './features/viewers/mei/Mei'
+import {User} from "./features/user/User";
+import {Login} from "./features/user/Login";
+import AuthenticatedRoute from "./common/AuthenticatedRoute";
+import UnauthenticatedRouteOnly from "./common/UnauthenticatedRouteOnly";
 
 const App = () => {
   return (
@@ -15,6 +19,8 @@ const App = () => {
       <Route path="/describe/:uri/:view?" component={DescribeUri} exact />
       <Route path="/yasgui" component={YasguiC} exact />
       <Route path="/mei" component={Mei} exact />
+      <AuthenticatedRoute path="/me" component={User} exact />
+      <UnauthenticatedRouteOnly path="/login" component={Login} exact />
     </Router>
   )
 }

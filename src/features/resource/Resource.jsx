@@ -1,25 +1,25 @@
 /** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react'
-import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useHistory } from 'react-router-dom'
+import {css} from '@emotion/react'
+import {useEffect, useState} from 'react'
+import {useDispatch, useSelector} from 'react-redux'
+import {useHistory} from 'react-router-dom'
 
-import { renderBar } from './bar'
+import {renderBar} from './bar'
 import E13 from './e13/E13'
 import Incoming from './incoming/Incoming'
-import { fetchOutgoing } from './outgoing/outgoingSlice'
-import { isTreeDisplayedToggled } from '../settings/settingsSlice'
+import {fetchOutgoing} from './outgoing/outgoingSlice'
+import {isTreeDisplayedToggled} from '../settings/settingsSlice'
 import Outgoing from './outgoing/Outgoing'
 import Tree from '../tree/Tree'
 
-import { resource, root, TREE_WIDTH } from './Resource.css'
-import { findVierwers } from '../../common/viewerSelector'
+import {resource, root, TREE_WIDTH} from './Resource.css'
+import {findVierwers} from '../../common/viewerSelector'
 
 export const VIEW_PO = 'po'
 export const VIEW_E13 = 'e13'
 export const VIEW_PS = 'ps'
 
-const C = ({ resourceUri, view }) => {
+const C = ({resourceUri, view}) => {
   const history = useHistory()
   const dispatch = useDispatch()
   const [selectedView, setSelectedView] = useState(view || VIEW_PO)
@@ -36,19 +36,18 @@ const C = ({ resourceUri, view }) => {
 
   return (
     <div css={root}>
-      {tree && (
-        <div
-          css={css`
+      <div
+        css={css`
             background-color: white;
+            display: ${tree ? 'block' : 'none'};
             height: 100vh;
             overflow-y: scroll;
             position: fixed;
             width: ${TREE_WIDTH}px;
           `}
-        >
-          <Tree uri={resourceUri} />
-        </div>
-      )}
+      >
+        <Tree uri={resourceUri}/>
+      </div>
       <div
         css={[
           resource,
@@ -68,9 +67,9 @@ const C = ({ resourceUri, view }) => {
           )}
         </header>
         <main>
-          {selectedView === VIEW_PO && <Outgoing resourceUri={focusedResourceUri} />}
-          {selectedView === VIEW_E13 && <E13 resourceUri={focusedResourceUri} />}
-          {selectedView === VIEW_PS && <Incoming resourceUri={focusedResourceUri} />}
+          {selectedView === VIEW_PO && <Outgoing resourceUri={focusedResourceUri}/>}
+          {selectedView === VIEW_E13 && <E13 resourceUri={focusedResourceUri}/>}
+          {selectedView === VIEW_PS && <Incoming resourceUri={focusedResourceUri}/>}
         </main>
       </div>
     </div>
