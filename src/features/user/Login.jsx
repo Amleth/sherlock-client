@@ -39,7 +39,7 @@ export const Login = () => {
       <input
         css={submit}
         type="submit"
-        value="LOGIN"
+        value={user.status && user.status === "loading" ? "..." : "LOGIN"}
         onClick={() => {
           if (credentials.username && credentials.password) {
             dispatch(getUser(credentials));
@@ -53,6 +53,8 @@ export const Login = () => {
 function computeMessage(user) {
   if (user.status === 401) {
     return <span>Mauvais couple [username, password]</span>
+  } else if (user.status === -1) {
+    return <span>Impossible de joindre le serveur</span>
   }
   return null;
 }
