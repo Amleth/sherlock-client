@@ -1,5 +1,5 @@
 import StyledTreeItem from './StyledTreeItem'
-import React from 'react'
+import React, {useEffect, useRef} from 'react'
 import { ArrowLeft, ArrowRight } from '@material-ui/icons'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { useDispatch, useSelector } from 'react-redux'
@@ -27,8 +27,8 @@ const PredicateTreeItem = ({ path, predicate, relatedUri }) => {
       return (
         <StyledTreeItem
           onIconClick={() => {
-            dispatch(getResourcesByPredicateAndLinkedResource({p: predicate.p.value, uri: relatedUri}))
             dispatch(pathUnfoldStatusChanged(`${path}${predicate.p.value},${predicate.direction.value},`))
+            dispatch(getResourcesByPredicateAndLinkedResource({p: predicate, uri: relatedUri}))
           }}
           onLabelClick={e => {
             e.preventDefault()
@@ -40,19 +40,17 @@ const PredicateTreeItem = ({ path, predicate, relatedUri }) => {
         >
           {canShowItem(predicate, unfoldedPaths, path) &&
           predicate.resources.map(resource => {
-            return resource.r.type === 'uri' ? (
-              <IriTreeItem
+            return resource.r.type === 'uri'
+              ? <IriTreeItem
                 path={`${path}${predicate.p.value},${predicate.direction.value},`}
                 key={`${path}${predicate.p.value},${predicate.direction.value},${resource.r.value},`}
                 uri={resource.r.value}
               />
-            ) : (
-              <LiteralTreeItem
+              : <LiteralTreeItem
                 path={`${path}${predicate.p.value},${predicate.direction.value},`}
                 key={`${path}${predicate.p.value},${predicate.direction.value},${resource.r.value},`}
                 literal={resource.r}
               />
-            )
           })}
           {!predicate.resources && predicate.c.value < maxResourceUnfoldable && <CircularProgress/>}
         </StyledTreeItem>

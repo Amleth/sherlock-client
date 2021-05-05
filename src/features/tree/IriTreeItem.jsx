@@ -31,7 +31,7 @@ const IriTreeItem = ({ path, uri }) => {
       {resource.predicates &&
         resource.predicates.map(predicate => (
           <PredicateTreeItem
-            key={`${path},${resource.id},${predicate.p.value}`}
+            key={`${path},${resource.id},${predicate.p.value},${predicate.direction.value},`}
             relatedUri={resource.id}
             path={`${path}${resource.id},`}
             predicate={predicate}
