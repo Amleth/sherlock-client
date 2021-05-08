@@ -6,26 +6,39 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getResourcesByPredicateAndLinkedResource, pathUnfoldStatusChanged } from './treeSlice'
 import IriTreeItem from './IriTreeItem'
 import LiteralTreeItem from './LiteralTreeItem'
+import {formatUri} from "../../common/rdf";
+import {maxResourceUnfoldable} from "../../common/utils";
 
 const PredicateTreeItem = ({ path, predicate, relatedUri }) => {
   const dispatch = useDispatch()
   const unfoldedPaths = useSelector(state => state.tree.unfoldedPaths)
   if (predicate.c) {
-    return (
-      <StyledTreeItem
-        onIconClick={() => {
-          dispatch(getResourcesByPredicateAndLinkedResource({ p: predicate.p.value, uri: relatedUri }))
-          dispatch(pathUnfoldStatusChanged(`${path}${predicate.p.value},${predicate.direction.value},`))
-        }}
+    if (predicate.c.value > maxResourceUnfoldable) {
+      return <StyledTreeItem
         onLabelClick={e => {
           e.preventDefault()
         }}
         labelIcon={computeLabelIcon(predicate)}
         labelInfo={predicate.c.value}
-        labelText={predicate.p.value}
+        labelText={formatUri(predicate.p.value)}
         nodeId={`${path}${predicate.p.value},${predicate.direction.value},`}
-      >
-        {canShowItem(predicate, unfoldedPaths, path) &&
+      />
+    } else {
+      return (
+        <StyledTreeItem
+          onIconClick={() => {
+            dispatch(getResourcesByPredicateAndLinkedResource({p: predicate.p.value, uri: relatedUri}))
+            dispatch(pathUnfoldStatusChanged(`${path}${predicate.p.value},${predicate.direction.value},`))
+          }}
+          onLabelClick={e => {
+            e.preventDefault()
+          }}
+          labelIcon={computeLabelIcon(predicate)}
+          labelInfo={predicate.c.value}
+          labelText={formatUri(predicate.p.value)}
+          nodeId={`${path}${predicate.p.value},${predicate.direction.value},`}
+        >
+          {canShowItem(predicate, unfoldedPaths, path) &&
           predicate.resources.map(resource => {
             return resource.r.type === 'uri' ? (
               <IriTreeItem
@@ -41,9 +54,10 @@ const PredicateTreeItem = ({ path, predicate, relatedUri }) => {
               />
             )
           })}
-        {!predicate.resources && <CircularProgress />}
-      </StyledTreeItem>
-    )
+          {!predicate.resources && predicate.c.value < maxResourceUnfoldable && <CircularProgress/>}
+        </StyledTreeItem>
+      )
+    }
   } else {
     return <div />
   }

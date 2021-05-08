@@ -6,6 +6,7 @@ import { getResourcePredicates, pathUnfoldStatusChanged, selectResourceByUri } f
 import CircularProgress from '@material-ui/core/CircularProgress'
 import PredicateTreeItem from './PredicateTreeItem'
 import { focusedResourceUriSet } from '../settings/settingsSlice'
+import {formatUri} from "../../common/rdf";
 
 const IriTreeItem = ({ path, uri }) => {
   const dispatch = useDispatch()
@@ -24,7 +25,7 @@ const IriTreeItem = ({ path, uri }) => {
       }}
       labelIcon={Public}
       labelInfo={count.value}
-      labelText={resource.id}
+      labelText={formatUri(uri)}
       nodeId={`${path}${resource.id},`}
     >
       {resource.predicates &&
