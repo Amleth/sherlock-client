@@ -16,7 +16,15 @@ const Home = () => {
         width: 100%;
       `}
     >
-      <h1>SHERLOCK</h1>
+      <h1
+        css={css`
+          font-weight: 100;
+          letter-spacing: 13px;
+          margin: 123px 0;
+        `}
+      >
+        SHERLOCK
+      </h1>
       <section
         css={css`
           width: 100%;
@@ -35,7 +43,7 @@ const Home = () => {
               font-size: 82%;
               width: 100%;
             `}
-            onChange={(e) => {
+            onChange={e => {
               setUri(e.target.value)
             }}
             value={uri}

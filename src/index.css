@@ -17,7 +17,7 @@ body {
 }
 
 a {
-  background-color: transparent;
+  /* background-color: transparent; */
   color: #0dd;
   text-decoration: none !important;
   transition-duration: 0.5s;
@@ -26,9 +26,10 @@ a {
 }
 
 a:hover {
-  background-color: aqua;
-  color: black;
+  /* background-color: aqua; */
+  /* color: black; */
   cursor: default;
+  text-decoration: underline !important;
   transition-duration: 0s;
   transition-property: background-color;
   /* transition-property: color; */

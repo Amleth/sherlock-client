@@ -12,7 +12,7 @@ import { isTreeDisplayedToggled } from '../settings/settingsSlice'
 import Outgoing from './outgoing/Outgoing'
 import Tree from '../tree/Tree'
 
-import { resource, root, TREE_WIDTH } from './Resource.css'
+import { resource, root } from './Resource.css'
 import { findViewers } from '../../common/viewerSelector'
 
 export const VIEW_PO = 'po'
@@ -40,10 +40,11 @@ const C = ({ resourceUri, view }) => {
         <div
           css={css`
             background-color: white;
+            display: block;
             height: 100vh;
             overflow-y: scroll;
             position: fixed;
-            width: ${TREE_WIDTH}px;
+            width: ${tree ? '33%' : 0};
           `}
         >
           <Tree uri={resourceUri} />
@@ -53,13 +54,13 @@ const C = ({ resourceUri, view }) => {
         css={[
           resource,
           css`
-            margin-left: ${tree ? TREE_WIDTH : 0}px;
+            margin-left: ${tree ? '33%' : 0};
           `,
         ]}
       >
         <header
           css={css`
-            width: calc(100% - ${tree ? TREE_WIDTH : 0}px);
+            width: calc(100% - ${tree ? '33%' : '0%'});
           `}
         >
           <h1>{focusedResourceUri}</h1>
@@ -70,7 +71,7 @@ const C = ({ resourceUri, view }) => {
         <main>
           {selectedView === VIEW_PO && <Outgoing resourceUri={focusedResourceUri} />}
           {selectedView === VIEW_E13 && <E13 resourceUri={focusedResourceUri} />}
-          {selectedView === VIEW_PS && <Incoming resourceUri={focusedResourceUri} />}
+          {selectedView === VIEW_PS && <Incoming resourceUri={focusedResourceUri} />}s
         </main>
       </div>
     </div>

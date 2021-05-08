@@ -3,7 +3,7 @@ import { css } from '@emotion/react'
 import { Link } from 'react-router-dom'
 
 import { VIEW_E13, VIEW_PO, VIEW_PS } from './Resource'
-import {COLOR_MI_GREEN, COLOR_MI_MAGENTA, COLOR_MI_ORANGE, COLOR_MI_TEAL, COLOR_MI_YELLOW} from '../../style'
+import { COLOR_MI_GREEN, COLOR_MI_MAGENTA, COLOR_MI_ORANGE, COLOR_MI_TEAL, COLOR_MI_YELLOW } from '../../style'
 import { MEI } from '../../common/viewerSelector'
 import { BAR_SIZE } from './Resource.css'
 
@@ -35,7 +35,13 @@ export const renderBar = (history, outgoing, resourceUri, setSelectedView, viewe
       <div css={s('aqua')} onClick={e => toggleIsTreeDisplayed()}>
         🌴
       </div>
-      <div title={"définir une nouvelle racine"} css={s(COLOR_MI_GREEN)} onClick={e => {history.push('/describe/' + encodeURIComponent(resourceUri))}}>
+      <div
+        title={'définir une nouvelle racine'}
+        css={s(COLOR_MI_GREEN)}
+        onClick={e => {
+          history.push('/describe/' + encodeURIComponent(resourceUri))
+        }}
+      >
         🔎
       </div>
       <div css={s(COLOR_MI_ORANGE)} onClick={e => setSelectedView(VIEW_PO)}>
@@ -69,7 +75,7 @@ export const renderBar = (history, outgoing, resourceUri, setSelectedView, viewe
       `}
       to="/me"
     >
-      USER
+      👤
     </Link>
     <Link
       css={css`
@@ -88,7 +94,7 @@ export const renderBar = (history, outgoing, resourceUri, setSelectedView, viewe
       `}
       to="/"
     >
-      HOME
+      🏠
     </Link>
   </nav>
 )
