@@ -13,7 +13,7 @@ import Outgoing from './outgoing/Outgoing'
 import Tree from '../tree/Tree'
 
 import { resource, root, TREE_WIDTH } from './Resource.css'
-import { findVierwers } from '../../common/viewerSelector'
+import { findViewers } from '../../common/viewerSelector'
 
 export const VIEW_PO = 'po'
 export const VIEW_E13 = 'e13'
@@ -32,7 +32,7 @@ const C = ({ resourceUri, view }) => {
   }, [dispatch, focusedResourceUri])
   const outgoing = useSelector(state => state.outgoing.entities[focusedResourceUri])
   let viewers = []
-  if (outgoing) viewers = findVierwers(outgoing.data)
+  if (outgoing) viewers = findViewers(resourceUri, outgoing.data)
 
   return (
     <div css={root}>

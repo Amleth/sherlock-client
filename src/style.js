@@ -10,3 +10,5 @@ export const COLOR_MI_MAGENTA = '#EC016A'
 export const COLOR_MI_YELLOW = '#EBB525'
 
 export const randomColor = () => Math.floor(Math.random() * 16777215).toString(16)
+
+export const ITEM_MARGIN = 3

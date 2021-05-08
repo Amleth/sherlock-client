@@ -1,61 +1,81 @@
 /** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react'
-import React, { useState } from 'react'
-import { useLocation } from 'react-router-dom'
-import useScript from '../../../common/useScript'
+import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { createVerovio, getNodeNote, prout } from './verovioHelpers'
+import { annotationsPanelStyle, containerStyle, mainAreaStyle, verovioStyle } from './mei.css'
+import Basket from './Basket'
+import ModeSelector from './ModeSelector'
 
-// https://www.verovio.org/javascript.xhtml
-// https://www.verovio.org/mei-viewer.xhtml
-// https://betterprogramming.pub/4-ways-of-adding-external-js-files-in-reactjs-823f85de3668
+window.verovioCallback = prout
 
-function C() {
-  const query = new URLSearchParams(useLocation().search)
-  const mei_uri = query.get('mei_uri')
+export const VIEW_STATE_READING = 'reading'
+export const VIEW_STATE_PICKING = 'picking'
 
-  const [score, setScore] = useState(null)
+const Mei = () => {
+  const { id } = useParams()
+  const meiUri = process.env.REACT_APP_SHERLOCK_FILES_URI + 'mei/' + id + '_sherlockized.mei'
 
-  const { verovio } = useScript('https://www.verovio.org/javascript/develop/verovio-toolkit.js', 'verovio')
-  if (verovio && !score) {
-    const tk = new window.verovio.toolkit()
+  const [basket, setBasket] = useState({})
+  const [viewState, setViewState] = useState(VIEW_STATE_READING)
 
-    fetch(mei_uri, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-      },
-      mode: 'cors',
-      cache: 'no-cache',
-      redirect: 'follow',
-    })
-      .then(res => res.text())
-      .then(res => {
-        const { innerHeight, innerWidth } = window
-        console.log(innerHeight, innerWidth)
+  useEffect(() => {
+    createVerovio(meiUri) // github.com/rism-digital/verovio-app-react/blob/master/src/App.js
+  }, [meiUri])
 
-        setScore(
-          tk.renderData(res, {
-            svgHtml5: true,
-            svgViewBox: true,
-          })
-        )
-      })
+  const handleMouseOver = e => {
+    const n = getNodeNote(e)
+    if (n) {
+      n.noteNode.classList.add('hovered')
+    }
+  }
+
+  const handleMouseLeave = e => {
+    const n = getNodeNote(e)
+    if (n) {
+      n.noteNode.classList.remove('hovered')
+    }
+  }
+
+  const handleClick = e => {
+    const n = getNodeNote(e)
+    if (n && viewState === VIEW_STATE_PICKING) {
+      document.getElementById(n.noteNode.id).classList.add('selected')
+      setBasket({ ...basket, [n.noteNode.id]: n })
+    }
+  }
+
+  const removeFromBasket = n => {
+    const b = { ...basket }
+    delete b[n.noteNode.id]
+    document.getElementById(n.noteNode.id) && document.getElementById(n.noteNode.id).classList.remove('selected')
+    document.getElementById(n.noteNode.id) && document.getElementById(n.noteNode.id).classList.remove('focused')
+    setBasket(b)
   }
 
   return (
-    <>
-      <header>
-        <div>{query.get('sherlock_uri')}</div>
-        <div>{query.get('mei_uri')}</div>
-      </header>
-      <div
-        css={css`
-          background-color: white;
-        `}
-        className="verovio"
-        dangerouslySetInnerHTML={{ __html: score }}
-      />
-    </>
+    <div
+      css={containerStyle}
+      onMouseEnter={() =>
+        Object.keys(basket).forEach(
+          _ => document.getElementById(_) && document.getElementById(_).classList.add('selected')
+        )
+      }
+    >
+      <div css={mainAreaStyle}>
+        <div
+          css={verovioStyle}
+          onClick={handleClick}
+          onMouseOver={handleMouseOver}
+          onMouseOut={handleMouseLeave}
+          id="verovio_container"
+        />
+      </div>
+      <div css={annotationsPanelStyle}>
+        <ModeSelector setViewState={setViewState} viewState={viewState} />
+        <Basket className="basket" data={basket} removeFromBasket={removeFromBasket} />
+      </div>
+    </div>
   )
 }
 
-export default C
+export default Mei

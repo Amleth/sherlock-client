@@ -91,16 +91,7 @@ export const renderBar = (history, outgoing, resourceUri, setSelectedView, viewe
 )
 
 const makeMeiIcon = (history, outgoing, resourceUri, viewerData) => (
-  <div
-    css={s(COLOR_MI_YELLOW)}
-    key={viewerData.label}
-    onClick={e =>
-      history.push({
-        pathname: viewerData.to,
-        state: { outgoing },
-      })
-    }
-  >
+  <Link css={s(COLOR_MI_YELLOW)} key={viewerData.label} to={viewerData.to}>
     {viewerData.label}
-  </div>
+  </Link>
 )

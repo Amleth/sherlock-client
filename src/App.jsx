@@ -14,7 +14,7 @@ const App = () => {
       <Route path="/id/:id/:view?" component={DescribeSherlockId} exact />
       <Route path="/describe/:uri/:view?" component={DescribeUri} exact />
       <Route path="/yasgui" component={YasguiC} exact />
-      <Route path="/mei" component={Mei} exact />
+      <Route path="/mei/:id" component={Mei} exact />
     </Router>
   )
 }
