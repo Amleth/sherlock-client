@@ -13,7 +13,7 @@ import Outgoing from './outgoing/Outgoing'
 import Tree from '../tree/Tree'
 
 import {resource, root, TREE_WIDTH} from './Resource.css'
-import {findVierwers} from '../../common/viewerSelector'
+import {findViewers} from '../../common/viewerSelector'
 
 export const VIEW_PO = 'po'
 export const VIEW_E13 = 'e13'
