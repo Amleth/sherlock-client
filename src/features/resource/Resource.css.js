@@ -7,23 +7,12 @@ const TOP_HEADER_HEIGHT = BAR_SIZE + TITLE_HEIGHT
 const RESOURCE_MARGIN = '0.69em'
 export const HEADER_HEIGHT = 35
 const TABLE_BORDER_COLOUR = '#034'
-export const TREE_WIDTH = 500
 export const TREE_BORDER_COLOR = '#666'
 export const NAV_BORDER_COLOR = '#333'
 
 export const root = css`
   display: flex;
   flex-direction: row;
-`
-
-export const tree = css`
-  background-color: #000;
-  border-right: 1px solid ${TREE_BORDER_COLOR};
-  color: white;
-  height: 100vh;
-  position: fixed;
-  text-align: center;
-  width: ${TREE_WIDTH}px;
 `
 
 export const resource = css`

@@ -1,14 +1,14 @@
 /** @jsxImportSource @emotion/react */
-import {css} from '@emotion/react'
-import {useEffect, useState} from 'react'
-import {useDispatch, useSelector} from 'react-redux'
-import {useHistory} from 'react-router-dom'
+import { css } from '@emotion/react'
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 
-import {renderBar} from './bar'
+import { renderBar } from './bar'
 import E13 from './e13/E13'
 import Incoming from './incoming/Incoming'
-import {fetchOutgoing} from './outgoing/outgoingSlice'
-import {isTreeDisplayedToggled} from '../settings/settingsSlice'
+import { fetchOutgoing } from './outgoing/outgoingSlice'
+import { isTreeDisplayedToggled } from '../settings/settingsSlice'
 import Outgoing from './outgoing/Outgoing'
 import Tree from '../tree/Tree'
 
@@ -19,7 +19,7 @@ export const VIEW_PO = 'po'
 export const VIEW_E13 = 'e13'
 export const VIEW_PS = 'ps'
 
-const C = ({resourceUri, view}) => {
+const C = ({ resourceUri, view }) => {
   const history = useHistory()
   const dispatch = useDispatch()
   const [selectedView, setSelectedView] = useState(view || VIEW_PO)
@@ -32,7 +32,7 @@ const C = ({resourceUri, view}) => {
   }, [dispatch, focusedResourceUri])
   const outgoing = useSelector(state => state.outgoing.entities[focusedResourceUri])
   let viewers = []
-  if (outgoing) viewers = findVierwers(outgoing.data)
+  if (outgoing) viewers = findViewers(resourceUri, outgoing.data)
 
   return (
     <div css={root}>
@@ -43,7 +43,7 @@ const C = ({resourceUri, view}) => {
             height: 100vh;
             overflow-y: scroll;
             position: fixed;
-            width: ${TREE_WIDTH}px;
+            width: ${tree ? '33%' : 0};
           `}
       >
         <Tree uri={resourceUri}/>
@@ -52,13 +52,13 @@ const C = ({resourceUri, view}) => {
         css={[
           resource,
           css`
-            margin-left: ${tree ? TREE_WIDTH : 0}px;
+            margin-left: ${tree ? '33%' : 0};
           `,
         ]}
       >
         <header
           css={css`
-            width: calc(100% - ${tree ? TREE_WIDTH : 0}px);
+            width: calc(100% - ${tree ? '33%' : '0%'});
           `}
         >
           <h1>{focusedResourceUri}</h1>
@@ -67,9 +67,9 @@ const C = ({resourceUri, view}) => {
           )}
         </header>
         <main>
-          {selectedView === VIEW_PO && <Outgoing resourceUri={focusedResourceUri}/>}
-          {selectedView === VIEW_E13 && <E13 resourceUri={focusedResourceUri}/>}
-          {selectedView === VIEW_PS && <Incoming resourceUri={focusedResourceUri}/>}
+          {selectedView === VIEW_PO && <Outgoing resourceUri={focusedResourceUri} />}
+          {selectedView === VIEW_E13 && <E13 resourceUri={focusedResourceUri} />}
+          {selectedView === VIEW_PS && <Incoming resourceUri={focusedResourceUri} />}s
         </main>
       </div>
     </div>

@@ -1,4 +1,5 @@
 /** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
 import { useEffect } from 'react'
 
 import TreeView from '@material-ui/lab/TreeView'
@@ -18,7 +19,16 @@ const Tree = ({ uri }) => {
   }, [uri])
 
   return (
-    <TreeView defaultCollapseIcon={<ExpandMoreIcon />} defaultExpandIcon={<ChevronRightIcon />}>
+    <TreeView
+      css={css`
+        .makeStyles-content-2 {
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+        }
+      `}
+      defaultCollapseIcon={<ExpandMoreIcon />}
+      defaultExpandIcon={<ChevronRightIcon />}
+    >
       <IriTreeItem path="" uri={uri} />
     </TreeView>
   )
