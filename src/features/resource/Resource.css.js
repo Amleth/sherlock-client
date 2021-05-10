@@ -48,7 +48,7 @@ export const resource = css`
   }
 
   section + section {
-    margin-top: 40px;
+    margin-top: 60px;
   }
 
   //
@@ -124,14 +124,21 @@ export const resource = css`
   }
 `
 
+const h_shadow_colour = 'darkturquoise'
+
 export const h2 = css`
-  color: #ddd;
+  color: ${h_shadow_colour};
   font-size: 140%;
   font-weight: 300;
   letter-spacing: 3px;
   line-height: ${HEADER_HEIGHT}px;
   margin: 0;
   padding: 0;
+  text-shadow:
+    0 0 5px ${h_shadow_colour}, 
+    0 0 20px ${h_shadow_colour},
+    0 0 40px ${h_shadow_colour},
+    0 0 60px ${h_shadow_colour};
   text-transform: uppercase;
 `
 
