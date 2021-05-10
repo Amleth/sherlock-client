@@ -2,13 +2,22 @@
 import { css } from '@emotion/react'
 
 export const BAR_SIZE = 30
-const TITLE_HEIGHT = 80
-const TOP_HEADER_HEIGHT = BAR_SIZE + TITLE_HEIGHT
-const RESOURCE_MARGIN = '0.69em'
+export const HEADER_BOTTOM_PADDING = 10
 export const HEADER_HEIGHT = 35
-const TABLE_BORDER_COLOUR = '#034'
-export const TREE_BORDER_COLOR = '#666'
+export const MARGIN = '2vw'
 export const NAV_BORDER_COLOR = '#333'
+const RESOURCE_MARGIN = '0.69em'
+const TABLE_BORDER_COLOUR = '#034'
+const TITLE_HEIGHT = 80
+const TOP_HEADER_HEIGHT = BAR_SIZE + TITLE_HEIGHT + HEADER_BOTTOM_PADDING + 10
+export const TREE_BORDER_COLOR = '#666'
+
+export const separator = css`
+  background: linear-gradient(90deg, fuchsia, hotpink, aqua);
+  height: 1px;
+  margin-top: ${HEADER_BOTTOM_PADDING}px;
+  width: 100%;
+`
 
 export const root = css`
   display: flex;
@@ -20,7 +29,6 @@ export const resource = css`
 
   > header {
     background-color: black;
-    height: ${TOP_HEADER_HEIGHT}px;
     position: fixed;
 
     h1 {
@@ -31,20 +39,12 @@ export const resource = css`
       font-size: 1em;
       height: ${TITLE_HEIGHT}px;
       margin: 0;
-      padding: 0 0 0 2vw;
-    }
-
-    nav {
-      border-bottom: 1px solid ${NAV_BORDER_COLOR};
-      border-top: 1px solid ${NAV_BORDER_COLOR};
-      display: flex;
-      flex-direction: line;
-      width: 100%;
+      padding: 0 0 0 ${MARGIN};
     }
   }
 
   > main {
-    margin: calc(${TOP_HEADER_HEIGHT}px + 4vh) 2vw 4vh 2vw;
+    margin: calc(${TOP_HEADER_HEIGHT}px + 69px) ${MARGIN} 4vh ${MARGIN};
   }
 
   section + section {

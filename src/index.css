@@ -17,30 +17,25 @@ body {
 }
 
 a {
-  /* background-color: transparent; */
-  color: #0dd;
-  text-decoration: none !important;
-  transition-duration: 0.5s;
-  transition-property: background-color;
-  /* transition-property: color; */
+  color: turquoise;
+  text-decoration: none;
+  transition: all 0.5s;
+  white-space: nowrap;
 }
 
 a:hover {
-  /* background-color: aqua; */
-  /* color: black; */
+  color: deeppink;
   cursor: default;
-  text-decoration: underline !important;
-  transition-duration: 0s;
-  transition-property: background-color;
-  /* transition-property: color; */
+  transition: all 0s;
 }
 
 /* YASGUI */
 
 .yasgui {
-  border-top: 2px solid darkturquoise !important;
+  border-top: 2px solid #00ced1 !important;
 }
 
 /* .yasgui .autocompleteWrapper {
   display: none !important;
 } */
+

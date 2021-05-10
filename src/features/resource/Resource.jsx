@@ -12,7 +12,7 @@ import { isTreeDisplayedToggled } from '../settings/settingsSlice'
 import Outgoing from './outgoing/Outgoing'
 import Tree from '../tree/Tree'
 
-import { resource, root } from './Resource.css'
+import { resource, root, separator } from './Resource.css'
 import { findViewers } from '../../common/viewerSelector'
 
 export const VIEW_PO = 'po'
@@ -67,11 +67,12 @@ const C = ({ resourceUri, view }) => {
           {renderBar(history, outgoing, focusedResourceUri, setSelectedView, viewers, () =>
             dispatch(isTreeDisplayedToggled())
           )}
+          <div css={separator} />
         </header>
         <main>
           {selectedView === VIEW_PO && <Outgoing resourceUri={focusedResourceUri} />}
           {selectedView === VIEW_E13 && <E13 resourceUri={focusedResourceUri} />}
-          {selectedView === VIEW_PS && <Incoming resourceUri={focusedResourceUri} />}s
+          {selectedView === VIEW_PS && <Incoming resourceUri={focusedResourceUri} />}
         </main>
       </div>
     </div>
