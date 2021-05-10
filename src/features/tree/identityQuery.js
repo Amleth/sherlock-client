@@ -51,7 +51,7 @@ PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 
-SELECT ?c ?p ?o ?id ?id
+SELECT ?c ?p ?o ?id 
 WHERE {
   {
     SELECT ?c ?p ?o (?id_identity AS ?id) {
@@ -97,6 +97,6 @@ WHERE {
 
 function resourceUriTabAsString(resourceUriTab) {
     return resourceUriTab.map( resource => {
-        return `<${resource.r.value}>`;
+        return resource.r.type === 'uri' && `<${resource.r.value}>`;
     }).join(",");
 }

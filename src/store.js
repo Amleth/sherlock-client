@@ -3,12 +3,14 @@ import incomingReducer from './features/resource/incoming/incomingSlice'
 import outgoingReducer from './features/resource/outgoing/outgoingSlice'
 import settingsReducer from './features/settings/settingsSlice'
 import treeReducer from './features/tree/treeSlice'
+import userReducer from './features/user/userSlice'
 
-export default configureStore({
+export const store = configureStore({
     reducer: {
         incoming: incomingReducer,
         outgoing: outgoingReducer,
         settings: settingsReducer,
-        tree: treeReducer
+        tree: treeReducer,
+        user: userReducer
     },
-})
+});

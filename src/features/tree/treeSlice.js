@@ -31,19 +31,19 @@ export const getResourcePredicates = createAsyncThunk('tree/fetchResourcePredica
 })
 
 export const getResourcesByPredicateAndLinkedResource = createAsyncThunk('tree/fetchResourcesByPredicateAndLinkedResource', async (payload, thunkAPI) => {
-    const predicate = thunkAPI.getState().tree.entities[payload.uri].predicates.find(predicate => predicate.p.value === payload.p);
+    const predicate = thunkAPI.getState().tree.entities[payload.uri].predicates.find(predicate => predicate.p.value === payload.p.p.value && predicate.direction.value === payload.p.direction.value);
     if (predicate.resources) {
-        return { id: payload.uri, p: payload.p, resources: predicate.resources };
+        return { id: payload.uri, p: predicate.p.value, direction: predicate.direction.value, resources: predicate.resources };
     }
-    const response = predicate.direction.value === 'o'
-        ? await sparqlEndpoint(resourcesByPredicateAndSubjectQuery(payload.p, payload.uri))
-        : await sparqlEndpoint(resourcesByPredicateAndObjectQuery(payload.p, payload.uri));
+    const response = predicate.direction.value === "o"
+        ? await sparqlEndpoint(resourcesByPredicateAndSubjectQuery(payload.p.p.value, payload.uri))
+        : await sparqlEndpoint(resourcesByPredicateAndObjectQuery(payload.p.p.value, payload.uri));
     const identities = await sparqlEndpoint(getIdentities(response.results.bindings));
     response.results.bindings.forEach(resource => {
         const identity = { id: resource.r.value, identity: identities.results.bindings.filter(identity => identity.id.value === resource.r.value) };
         thunkAPI.dispatch(resourceAdded(identity));
     });
-    return { id: payload.uri, p: payload.p, resources: response.results.bindings };
+    return { id: payload.uri, p: payload.p.p.value, direction: predicate.direction.value, resources: response.results.bindings };
 })
 
 export const treeSlice = createSlice({
@@ -80,7 +80,7 @@ export const treeSlice = createSlice({
         },
 
         [getResourcesByPredicateAndLinkedResource.fulfilled]: (state, action) => {
-            state.entities[action.payload.id].predicates.find(predicate => predicate.p.value === action.payload.p).resources = action.payload.resources;
+            state.entities[action.payload.id].predicates.find(predicate => predicate.p.value === action.payload.p && predicate.direction.value === action.payload.direction).resources = action.payload.resources;
             state.status = 'idle';
         },
         [getResourcesByPredicateAndLinkedResource.pending]: (state, action) => {

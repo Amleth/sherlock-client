@@ -36,20 +36,18 @@ const C = ({ resourceUri, view }) => {
 
   return (
     <div css={root}>
-      {tree && (
-        <div
-          css={css`
-            background-color: white;
-            display: block;
-            height: 100vh;
-            overflow-y: scroll;
-            position: fixed;
-            width: ${tree ? '33%' : 0};
-          `}
-        >
-          <Tree uri={resourceUri} />
-        </div>
-      )}
+      <div
+        css={css`
+          background-color: white;
+          display: ${tree ? 'block' : 'none'};
+          height: 100vh;
+          overflow-y: scroll;
+          position: fixed;
+          width: ${tree ? '33%' : 0};
+        `}
+      >
+        <Tree uri={resourceUri} />
+      </div>
       <div
         css={[
           resource,

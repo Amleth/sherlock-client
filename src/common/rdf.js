@@ -101,8 +101,8 @@ export function getCode(uri) {
 }
 
 export function formatUri(uri) {
-  for (const prefix of Object.entries(RDF_PREFIXES)) {
-    uri = uri.replace(prefix[0], prefix[1] !== "" ? prefix[1] +":" : "");
+  for (const [key,value] of Object.entries(RDF_PREFIXES)) {
+    uri = uri.replace(key, value !== "" ? value +":" : "");
   }
   return uri
 }
