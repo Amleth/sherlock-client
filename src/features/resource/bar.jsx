@@ -107,61 +107,19 @@ export const renderBar = (history, outgoing, resourceUri, setSelectedView, viewe
           labelColor: COLOR_MI_MAGENTA,
           onClick: e => setSelectedView(VIEW_PS),
         },
-      ].map(_ => makeLink(_))}
-      {/*
-      {viewers.map(viewerData => {
-        if (viewerData.type === MEI) return makeMeiIcon(history, outgoing, resourceUri, viewerData)
-        return null
-      })} */}
+      ]
+        .concat(
+          viewers.map(_ => ({
+            c1: COLOR_MI_YELLOW,
+            label: _.label,
+            labelColor: COLOR_MI_YELLOW,
+            onClick: e => history.push(_.to),
+          }))
+        )
+        .map(_ => makeLink(_))}
     </div>
-    {/* <Link
-      css={css`
-        color: inherited;
-        align-items: center;
-        display: flex;
-        justify-content: center;
-        height: ${BAR_SIZE}px;
-        text-align: center;
-        width: 69px;
-        white-space: nowrap;
-
-        &:hover {
-          background-color: aqua;
-          color: black;
-        }
-      `}
-      to="/me"
-    >
-      USER
-    </Link>
-    <Link
-      css={css`
-        color: inherited;
-        align-items: center;
-        display: flex;
-        justify-content: center;
-        height: ${BAR_SIZE}px;
-        text-align: center;
-        width: 69px;
-        white-space: nowrap;
-
-        &:hover {
-          background-color: aqua;
-          color: black;
-        }
-      `}
-      to="/"
-    >
-      HOME
-    </Link> */}
   </nav>
 )
-
-// const makeMeiIcon = (history, outgoing, resourceUri, viewerData) => (
-//   <Link css={s(COLOR_MI_YELLOW)} key={viewerData.label} to={viewerData.to}>
-//     {viewerData.label}
-//   </Link>
-// )
 
 const neonlink = (c1, c2, label) => `background: linear-gradient(90deg, ${c2}, ${c1});
 -webkit-animation: neonlink_${label} 0.69s linear infinite;

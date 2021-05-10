@@ -12,6 +12,8 @@ const TITLE_HEIGHT = 80
 const TOP_HEADER_HEIGHT = BAR_SIZE + TITLE_HEIGHT + HEADER_BOTTOM_PADDING + 10
 export const TREE_BORDER_COLOR = '#666'
 
+const h_shadow_colour = 'darkturquoise'
+
 export const separator = css`
   background: linear-gradient(90deg, fuchsia, hotpink, aqua);
   height: 1px;
@@ -33,13 +35,14 @@ export const resource = css`
 
     h1 {
       align-items: center;
-      color: white;
+      color: turquoise;
       display: flex;
       font-family: var(--mono-font);
       font-size: 1em;
       height: ${TITLE_HEIGHT}px;
       margin: 0;
       padding: 0 0 0 ${MARGIN};
+      text-shadow: 0 0 15px aqua;
     }
   }
 
@@ -66,8 +69,9 @@ export const resource = css`
     word-break: keep-all;
   }
   th {
-    color: #999;
+    color: #666;
     font-family: Jost;
+    font-style: italic;
     font-weight: normal;
     letter-spacing: 3px;
     padding: ${RESOURCE_MARGIN};
@@ -124,8 +128,6 @@ export const resource = css`
   }
 `
 
-const h_shadow_colour = 'darkturquoise'
-
 export const h2 = css`
   color: ${h_shadow_colour};
   font-size: 140%;
@@ -135,7 +137,7 @@ export const h2 = css`
   margin: 0;
   padding: 0;
   text-shadow:
-    0 0 5px ${h_shadow_colour}, 
+    0 0 5px ${h_shadow_colour},
     0 0 20px ${h_shadow_colour},
     0 0 40px ${h_shadow_colour},
     0 0 60px ${h_shadow_colour};
