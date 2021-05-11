@@ -12,14 +12,12 @@ const makeLink = ({ c1 = '', c2 = '', label = '', labelColor = 'white', onClick 
   return (
     <Link
       css={css`
-        background: none;
         color: ${labelColor};
         text-align: center;
         width: 60px;
 
         &:hover {
           color: ${labelColor};
-
           ${neonlink(c1, c2, label)}
         }
       `}

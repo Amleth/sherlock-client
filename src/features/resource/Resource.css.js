@@ -47,7 +47,7 @@ export const resource = css`
   }
 
   > main {
-    margin: calc(${TOP_HEADER_HEIGHT}px + 69px) ${MARGIN} 4vh ${MARGIN};
+    margin: calc(${TOP_HEADER_HEIGHT}px + 82px) ${MARGIN} 4vh ${MARGIN};
   }
 
   section + section {

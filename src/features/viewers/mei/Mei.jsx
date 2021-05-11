@@ -13,7 +13,7 @@ export const VIEW_STATE_PICKING = 'picking'
 
 const Mei = () => {
   const { id } = useParams()
-  const meiUri = process.env.REACT_APP_SHERLOCK_FILES_URI + 'mei/' + id + '_sherlockized.mei'
+  const meiUri = process.env.REACT_APP_SHERLOCK_FILES_URI + 'meiweb/' + id + '_sherlockized.mei'
 
   const [basket, setBasket] = useState({})
   const [viewState, setViewState] = useState(VIEW_STATE_READING)

@@ -7,11 +7,11 @@ import {ArrowLeft, ArrowRight, Label} from "@material-ui/icons";
 function computeLabelIcon(LabelIcon, classes) {
     if (LabelIcon === ArrowRight) {
         return <Typography className={classes.outPredicateIcon}>
-            OUT
+            →
         </Typography>
     } else if (LabelIcon === ArrowLeft) {
         return <Typography className={classes.inPredicateIcon}>
-            IN
+            ←
         </Typography>
     }
     return <LabelIcon color="inherit" className={classes.labelIcon}/>
