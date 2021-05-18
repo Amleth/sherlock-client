@@ -6,7 +6,7 @@ const UnauthenticatedRouteOnly = ({component: Component, ...rest}) => {
   return (
     <Route {...rest} render={(props) =>
       (
-        user.token
+        user && user.access_token
           ? <Redirect to='/me'/>
           : <Component {...props} />
       )}/>

@@ -15,7 +15,7 @@ const settingsSlice = createSlice({
         isTreeDisplayedToggled(state, action) {
             state.isTreeDisplayed = !state.isTreeDisplayed
         }
-    }
+    },
 })
 
 export const { focusedResourceUriSet, isTreeDisplayedToggled } = settingsSlice.actions

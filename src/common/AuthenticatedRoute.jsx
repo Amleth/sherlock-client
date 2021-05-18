@@ -6,7 +6,7 @@ const AuthenticatedRoute = ({component: Component, ...rest}) => {
   return (
     <Route {...rest} render={(props) =>
       (
-        user.token
+        user && user.access_token
           ? <Component {...props} />
           : <Redirect to='/login'/>
       )}/>
