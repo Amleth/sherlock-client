@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom'
-import Resource from './Resource'
+import Resource from '../resource/Resource'
 
 const C = () => {
   const { id, view } = useParams()

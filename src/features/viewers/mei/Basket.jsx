@@ -2,7 +2,6 @@
 import { css } from '@emotion/react'
 import { makeSelectedNode } from './verovioHelpers'
 import { ITEM_MARGIN } from '../../../style'
-import { COLOR_FOCUS } from './mei.css'
 
 const C = ({ data, removeFromBasket }) => {
   return Object.entries(data).length ? (

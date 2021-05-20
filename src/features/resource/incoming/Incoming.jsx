@@ -12,7 +12,7 @@ const C = ({ resourceUri }) => {
     dispatch(fetchIncoming(resourceUri))
   }, [dispatch, resourceUri])
 
-  const incoming = useSelector(state => state.incoming.entities[resourceUri])
+  const incoming = useSelector(state => state.tweets.entities[resourceUri])
 
   return !incoming ? (
     <div style={{ fontFamily: 'monospace' }}>🐌</div>

@@ -1,16 +1,15 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import { Link } from 'react-router-dom'
 
 import { VIEW_E13, VIEW_PO, VIEW_PS } from './Resource'
-import { COLOR_MI_GREEN, COLOR_MI_MAGENTA, COLOR_MI_ORANGE, COLOR_MI_TEAL, COLOR_MI_YELLOW, darken } from '../../style'
-import { MEI } from '../../common/viewerSelector'
-import { BAR_SIZE, MARGIN } from './Resource.css'
+import { COLOR_MI_MAGENTA, COLOR_MI_ORANGE, COLOR_MI_TEAL, COLOR_MI_YELLOW, darken } from '../../style'
+import { MARGIN } from './Resource.css'
 
 const makeLink = ({ c1 = '', c2 = '', label = '', labelColor = 'white', onClick = '', title = '' }) => {
   if (!c2) c2 = darken(c1, 0.5)
   return (
-    <Link
+    <div
+      key={label}
       css={css`
         color: ${labelColor};
         text-align: center;
@@ -33,7 +32,7 @@ const makeLink = ({ c1 = '', c2 = '', label = '', labelColor = 'white', onClick 
       >
         {label}
       </div>
-    </Link>
+    </div>
   )
 }
 
@@ -53,71 +52,75 @@ const makeLink = ({ c1 = '', c2 = '', label = '', labelColor = 'white', onClick 
 //     }
 //   `
 
-export const renderBar = (history, outgoing, resourceUri, setSelectedView, viewers, toggleIsTreeDisplayed) => (
-  <nav
-    css={css`
-      display: flex;
-      flex-direction: line;
-      margin-top: ${MARGIN};
-      padding: 0 ${MARGIN};
-      width: 100%;
-    `}
-  >
-    <div
+export const renderBar = (history, outgoing, resourceUri, setSelectedView, viewers, toggleIsTreeDisplayed) => {
+  return (
+    <nav
       css={css`
         display: flex;
         flex-direction: line;
-        // gap: 11px;
+        margin-top: ${MARGIN};
+        padding: 0 ${MARGIN};
         width: 100%;
       `}
     >
-      {' '}
-      {[
-        {
-          c1: 'rgba(0, 255, 0, 1)',
-          label: '🌴',
-          labelColor: '',
-          onClick: e => toggleIsTreeDisplayed(),
-          title: "afficher/masquer l'arbre",
-        },
-        {
-          c1: 'rgba(0, 255, 0, 1)',
-          label: '🪴',
-          labelColor: '',
-          onClick: e => history.push('/describe/' + encodeURIComponent(resourceUri)),
-          title: "réenraciner l'arbre sur la ressource courante",
-        },
-        {
-          c1: COLOR_MI_ORANGE,
-          label: 'Spo',
-          labelColor: COLOR_MI_ORANGE,
-          onClick: e => setSelectedView(VIEW_PO),
-        },
-        {
-          c1: COLOR_MI_TEAL,
-          label: 'E13',
-          labelColor: COLOR_MI_TEAL,
-          // onClick: e => setSelectedView(VIEW_E13),
-        },
-        {
-          c1: COLOR_MI_MAGENTA,
-          label: 'spO',
-          labelColor: COLOR_MI_MAGENTA,
-          onClick: e => setSelectedView(VIEW_PS),
-        },
-      ]
-        .concat(
-          viewers.map(_ => ({
-            c1: COLOR_MI_YELLOW,
-            label: _.label,
-            labelColor: COLOR_MI_YELLOW,
-            onClick: e => history.push(_.to),
-          }))
-        )
-        .map(_ => makeLink(_))}
-    </div>
-  </nav>
-)
+      <div
+        css={css`
+          display: flex;
+          flex-direction: line;
+          // gap: 11px;
+          width: 100%;
+        `}
+      >
+        {' '}
+        {[
+          {
+            c1: 'rgba(0, 255, 0, 1)',
+            label: '🌴',
+            labelColor: '',
+            onClick: e => toggleIsTreeDisplayed(),
+            title: "afficher/masquer l'arbre",
+          },
+          {
+            c1: 'rgba(0, 255, 0, 1)',
+            label: '🪴',
+            labelColor: '',
+            onClick: e => history.push('/describe/' + encodeURIComponent(resourceUri)),
+            title: "réenraciner l'arbre sur la ressource courante",
+          },
+          {
+            c1: COLOR_MI_ORANGE,
+            label: 'Spo',
+            labelColor: COLOR_MI_ORANGE,
+            onClick: e => setSelectedView(VIEW_PO),
+          },
+          {
+            c1: COLOR_MI_TEAL,
+            label: 'E13',
+            labelColor: COLOR_MI_TEAL,
+            onClick: e => setSelectedView(VIEW_E13),
+          },
+          {
+            c1: COLOR_MI_MAGENTA,
+            label: 'spO',
+            labelColor: COLOR_MI_MAGENTA,
+            onClick: e => setSelectedView(VIEW_PS),
+          },
+        ]
+          .concat(
+            viewers.map(_ => {
+              return {
+                c1: _.color || COLOR_MI_YELLOW,
+                label: _.label,
+                labelColor: _.color || COLOR_MI_YELLOW,
+                onClick: e => (_.to ? history.push(_.to) : setSelectedView(_.view)),
+              }
+            })
+          )
+          .map(_ => makeLink(_))}
+      </div>
+    </nav>
+  )
+}
 
 const neonlink = (c1, c2, label) => `background: linear-gradient(90deg, ${c2}, ${c1});
 -webkit-animation: neonlink_${label} 0.69s linear infinite;

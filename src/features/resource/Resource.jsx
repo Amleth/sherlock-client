@@ -11,9 +11,11 @@ import { fetchOutgoing } from './outgoing/outgoingSlice'
 import { isTreeDisplayedToggled } from '../settings/settingsSlice'
 import Outgoing from './outgoing/Outgoing'
 import Tree from '../tree/Tree'
+import Tweet from '../twitter/Tweet'
 
 import { resource, root, separator } from './Resource.css'
 import { findViewers } from '../../common/viewerSelector'
+import { ANNOTATE as VIEW_ANNOTATE } from '../../common/viewerSelector'
 
 export const VIEW_PO = 'po'
 export const VIEW_E13 = 'e13'
@@ -71,6 +73,9 @@ const C = ({ resourceUri, view }) => {
           {selectedView === VIEW_PO && <Outgoing resourceUri={focusedResourceUri} />}
           {selectedView === VIEW_E13 && <E13 resourceUri={focusedResourceUri} />}
           {selectedView === VIEW_PS && <Incoming resourceUri={focusedResourceUri} />}
+          {focusedResourceUri.startsWith('https://twitter.com/') && selectedView === VIEW_ANNOTATE && (
+            <Tweet resourceUri={focusedResourceUri} />
+          )}
         </main>
       </div>
     </div>

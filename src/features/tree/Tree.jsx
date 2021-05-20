@@ -16,7 +16,7 @@ const Tree = ({ uri }) => {
   useEffect(() => {
     dispatch(rootSet(uri))
     dispatch(getResourceIdentity(uri))
-  }, [uri])
+  }, [dispatch, uri])
 
   return (
     <TreeView

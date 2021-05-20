@@ -2,7 +2,7 @@ import TreeItem from "@material-ui/lab/TreeItem";
 import React from "react";
 import Typography from "@material-ui/core/Typography";
 import { useTreeItemStyles } from "./treeItem.css";
-import {ArrowLeft, ArrowRight, Label} from "@material-ui/icons";
+import { ArrowLeft, ArrowRight } from "@material-ui/icons";
 
 function computeLabelIcon(LabelIcon, classes) {
     if (LabelIcon === ArrowRight) {
@@ -14,7 +14,7 @@ function computeLabelIcon(LabelIcon, classes) {
             ←
         </Typography>
     }
-    return <LabelIcon color="inherit" className={classes.labelIcon}/>
+    return <LabelIcon color="inherit" className={classes.labelIcon} />
 }
 
 function StyledTreeItem(props) {

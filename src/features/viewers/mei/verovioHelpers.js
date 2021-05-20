@@ -46,9 +46,12 @@ export const getNodeNote = e => {
                 mouseNode = e.target
                 noteNode = parentNode
             }
+            break
+        default:
+            console.log(``)
     }
 
-    if (mouseNode, noteNode) {
+    if (mouseNode && noteNode) {
         return { mouseNode, noteNode }
     }
     else return null

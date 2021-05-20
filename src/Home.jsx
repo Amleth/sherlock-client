@@ -3,10 +3,11 @@ import { css } from '@emotion/react'
 import { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { parse } from 'uuid'
+import { getTweetUserAndId } from './features/twitter/twitter'
 
 const Home = () => {
   const history = useHistory()
-  const [uri, setUri] = useState('')
+  const [uri, setUri] = useState('https://twitter.com/tubbutec/status/1391311620786229248')
 
   return (
     <div
@@ -67,8 +68,16 @@ const Home = () => {
               }
             `}
             onClick={() => {
-              uri && uri.startsWith('http') && history.push('/describe/' + encodeURIComponent(uri))
-              uri && parse(uri) && history.push('/id/' + uri)
+              if (uri) {
+                if (uri.startsWith('https://twitter.com/')) {
+                  const { userScreenName, statusId } = getTweetUserAndId(uri)
+                  history.push(`/tweet/${userScreenName}/${statusId}`)
+                } else if (uri.startsWith('http')) {
+                  history.push('/describe/' + encodeURIComponent(uri))
+                } else {
+                  parse(uri) && history.push('/id/' + uri)
+                }
+              }
             }}
           >
             {`->`}

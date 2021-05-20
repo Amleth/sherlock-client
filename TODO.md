@@ -1,7 +1,5 @@
-- https://redux.js.org/tutorials/essentials/part-6-performance-normalization
-- https://react-redux.js.org/api/hooks
-- https://redux.js.org/tutorials/fundamentals/part-8-modern-redux
-- https://redux.js.org/tutorials/fundamentals/part-8-modern-redux#normalizing-state
-- https://redux-toolkit.js.org/usage/immer-reducers
+- réparer le bouton MEI
+- réparer le bouton spO
+- ne pas describe les /files, mais les proposer au téléchargement
 - identité des o : indiquer le label du P2
 - truc qui tourne style par défaut CRA
