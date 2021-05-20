@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import {getTokenByCredentials} from "../../common/backend";
 
-const initialState = {token: loadTokenFromLocalStorage()};
+const initialState = loadUserFromLocalStorage();
 
 
 export const getUser = createAsyncThunk('user/getUser', async (credentials, ThunkAPI) => {
@@ -16,22 +16,25 @@ export const getUser = createAsyncThunk('user/getUser', async (credentials, Thun
 
 const userSlice = createSlice({
   name: 'user',
-  initialState,
+  initialState: initialState ? initialState : {status: 'idle'},
   reducers: {
     userDisconnected: (state) => {
-      saveTokenToLocalStorage(undefined);
+      saveUserToLocalStorage(undefined);
       return {
-        ...state,
-        token: null
+        status: 'idle'
       };
+    },
+    tokenSet: (state, action) => {
+      state.access_token = action.payload
     },
   },
   extraReducers: {
     [getUser.fulfilled]: (state, action) => {
       state.username = action.payload.username;
-      state.token = action.payload.access_token;
+      state.access_token = action.payload.access_token;
+      state.refresh_token = action.payload.refresh_token;
       state.status = 'idle';
-      saveTokenToLocalStorage(action.payload.access_token);
+      saveUserToLocalStorage(state);
     },
     [getUser.pending]: (state, action) => {
       state.status = 'loading';
@@ -42,11 +45,11 @@ const userSlice = createSlice({
   }
 });
 
-function loadTokenFromLocalStorage() {
+function loadUserFromLocalStorage() {
   try {
-    const token = localStorage.getItem("token");
-    if (token === null) return undefined;
-    return JSON.parse(token);
+    const user = localStorage.getItem("user");
+    if (user === null) return undefined;
+    return JSON.parse(user);
   } catch (e) {
     console.warn(e);
     return undefined;
@@ -54,14 +57,14 @@ function loadTokenFromLocalStorage() {
 }
 
 
-function saveTokenToLocalStorage(token) {
+function saveUserToLocalStorage(user) {
   try {
-    const serialisedToken = JSON.stringify(token);
-    localStorage.setItem("token", serialisedToken);
+    const userSerialized = JSON.stringify(user);
+    localStorage.setItem("user", userSerialized);
   } catch (e) {
     console.warn(e);
   }
 }
 
 export default userSlice.reducer
-export const {userDisconnected} = userSlice.actions
+export const {userDisconnected, tokenSet} = userSlice.actions
