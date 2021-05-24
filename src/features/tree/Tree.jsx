@@ -1,3 +1,5 @@
+// https://github.com/mui-org/material-ui/blob/v5.0.0-alpha.34/docs/src/pages/components/tree-view/IconExpansionTreeView.js
+
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { useEffect } from 'react'
@@ -9,6 +11,7 @@ import { useDispatch } from 'react-redux'
 
 import { rootSet, getResourceIdentity } from './treeSlice'
 import IriTreeItem from './IriTreeItem'
+import TreeItem from '@material-ui/lab/TreeItem'
 
 const Tree = ({ uri }) => {
   const dispatch = useDispatch()

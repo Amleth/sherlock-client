@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
+import { Box, Button } from '@material-ui/core'
 
 import { VIEW_E13, VIEW_PO, VIEW_PS } from './Resource'
 import { COLOR_MI_MAGENTA, COLOR_MI_ORANGE, COLOR_MI_TEAL, COLOR_MI_YELLOW, darken } from '../../style'
@@ -7,6 +8,13 @@ import { MARGIN } from './Resource.css'
 
 const makeLink = ({ c1 = '', c2 = '', label = '', labelColor = 'white', onClick = '', title = '' }) => {
   if (!c2) c2 = darken(c1, 0.5)
+
+  return (
+    <Button key={label} variant="outlined">
+      Primary
+    </Button>
+  )
+
   return (
     <div
       key={label}
@@ -63,15 +71,7 @@ export const renderBar = (history, outgoing, resourceUri, setSelectedView, viewe
         width: 100%;
       `}
     >
-      <div
-        css={css`
-          display: flex;
-          flex-direction: line;
-          // gap: 11px;
-          width: 100%;
-        `}
-      >
-        {' '}
+      <Box sx={{ display: 'flex', gap: 1 }}>
         {[
           {
             c1: 'rgba(0, 255, 0, 1)',
@@ -117,7 +117,7 @@ export const renderBar = (history, outgoing, resourceUri, setSelectedView, viewe
             })
           )
           .map(_ => makeLink(_))}
-      </div>
+      </Box>
     </nav>
   )
 }

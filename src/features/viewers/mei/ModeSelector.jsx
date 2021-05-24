@@ -12,8 +12,10 @@ const C = ({ setViewState, viewState }) => {
       css={css`
         border-bottom: 1px solid black;
         display: flex;
+        height: 36px;
 
         > div {
+          line-height: 36px;
           padding: 0 10px;
           text-align: center;
           width: 100%;

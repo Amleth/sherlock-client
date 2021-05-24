@@ -40,7 +40,6 @@ const C = ({ resourceUri, view }) => {
     <div css={root}>
       <div
         css={css`
-          background-color: white;
           display: ${tree ? 'block' : 'none'};
           height: 100vh;
           overflow-y: scroll;
