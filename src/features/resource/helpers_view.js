@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
+import { Link } from '@material-ui/core'
 import React from 'react'
 import { DATA_IREMUS_FILES_BASE, DATA_IREMUS_ID_BASE, RDF_PREFIXES } from '../../common/rdf'
 import { COLOR_MI_ORANGE } from '../../style.js'
@@ -121,7 +122,7 @@ export const formatBinding = b => {
         else {
             href = APP_BASE_URI + 'describe/' + encodeURIComponent(href)
         }
-        return <a href={href}>{label}</a>
+        return <Link href={href}>{label}</Link>
     } else {
         return (
             <React.Fragment>

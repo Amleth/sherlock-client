@@ -1,11 +1,11 @@
-import StyledTreeItem from './StyledTreeItem'
+import SherlockTreeItemContent from './SherlockTreeItemContent'
 import React from 'react'
 import { DateRange, Label } from '@material-ui/icons'
 import type from './datatype'
 
 const LiteralTreeItem = ({ path, literal }) => {
   return (
-    <StyledTreeItem key={path} nodeId={path} labelText={literal.value} labelIcon={computeLabelIcon(literal.datatype)} />
+    <SherlockTreeItemContent key={path} nodeId={path} labelText={literal.value} labelIcon={computeLabelIcon(literal.datatype)} />
   )
 }
 

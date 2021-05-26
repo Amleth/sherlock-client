@@ -1,4 +1,4 @@
-import StyledTreeItem from './StyledTreeItem'
+import SherlockTreeItemContent from './SherlockTreeItemContent'
 import React from 'react'
 import { ArrowLeft, ArrowRight } from '@material-ui/icons'
 import CircularProgress from '@material-ui/core/CircularProgress'
@@ -15,7 +15,7 @@ const PredicateTreeItem = ({ path, predicate, relatedUri }) => {
   if (predicate.c) {
     if (predicate.c.value > maxResourceUnfoldable) {
       return (
-        <StyledTreeItem
+        <SherlockTreeItemContent
           onLabelClick={e => {
             e.preventDefault()
           }}
@@ -27,7 +27,7 @@ const PredicateTreeItem = ({ path, predicate, relatedUri }) => {
       )
     } else {
       return (
-        <StyledTreeItem
+        <SherlockTreeItemContent
           onIconClick={() => {
             dispatch(pathUnfoldStatusChanged(`${path}${predicate.p.value},${predicate.direction.value},`))
             dispatch(getResourcesByPredicateAndLinkedResource({ p: predicate, uri: relatedUri }))
@@ -57,7 +57,7 @@ const PredicateTreeItem = ({ path, predicate, relatedUri }) => {
               )
             })}
           {!predicate.resources && predicate.c.value < maxResourceUnfoldable && <CircularProgress />}
-        </StyledTreeItem>
+        </SherlockTreeItemContent>
       )
     }
   } else {

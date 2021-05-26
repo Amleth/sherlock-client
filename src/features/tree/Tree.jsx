@@ -11,10 +11,10 @@ import { useDispatch } from 'react-redux'
 
 import { rootSet, getResourceIdentity } from './treeSlice'
 import IriTreeItem from './IriTreeItem'
-import TreeItem from '@material-ui/lab/TreeItem'
 
 const Tree = ({ uri }) => {
   const dispatch = useDispatch()
+  const path = ''
 
   useEffect(() => {
     dispatch(rootSet(uri))
@@ -22,17 +22,8 @@ const Tree = ({ uri }) => {
   }, [dispatch, uri])
 
   return (
-    <TreeView
-      css={css`
-        .makeStyles-content-2 {
-          border-top-right-radius: 0;
-          border-bottom-right-radius: 0;
-        }
-      `}
-      defaultCollapseIcon={<ExpandMoreIcon />}
-      defaultExpandIcon={<ChevronRightIcon />}
-    >
-      <IriTreeItem path="" uri={uri} />
+    <TreeView defaultCollapseIcon={<ExpandMoreIcon />} defaultExpandIcon={<ChevronRightIcon />}>
+      <IriTreeItem path={path} uri={uri} nodeId={path + uri + ','} />
     </TreeView>
   )
 }

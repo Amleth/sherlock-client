@@ -43,7 +43,7 @@ export const useTreeItemStyles = makeStyles((theme) => ({
     },
     labelIcon: {
         marginRight: theme.spacing(1),
-},
+    },
     labelText: {
         fontWeight: 'inherit',
         flexGrow: 1,
