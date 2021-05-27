@@ -1,5 +1,6 @@
 import SherlockTreeItemContent from './SherlockTreeItemContent'
 import React from 'react'
+import TreeItem from '@material-ui/lab/TreeItem'
 import { ArrowLeft, ArrowRight } from '@material-ui/icons'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { useDispatch, useSelector } from 'react-redux'
@@ -9,57 +10,69 @@ import LiteralTreeItem from './LiteralTreeItem'
 import { formatUri } from '../../common/rdf'
 import { maxResourceUnfoldable } from '../../common/utils'
 
-const PredicateTreeItem = ({ path, predicate, relatedUri }) => {
+const PredicateTreeItem = ({ nodeId, path, predicate, relatedUri }) => {
   const dispatch = useDispatch()
   const unfoldedPaths = useSelector(state => state.tree.unfoldedPaths)
+
   if (predicate.c) {
-    if (predicate.c.value > maxResourceUnfoldable) {
-      return (
-        <SherlockTreeItemContent
-          onLabelClick={e => {
-            e.preventDefault()
-          }}
-          labelIcon={computeLabelIcon(predicate)}
-          labelInfo={predicate.c.value}
-          labelText={formatUri(predicate.p.value)}
-          nodeId={`${path}${predicate.p.value},${predicate.direction.value},`}
-        />
-      )
-    } else {
-      return (
-        <SherlockTreeItemContent
-          onIconClick={() => {
+    // if (predicate.c.value > maxResourceUnfoldable) {
+    //   return (
+    //     <SherlockTreeItemContent
+    //       onLabelClick={e => {
+    //         e.preventDefault()
+    //       }}
+    //       labelIcon={computeLabelIcon(predicate)}
+    //       labelInfo={predicate.c.value}
+    //       labelText={formatUri(predicate.p.value)}
+    //       nodeId={`${path}${predicate.p.value},${predicate.direction.value},`}
+    //     />
+    //   )
+    // } else {
+    return (
+      <TreeItem
+        ContentComponent={SherlockTreeItemContent}
+        ContentProps={{
+          labelIcon: computeLabelIcon(predicate),
+          labelInfo: predicate.c.value,
+          labelText: formatUri(predicate.p.value),
+          onIconClick: () => {
             dispatch(pathUnfoldStatusChanged(`${path}${predicate.p.value},${predicate.direction.value},`))
             dispatch(getResourcesByPredicateAndLinkedResource({ p: predicate, uri: relatedUri }))
-          }}
-          onLabelClick={e => {
+          },
+          onLabelClick: e => {
             e.preventDefault()
-          }}
-          labelIcon={computeLabelIcon(predicate)}
-          labelInfo={predicate.c.value}
-          labelText={formatUri(predicate.p.value)}
-          nodeId={`${path}${predicate.p.value},${predicate.direction.value},`}
-        >
-          {canShowItem(predicate, unfoldedPaths, path) &&
-            predicate.resources.map(resource => {
-              return resource.r.type === 'uri' ? (
-                <IriTreeItem
-                  path={`${path}${predicate.p.value},${predicate.direction.value},`}
-                  key={`${path}${predicate.p.value},${predicate.direction.value},${resource.r.value},`}
-                  uri={resource.r.value}
-                />
-              ) : (
-                <LiteralTreeItem
-                  path={`${path}${predicate.p.value},${predicate.direction.value},`}
-                  key={`${path}${predicate.p.value},${predicate.direction.value},${resource.r.value},`}
-                  literal={resource.r}
-                />
-              )
-            })}
-          {!predicate.resources && predicate.c.value < maxResourceUnfoldable && <CircularProgress />}
-        </SherlockTreeItemContent>
-      )
-    }
+          },
+        }}
+        // nodeId={`${path}${predicate.p.value},${predicate.direction.value},`}
+        nodeId={nodeId}
+      >
+        {unfoldedPaths.includes(path) && predicate.resources ? (
+          predicate.resources.map(resource => {
+            const id = `${path}${predicate.p.value},${predicate.direction.value},${resource.r.value},`
+            console.log('literal ?', resource.r.value, resource.r.type)
+            console.log(JSON.stringify(predicate.resources))
+            return resource.r.type === 'uri' ? (
+              <IriTreeItem
+                key={id}
+                nodeId={id}
+                path={`${path}${predicate.p.value},${predicate.direction.value},`}
+                uri={resource.r.value}
+              />
+            ) : (
+              <LiteralTreeItem
+                key={id}
+                nodeId={id}
+                path={`${path}${predicate.p.value},${predicate.direction.value},`}
+                literal={resource.r}
+              />
+            )
+          })
+        ) : (
+          <div />
+        )}
+      </TreeItem>
+    )
+    // }
   } else {
     return <div />
   }
@@ -67,10 +80,6 @@ const PredicateTreeItem = ({ path, predicate, relatedUri }) => {
 
 function computeLabelIcon(predicate) {
   return predicate.direction.value === 'o' ? ArrowRight : ArrowLeft
-}
-
-function canShowItem(predicate, unfoldedPaths, path) {
-  return predicate.resources && unfoldedPaths.includes(path)
 }
 
 export default PredicateTreeItem

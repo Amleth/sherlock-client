@@ -11,7 +11,6 @@ import { focusedResourceUriSet } from '../settings/settingsSlice'
 import { formatUri } from '../../common/rdf'
 
 const IriTreeItem = ({ nodeId, path, uri, ...props }) => {
-  console.log(props)
   const dispatch = useDispatch()
   const resource = useSelector(state => selectResourceByUri(state, uri))
   const unfoldedPaths = useSelector(state => state.tree.unfoldedPaths)
@@ -29,26 +28,29 @@ const IriTreeItem = ({ nodeId, path, uri, ...props }) => {
           e.preventDefault()
           dispatch(focusedResourceUriSet(resource.id))
         },
-        labelInfo: count.value,
         labelIcon: Public,
+        labelInfo: count.value,
         labelText: formatUri(uri),
       }}
       nodeId={nodeId}
       {...props}
-    />
+    >
+      {resource.predicates &&
+        resource.predicates.map(predicate => {
+          const id = `${path},${resource.id},${predicate.p.value},${predicate.direction.value},`
+          return (
+            <PredicateTreeItem
+              key={id}
+              nodeId={id}
+              path={`${path}${resource.id},`}
+              predicate={predicate}
+              relatedUri={resource.id}
+            />
+          )
+        })}
+      {count && !resource.predicates && <CircularProgress />}
+    </TreeItem>
   ) : (
-    // <StyledTreeItem>
-    //   {resource.predicates &&
-    //     resource.predicates.map(predicate => (
-    //       <PredicateTreeItem
-    //         key={`${path},${resource.id},${predicate.p.value},${predicate.direction.value},`}
-    //         relatedUri={resource.id}
-    //         path={`${path}${resource.id},`}
-    //         predicate={predicate}
-    //       />
-    //     ))}
-    //   {count && !resource.predicates && <CircularProgress />}
-    // </StyledTreeItem>
     <CircularProgress />
   )
 }

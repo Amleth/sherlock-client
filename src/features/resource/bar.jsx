@@ -3,7 +3,7 @@ import { css } from '@emotion/react'
 import { Box, Button } from '@material-ui/core'
 
 import { VIEW_E13, VIEW_PO, VIEW_PS } from './Resource'
-import { COLOR_MI_MAGENTA, COLOR_MI_ORANGE, COLOR_MI_TEAL, COLOR_MI_YELLOW, darken } from '../../style'
+import { darken } from '../../style'
 import { MARGIN } from './Resource.css'
 
 const makeLink = ({ c1 = '', c2 = '', label = '', labelColor = 'white', onClick = '', title = '' }) => {
@@ -60,7 +60,7 @@ const makeLink = ({ c1 = '', c2 = '', label = '', labelColor = 'white', onClick 
 //     }
 //   `
 
-export const renderBar = (history, outgoing, resourceUri, setSelectedView, viewers, toggleIsTreeDisplayed) => {
+export const renderBar = (theme, history, outgoing, resourceUri, setSelectedView, viewers, toggleIsTreeDisplayed) => {
   return (
     <nav
       css={css`
@@ -88,30 +88,30 @@ export const renderBar = (history, outgoing, resourceUri, setSelectedView, viewe
             title: "réenraciner l'arbre sur la ressource courante",
           },
           {
-            c1: COLOR_MI_ORANGE,
+            c1: theme.palette.colors.MI_ORANGE,
             label: 'Spo',
-            labelColor: COLOR_MI_ORANGE,
+            labelColor: theme.palette.colors.MI_ORANGE,
             onClick: e => setSelectedView(VIEW_PO),
           },
           {
-            c1: COLOR_MI_TEAL,
+            c1: theme.palette.colors.MI_TEAL,
             label: 'E13',
-            labelColor: COLOR_MI_TEAL,
+            labelColor: theme.palette.colors.MI_TEAL,
             onClick: e => setSelectedView(VIEW_E13),
           },
           {
-            c1: COLOR_MI_MAGENTA,
+            c1: theme.palette.colors.MI_MAGENTA,
             label: 'spO',
-            labelColor: COLOR_MI_MAGENTA,
+            labelColor: theme.palette.colors.MI_MAGENTA,
             onClick: e => setSelectedView(VIEW_PS),
           },
         ]
           .concat(
             viewers.map(_ => {
               return {
-                c1: _.color || COLOR_MI_YELLOW,
+                c1: _.color || theme.palette.colors.MI_YELLOW,
                 label: _.label,
-                labelColor: _.color || COLOR_MI_YELLOW,
+                labelColor: _.color || theme.palette.colors.MI_YELLOW,
                 onClick: e => (_.to ? history.push(_.to) : setSelectedView(_.view)),
               }
             })

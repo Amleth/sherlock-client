@@ -1,11 +1,40 @@
-import SherlockTreeItemContent from './SherlockTreeItemContent'
-import React from 'react'
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
 import { DateRange, Label } from '@material-ui/icons'
+import { Box } from '@material-ui/core'
+import TreeItem from '@material-ui/lab/TreeItem'
+import React from 'react'
+
 import type from './datatype'
+import { Typography } from '@material-ui/core'
 
 const LiteralTreeItem = ({ path, literal }) => {
   return (
-    <SherlockTreeItemContent key={path} nodeId={path} labelText={literal.value} labelIcon={computeLabelIcon(literal.datatype)} />
+    <TreeItem
+      key={path}
+      label={
+        <Box
+          css={css`
+            display: flex;
+          `}
+        >
+          <Box
+            component={computeLabelIcon(literal.datatype)}
+            css={css`
+              width: 33px;
+            `}
+          />
+          <Typography
+            css={css`
+              font-size: 0.875rem;
+            `}
+          >
+            {literal.value}
+          </Typography>
+        </Box>
+      }
+      nodeId={path}
+    />
   )
 }
 

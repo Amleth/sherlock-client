@@ -3,7 +3,6 @@ import { css } from '@emotion/react'
 import { Link } from '@material-ui/core'
 import React from 'react'
 import { DATA_IREMUS_FILES_BASE, DATA_IREMUS_ID_BASE, RDF_PREFIXES } from '../../common/rdf'
-import { COLOR_MI_ORANGE } from '../../style.js'
 import { codes as codesCss, header, HEADER_HEIGHT } from './Resource.css'
 
 const APP_BASE_URI =
@@ -136,10 +135,10 @@ export const formatBinding = b => {
 }
 
 export function makeCode(code, size) {
-    return <div css={css`
+    return <div css={theme => css`
         background-color: #111;
-        border: 1px solid ${COLOR_MI_ORANGE};
-        color: ${COLOR_MI_ORANGE};
+        border: 1px solid ${theme.palette.colors.MI_ORANGE};
+        color: ${theme.palette.colors.MI_ORANGE};
         height: ${size}px;
         line-height: ${size}px;
         text-align: center;
