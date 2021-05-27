@@ -4,6 +4,7 @@ import TreeItem from '@material-ui/lab/TreeItem'
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
+import TransitionComponent from './TransitionComponent'
 import { getResourcePredicates, pathUnfoldStatusChanged, selectResourceByUri } from './treeSlice'
 import SherlockTreeItemContent from './SherlockTreeItemContent'
 import PredicateTreeItem from './PredicateTreeItem'
@@ -33,6 +34,7 @@ const IriTreeItem = ({ nodeId, path, uri, ...props }) => {
         labelText: formatUri(uri),
       }}
       nodeId={nodeId}
+      TransitionComponent={TransitionComponent}
       {...props}
     >
       {resource.predicates &&

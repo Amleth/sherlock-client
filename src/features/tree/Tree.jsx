@@ -1,7 +1,5 @@
-// https://github.com/mui-org/material-ui/blob/v5.0.0-alpha.34/docs/src/pages/components/tree-view/IconExpansionTreeView.js
-
 /** @jsxImportSource @emotion/react */
-// import { css } from '@emotion/react'
+import { css } from '@emotion/react'
 import { useEffect } from 'react'
 
 import TreeView from '@material-ui/lab/TreeView'
@@ -22,7 +20,13 @@ const Tree = ({ uri }) => {
   }, [dispatch, uri])
 
   return (
-    <TreeView defaultCollapseIcon={<ExpandMoreIcon />} defaultExpandIcon={<ChevronRightIcon />}>
+    <TreeView
+      css={css`
+        user-select: none;
+      `}
+      defaultCollapseIcon={<ExpandMoreIcon />}
+      defaultExpandIcon={<ChevronRightIcon />}
+    >
       <IriTreeItem path={path} uri={uri} nodeId={path + uri + ','} />
     </TreeView>
   )

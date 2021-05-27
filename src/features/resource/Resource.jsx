@@ -81,13 +81,14 @@ export default function C({ resourceUri, view }) {
         <Toolbar>
           <Typography
             component="h1"
-            css={css`
+            css={theme => css`
               color: turquoise;
-              font-family: monospace;
+              font-family: ${theme.typography.fontFamilyMonospaced};
+              font-weight: bold;
               text-shadow: 0 0 15px aqua;
             `}
           >
-            {resourceUri}
+            {focusedResourceUri}
           </Typography>
         </Toolbar>
         <Toolbar>

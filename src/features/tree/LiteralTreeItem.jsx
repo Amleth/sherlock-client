@@ -3,7 +3,7 @@ import { css } from '@emotion/react'
 import { DateRange, Label } from '@material-ui/icons'
 import { Box } from '@material-ui/core'
 import TreeItem from '@material-ui/lab/TreeItem'
-import React from 'react'
+import TransitionComponent from './TransitionComponent'
 
 import type from './datatype'
 import { Typography } from '@material-ui/core'
@@ -34,6 +34,7 @@ const LiteralTreeItem = ({ path, literal }) => {
         </Box>
       }
       nodeId={path}
+      TransitionComponent={TransitionComponent}
     />
   )
 }

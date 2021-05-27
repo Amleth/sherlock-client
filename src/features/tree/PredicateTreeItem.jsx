@@ -2,13 +2,14 @@ import SherlockTreeItemContent from './SherlockTreeItemContent'
 import React from 'react'
 import TreeItem from '@material-ui/lab/TreeItem'
 import { ArrowLeft, ArrowRight } from '@material-ui/icons'
-import CircularProgress from '@material-ui/core/CircularProgress'
 import { useDispatch, useSelector } from 'react-redux'
+
+import TransitionComponent from './TransitionComponent'
 import { getResourcesByPredicateAndLinkedResource, pathUnfoldStatusChanged } from './treeSlice'
 import IriTreeItem from './IriTreeItem'
 import LiteralTreeItem from './LiteralTreeItem'
 import { formatUri } from '../../common/rdf'
-import { maxResourceUnfoldable } from '../../common/utils'
+// import { maxResourceUnfoldable } from '../../common/utils'
 
 const PredicateTreeItem = ({ nodeId, path, predicate, relatedUri }) => {
   const dispatch = useDispatch()
@@ -44,13 +45,12 @@ const PredicateTreeItem = ({ nodeId, path, predicate, relatedUri }) => {
           },
         }}
         // nodeId={`${path}${predicate.p.value},${predicate.direction.value},`}
-        nodeId={nodeId}
+        nodeId={nodeId} //TODO c'est pas le même à cause de la virgule en début (path)
+        TransitionComponent={TransitionComponent}
       >
         {unfoldedPaths.includes(path) && predicate.resources ? (
           predicate.resources.map(resource => {
             const id = `${path}${predicate.p.value},${predicate.direction.value},${resource.r.value},`
-            console.log('literal ?', resource.r.value, resource.r.type)
-            console.log(JSON.stringify(predicate.resources))
             return resource.r.type === 'uri' ? (
               <IriTreeItem
                 key={id}

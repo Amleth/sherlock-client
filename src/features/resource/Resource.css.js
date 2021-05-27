@@ -65,7 +65,7 @@ export const header = css`
 
 const RESOURCE_MARGIN = '0.69em'
 const TABLE_BORDER_COLOUR = '#034'
-export const triplesTableStyle = css`
+export const triplesTableStyle = theme => css`
   //
   // SECTIONS
   //
@@ -80,7 +80,7 @@ export const triplesTableStyle = css`
 
   table {
     border-collapse: collapse;
-    font-family: monospace;
+    font-family: ${theme.typography.fontFamilyMonospaced};
     width: 100%;
   }
 
