@@ -1,52 +1,39 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
+import { Box, Switch, Typography } from '@material-ui/core'
+
 import { VIEW_STATE_PICKING, VIEW_STATE_READING } from './Mei'
 
 const C = ({ setViewState, viewState }) => {
   return (
-    <div
-      onClick={e => {
-        if (viewState === VIEW_STATE_PICKING) setViewState(VIEW_STATE_READING)
-        else setViewState(VIEW_STATE_PICKING)
-      }}
-      css={css`
-        border-bottom: 1px solid black;
+    <Box
+      css={theme => css`
+        align-items: center;
+        color: ${theme.palette.primary.text};
         display: flex;
-        height: 36px;
-
-        > div {
-          line-height: 36px;
-          padding: 0 10px;
-          text-align: center;
-          width: 100%;
-        }
+        justify-content: center;
       `}
     >
-      <div
-        css={css`
-          background-color: ${viewState === VIEW_STATE_READING ? 'black' : 'white'};
-          color: ${viewState === VIEW_STATE_READING ? 'white' : 'black'};
-          &:hover {
-            background-color: black;
-            color: white;
-          }
+      <Typography
+        css={theme => css`
+          color: ${viewState === VIEW_STATE_READING ? theme.palette.primary.main : theme.palette.primary.text};
         `}
       >
-        CONSULTATION
-      </div>
-      <div
-        css={css`
-          background-color: ${viewState === VIEW_STATE_PICKING ? 'black' : 'white'};
-          color: ${viewState === VIEW_STATE_PICKING ? 'white' : 'black'};
-          &:hover {
-            background-color: black;
-            color: white;
-          }
+        consultation
+      </Typography>
+      <Switch
+        onChange={e => {
+          setViewState(e.target.checked ? VIEW_STATE_PICKING : VIEW_STATE_READING)
+        }}
+      />
+      <Typography
+        css={theme => css`
+          color: ${viewState === VIEW_STATE_PICKING ? theme.palette.primary.main : theme.palette.primary.text};
         `}
       >
-        SELECTION
-      </div>
-    </div>
+        sélection
+      </Typography>
+    </Box>
   )
 }
 

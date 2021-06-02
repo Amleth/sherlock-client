@@ -39,10 +39,8 @@ export const getResourcesByPredicateAndLinkedResource = createAsyncThunk('tree/f
         ? await sparqlEndpoint(resourcesByPredicateAndSubjectQuery(payload.p.p.value, payload.uri))
         : await sparqlEndpoint(resourcesByPredicateAndObjectQuery(payload.p.p.value, payload.uri));
     const identities = await sparqlEndpoint(getIdentities(response.results.bindings));
-    response.results.bindings.forEach(resource => {
-        const identity = { id: resource.r.value, identity: identities.results.bindings.filter(identity => identity.id.value === resource.r.value) };
-        thunkAPI.dispatch(resourceAdded(identity));
-    });
+    const entities = response.results.bindings.map(resource => ({ id: resource.r.value, identity: identities.results.bindings.filter(identity => identity.id.value === resource.r.value) }))
+    thunkAPI.dispatch(resourcesAdded(entities));
     return { id: payload.uri, p: payload.p.p.value, direction: predicate.direction.value, resources: response.results.bindings };
 })
 
@@ -53,8 +51,8 @@ export const treeSlice = createSlice({
         rootSet: (state, action) => {
             state.root = action.payload;
         },
-        resourceAdded: (state, action) => {
-            adapter.addOne(state, action.payload)
+        resourcesAdded: (state, action) => {
+            adapter.addMany(state, action.payload)
         },
         pathUnfoldStatusChanged: (state, action) => {
             state.unfoldedPaths.includes(action.payload)
@@ -89,7 +87,7 @@ export const treeSlice = createSlice({
     }
 })
 
-export const { rootSet, pathUnfoldStatusChanged, resourceAdded } = treeSlice.actions
+export const { rootSet, pathUnfoldStatusChanged, resourcesAdded } = treeSlice.actions
 export const { selectById: selectResourceByUri } = adapter.getSelectors(state => state.tree)
 
 export default treeSlice.reducer

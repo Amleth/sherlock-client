@@ -1,32 +1,3 @@
-/** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react'
-import { ITEM_MARGIN } from '../../../style'
-import { COLOR_FOCUS } from './mei.css'
-
-export const makeSelectedNode = (n, removeFromBasket) => {
-    let icon = ' ♪'
-    return <div key={n.noteNode.id} css={css`
-        border: 1px solid #eee;
-        margin: ${ITEM_MARGIN}px;
-        white-space: nowrap;
-        width: 100px;
-
-        &:hover {
-          background-color: ${COLOR_FOCUS};
-          border: 1px solid ${COLOR_FOCUS};
-        }
-    `}
-        onMouseEnter={() => document.getElementById(n.noteNode.id) && document.getElementById(n.noteNode.id).classList.add('focused')}
-        onMouseLeave={() => document.getElementById(n.noteNode.id) && document.getElementById(n.noteNode.id).classList.remove('focused')}
-    >
-        <div css={css`user-select: none;`}>
-            <span css={css`display: inline-block; min-width: 16px;`}>{icon}</span>
-            <span css={css``}>{n.noteNode.id}</span>
-            <span css={css`float: right; width: 20px;`} onClick={e => removeFromBasket(n)}>×</span>
-        </div>
-    </div>
-}
-
 export const getNodeNote = e => {
     let mouseNode = null
     let noteNode = null
@@ -48,7 +19,7 @@ export const getNodeNote = e => {
             }
             break
         default:
-            console.log(``)
+            break
     }
 
     if (mouseNode && noteNode) {
@@ -68,13 +39,14 @@ export const createVerovio = (meiUri) => {
             defaultZoom: 3,
         });`,
         `window.verovioCallback("${meiUri}");`,
+        // `window.verovioCallback("https://www.verovio.org/editor/brahms.mei");`,
     ]
     s.innerHTML = js_lines.join('\n') + '\n'
     document.body.appendChild(s)
 }
 
 
-export const prout = (mei_uri) => {
+export const load = (mei_uri) => {
     fetch(mei_uri, {
         method: 'GET',
         headers: {

@@ -34,7 +34,8 @@ export default createTheme({
             MI_YELLOW: 'rgba(235, 181, 37, 1)'
         },
         primary: {
-            main: cyan['A200']
+            main: cyan['A200'],
+            text: 'white',
         }
     },
     shape: {

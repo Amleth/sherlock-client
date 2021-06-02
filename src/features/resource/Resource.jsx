@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { useDispatch, useSelector } from 'react-redux'
-// import { useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { experimentalStyled as styled, useTheme } from '@material-ui/core/styles'
 import { AppBar as MuiAppBar, Box, Button, Drawer, Toolbar, Typography } from '@material-ui/core'
@@ -16,7 +16,7 @@ import Tree from '../tree/Tree'
 import Tweet from '../twitter/Tweet'
 
 import { drawerStyle, DRAWER_WIDTH, triplesTableStyle } from './Resource.css'
-// import { findViewers } from '../../common/viewerSelector'
+import { findViewers } from '../../common/viewerSelector'
 import { ANNOTATE as VIEW_ANNOTATE } from '../../common/viewerSelector'
 
 export const VIEW_PO = 'po'
@@ -61,7 +61,7 @@ const Offset = styled('div')(({ theme }) => theme.mixins.toolbar)
 
 export default function C({ resourceUri, view }) {
   const dispatch = useDispatch()
-  // const history = useHistory()
+  const history = useHistory()
   const theme = useTheme()
 
   const focusedResourceUri = useSelector(state => state.settings.focusedResourceUri) || resourceUri
@@ -71,9 +71,9 @@ export default function C({ resourceUri, view }) {
   useEffect(() => {
     dispatch(fetchOutgoing(focusedResourceUri))
   }, [dispatch, focusedResourceUri])
-  // const outgoing = useSelector(state => state.outgoing.entities[focusedResourceUri])
-  // let viewers = []
-  // if (outgoing) viewers = findViewers(resourceUri, outgoing.data)
+  const outgoing = useSelector(state => state.outgoing.entities[focusedResourceUri])
+  let viewers = []
+  if (outgoing) viewers = findViewers(resourceUri, outgoing.data)
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -91,13 +91,23 @@ export default function C({ resourceUri, view }) {
             {focusedResourceUri}
           </Typography>
         </Toolbar>
-        <Toolbar>
+        <Toolbar
+          css={css`
+            display: flex;
+
+            & > * {
+              margin-right: 10px;
+            }
+          `}
+        >
           <Button onClick={() => dispatch(isTreeDisplayedToggled())} variant="outlined">
             🌴
           </Button>
-          {/* {renderBar(history, outgoing, focusedResourceUri, setSelectedView, viewers, () =>
-            dispatch(isTreeDisplayedToggled())
-          )} */}
+          {viewers.map(v => (
+            <Button key={v.to} onClick={() => history.push(v.to)} variant="outlined">
+              {v.label}
+            </Button>
+          ))}
         </Toolbar>
         <div
           css={css`
@@ -111,8 +121,11 @@ export default function C({ resourceUri, view }) {
         <Tree uri={resourceUri} />
       </Drawer>
       <Main open={tree} css={triplesTableStyle}>
-        <Offset />
-        <Offset />
+        <Offset
+          css={css`
+            height: 159px;
+          `}
+        />
         {selectedView === VIEW_PO && <Outgoing resourceUri={focusedResourceUri} />}
         {selectedView === VIEW_E13 && <E13 resourceUri={focusedResourceUri} />}
         {selectedView === VIEW_PS && <Incoming resourceUri={focusedResourceUri} />}

@@ -1,12 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { createVerovio, getNodeNote, prout } from './verovioHelpers'
+import { createVerovio, getNodeNote, load } from './verovioHelpers'
 import { annotationsPanelStyle, containerStyle, mainAreaStyle, verovioStyle } from './mei.css'
 import Basket from './Basket'
 import ModeSelector from './ModeSelector'
+import NoteInspector from './NoteInspector'
+import { getSherlockIriFromMeiNoteXmlId } from './verovio2sherlock'
 
-window.verovioCallback = prout
+window.verovioCallback = load
 
 export const VIEW_STATE_READING = 'reading'
 export const VIEW_STATE_PICKING = 'picking'
@@ -17,6 +19,8 @@ const Mei = () => {
 
   const [basket, setBasket] = useState({})
   const [viewState, setViewState] = useState(VIEW_STATE_READING)
+  const [focusedNote, setFocusedNote] = useState(null)
+  console.log(focusedNote)
 
   useEffect(() => {
     createVerovio(meiUri) // github.com/rism-digital/verovio-app-react/blob/master/src/App.js
@@ -41,6 +45,11 @@ const Mei = () => {
     if (n && viewState === VIEW_STATE_PICKING) {
       document.getElementById(n.noteNode.id).classList.add('selected')
       setBasket({ ...basket, [n.noteNode.id]: n })
+    }
+    if (n) {
+      const noteIri = getSherlockIriFromMeiNoteXmlId(id, n.noteNode.id)
+      console.log(noteIri)
+      setFocusedNote(noteIri)
     }
   }
 
@@ -71,8 +80,9 @@ const Mei = () => {
         />
       </div>
       <div css={annotationsPanelStyle}>
-        <ModeSelector setViewState={setViewState} viewState={viewState} />
-        <Basket className="basket" data={basket} removeFromBasket={removeFromBasket} />
+        {focusedNote && <NoteInspector noteIri={focusedNote} />}
+        {/* <ModeSelector setViewState={setViewState} viewState={viewState} />
+        <Basket className="basket" data={basket} removeFromBasket={removeFromBasket} /> */}
       </div>
     </div>
   )

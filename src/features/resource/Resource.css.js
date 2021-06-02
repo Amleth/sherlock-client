@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 
-export const DRAWER_WIDTH = '50%'
+export const DRAWER_WIDTH = '40%'
 export const HEADER_HEIGHT = 35
 const H_SHADOW_COLOR = 'darkturquoise'
 export const MARGIN = '2vw'
