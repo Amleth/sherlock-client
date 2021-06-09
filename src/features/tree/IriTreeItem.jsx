@@ -9,14 +9,13 @@ import { getResourcePredicates, pathUnfoldStatusChanged, selectResourceByUri } f
 import SherlockTreeItemContent from './SherlockTreeItemContent'
 import PredicateTreeItem from './PredicateTreeItem'
 import { focusedResourceUriSet } from '../settings/settingsSlice'
-import { formatUri } from '../../common/rdf'
+import {computeIdentity, formatUri} from '../../common/rdf'
 
 const IriTreeItem = ({ nodeId, path, uri, ...props }) => {
   const dispatch = useDispatch()
   const resource = useSelector(state => selectResourceByUri(state, uri))
   const unfoldedPaths = useSelector(state => state.tree.unfoldedPaths)
   const count = getNumberOfChildren(resource)
-
   return canShowItem(resource, unfoldedPaths, path) ? (
     <TreeItem
       ContentComponent={SherlockTreeItemContent}
@@ -31,7 +30,7 @@ const IriTreeItem = ({ nodeId, path, uri, ...props }) => {
         },
         labelIcon: Public,
         labelInfo: count.value,
-        labelText: formatUri(uri),
+        labelText: `${computeIdentity(resource.identity)}   ${formatUri(uri)}`,
       }}
       nodeId={nodeId}
       TransitionComponent={TransitionComponent}

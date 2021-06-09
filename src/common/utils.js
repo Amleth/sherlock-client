@@ -1,1 +1,1 @@
-export const maxResourceUnfoldable = 100;
+export const maxResourceUnfoldable = 123;

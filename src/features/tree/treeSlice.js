@@ -1,6 +1,6 @@
 import { createAsyncThunk, createEntityAdapter, createSlice } from "@reduxjs/toolkit";
 import { sparqlEndpoint } from "../../common/sparql"
-import { Q, getIdentities } from "./identityQuery";
+import {Q, getIdentities, getIdentitiesWithoutCount} from "./identityQuery";
 import predicatesQuery from "./predicatesQuery";
 import {
     resourcesByPredicateAndObjectQuery,
@@ -10,6 +10,10 @@ import {
 const adapter = createEntityAdapter()
 const initialState = adapter.getInitialState({
     root: null,
+    bottomPanelResources: {
+        relatedUri: null,
+        p: null
+    },
     unfoldedPaths: [],
     status: 'idle'
 })
@@ -38,7 +42,9 @@ export const getResourcesByPredicateAndLinkedResource = createAsyncThunk('tree/f
     const response = predicate.direction.value === "o"
         ? await sparqlEndpoint(resourcesByPredicateAndSubjectQuery(payload.p.p.value, payload.uri))
         : await sparqlEndpoint(resourcesByPredicateAndObjectQuery(payload.p.p.value, payload.uri));
-    const identities = await sparqlEndpoint(getIdentities(response.results.bindings));
+    const identities = payload.count
+      ? await sparqlEndpoint(getIdentities(response.results.bindings))
+      : await sparqlEndpoint(getIdentitiesWithoutCount(response.results.bindings));
     const entities = response.results.bindings.map(resource => ({ id: resource.r.value, identity: identities.results.bindings.filter(identity => identity.id.value === resource.r.value) }))
     thunkAPI.dispatch(resourcesAdded(entities));
     return { id: payload.uri, p: payload.p.p.value, direction: predicate.direction.value, resources: response.results.bindings };
@@ -58,7 +64,14 @@ export const treeSlice = createSlice({
             state.unfoldedPaths.includes(action.payload)
                 ? state.unfoldedPaths = state.unfoldedPaths.filter(item => item !== action.payload)
                 : state.unfoldedPaths.push(action.payload);
+        },
+        bottomPanelDisplayedResourcesChanged: (state, action) => {
+            state.bottomPanelResources =
+              state.bottomPanelResources.relatedUri === action.payload.relatedUri && state.bottomPanelResources.p === action.payload.p
+                ? {relatedUri: null, p: null}
+                : action.payload;
         }
+
     },
     extraReducers: {
         [getResourceIdentity.fulfilled]: (state, action) => {
@@ -87,7 +100,7 @@ export const treeSlice = createSlice({
     }
 })
 
-export const { rootSet, pathUnfoldStatusChanged, resourcesAdded } = treeSlice.actions
+export const { rootSet, pathUnfoldStatusChanged, resourcesAdded, bottomPanelDisplayedResourcesChanged } = treeSlice.actions
 export const { selectById: selectResourceByUri } = adapter.getSelectors(state => state.tree)
 
 export default treeSlice.reducer

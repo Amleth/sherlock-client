@@ -1,60 +1,46 @@
+/** @jsxImportSource @emotion/react */
+import {css} from '@emotion/react'
 import SherlockTreeItemContent from './SherlockTreeItemContent'
 import React from 'react'
 import TreeItem from '@material-ui/lab/TreeItem'
-import { CircularProgress, ListItem, ListItemText } from '@material-ui/core'
-import { ArrowLeft, ArrowRight } from '@material-ui/icons'
-import { useDispatch, useSelector } from 'react-redux'
-import { FixedSizeList } from 'react-window'
+import {ArrowLeft, ArrowRight, Visibility} from '@material-ui/icons'
+import {useDispatch, useSelector} from 'react-redux'
 
 import TransitionComponent from './TransitionComponent'
-import { getResourcesByPredicateAndLinkedResource, pathUnfoldStatusChanged } from './treeSlice'
+import {
+  bottomPanelDisplayedResourcesChanged,
+  getResourcesByPredicateAndLinkedResource,
+  pathUnfoldStatusChanged,
+} from './treeSlice'
 import IriTreeItem from './IriTreeItem'
 import LiteralTreeItem from './LiteralTreeItem'
-import { formatUri } from '../../common/rdf'
-// import { maxResourceUnfoldable } from '../../common/utils'
+import {formatUri} from '../../common/rdf'
+import {maxResourceUnfoldable} from "../../common/utils";
 
-const PredicateTreeItem = ({ nodeId, path, predicate, relatedUri }) => {
+const PredicateTreeItem = ({nodeId, path, predicate, relatedUri}) => {
   const dispatch = useDispatch()
   const unfoldedPaths = useSelector(state => state.tree.unfoldedPaths)
-
-  function renderRow(props) {
-    const { index, style } = props
-
-    if (unfoldedPaths.includes(path) && predicate.resources) {
-      const resource = predicate.resources[index]
-
-      const id = `${path}${predicate.p.value},${predicate.direction.value},${resource.r.value},`
-      const component =
-        resource.r.type === 'uri' ? (
-          <ListItem>
-            <ListItemText primary={resource.r.value} />
-          </ListItem>
-        ) : (
-          <ListItem>
-            <LiteralTreeItem
-              literal={resource.r}
-            />
-          </ListItem>
-        )
-
-      return (
-        <ListItem button style={style} key={index}>
-          {component}
-        </ListItem>
-      )
-    } else return <div />
-  }
+  const bottomPanelResources = useSelector(state => state.tree.bottomPanelResources)
+  const highlightPredicate = bottomPanelResources.relatedUri === relatedUri && bottomPanelResources.p === predicate.p.value
 
   return (
     <TreeItem
       ContentComponent={SherlockTreeItemContent}
+      expandIcon= {predicate.c.value < maxResourceUnfoldable ? null : <Visibility/>}
+      collapseIcon = {predicate.c.value < maxResourceUnfoldable ? null : <Visibility/>}
       ContentProps={{
+        highlightText: highlightPredicate,
         labelIcon: computeLabelIcon(predicate),
         labelInfo: predicate.c.value,
         labelText: formatUri(predicate.p.value),
-        onIconClick: () => {
-          dispatch(pathUnfoldStatusChanged(`${path}${predicate.p.value},${predicate.direction.value},`))
-          dispatch(getResourcesByPredicateAndLinkedResource({ p: predicate, uri: relatedUri }))
+        onIconClick: e => {
+          if (predicate.c.value < maxResourceUnfoldable) {
+            dispatch(getResourcesByPredicateAndLinkedResource({p: predicate, uri: relatedUri, count: true}))
+            dispatch(pathUnfoldStatusChanged(`${path}${predicate.p.value},${predicate.direction.value},`))
+          } else {
+            dispatch(getResourcesByPredicateAndLinkedResource({p: predicate, uri: relatedUri, count: false}))
+            dispatch(bottomPanelDisplayedResourcesChanged({relatedUri, p: predicate.p.value}))
+          }
         },
         onLabelClick: e => {
           e.preventDefault()
@@ -65,7 +51,7 @@ const PredicateTreeItem = ({ nodeId, path, predicate, relatedUri }) => {
       TransitionComponent={TransitionComponent}
     >
       {unfoldedPaths.includes(path) && predicate.resources ? (
-        predicate.c.value < 123 ? (
+        predicate.c.value < maxResourceUnfoldable ? (
           predicate.resources.map(resource => {
             const id = `${path}${predicate.p.value},${predicate.direction.value},${resource.r.value},`
             return resource.r.type === 'uri' ? (
@@ -84,16 +70,7 @@ const PredicateTreeItem = ({ nodeId, path, predicate, relatedUri }) => {
               />
             )
           })
-        ) : (
-          <FixedSizeList
-            height={Math.min(20 * predicate.c.value, 400)}
-            itemSize={20}
-            itemCount={predicate.c.value}
-            overscanCount={5}
-          >
-            {renderRow}
-          </FixedSizeList>
-        )
+        ) : (<div/>)
       ) : (
         '⏳'
       )}

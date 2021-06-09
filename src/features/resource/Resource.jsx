@@ -18,6 +18,7 @@ import Tweet from '../twitter/Tweet'
 import { drawerStyle, DRAWER_WIDTH, triplesTableStyle } from './Resource.css'
 import { findViewers } from '../../common/viewerSelector'
 import { ANNOTATE as VIEW_ANNOTATE } from '../../common/viewerSelector'
+import BottomPanel from "../tree/BottomPanel";
 
 export const VIEW_PO = 'po'
 export const VIEW_E13 = 'e13'
@@ -66,6 +67,7 @@ export default function C({ resourceUri, view }) {
 
   const focusedResourceUri = useSelector(state => state.settings.focusedResourceUri) || resourceUri
   const tree = useSelector(state => state.settings.isTreeDisplayed)
+  const bottomPanelResources = useSelector(state => state.tree.bottomPanelResources)
   const [selectedView, setSelectedView] = useState(view || VIEW_PO)
 
   useEffect(() => {
@@ -119,7 +121,20 @@ export default function C({ resourceUri, view }) {
       </AppBar>
       <Drawer sx={drawerStyle(theme)} variant="persistent" anchor="left" open={tree}>
         <Tree uri={resourceUri} />
+        <Box          css={css`
+            height: 50vh;
+            border-top: 1px solid #033;
+            flex-shrink: 0;
+            width: 100%;
+            display: ${bottomPanelResources.p !== null ? "block" : "none"}
+          `}
+        >
+          <BottomPanel bottomPanelResources={bottomPanelResources} />
+        </Box>
       </Drawer>
+
+
+
       <Main open={tree} css={triplesTableStyle}>
         <Offset
           css={css`
