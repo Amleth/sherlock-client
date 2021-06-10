@@ -121,16 +121,15 @@ export default function C({ resourceUri, view }) {
       </AppBar>
       <Drawer sx={drawerStyle(theme)} variant="persistent" anchor="left" open={tree}>
         <Tree uri={resourceUri} />
-        <Box          css={css`
+        {bottomPanelResources.p !== null && bottomPanelResources.relatedUri !== null && <Box          css={css`
             height: 50vh;
             border-top: 1px solid #033;
             flex-shrink: 0;
             width: 100%;
-            display: ${bottomPanelResources.p !== null ? "block" : "none"}
           `}
         >
-          <BottomPanel bottomPanelResources={bottomPanelResources} />
-        </Box>
+          <BottomPanel relatedResourceUri={bottomPanelResources.relatedUri} predicateUri={bottomPanelResources.p} />
+        </Box>}
       </Drawer>
 
 

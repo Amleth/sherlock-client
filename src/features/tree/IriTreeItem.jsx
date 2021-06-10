@@ -9,7 +9,6 @@ import { getResourcePredicates, pathUnfoldStatusChanged, selectResourceByUri } f
 import SherlockTreeItemContent from './SherlockTreeItemContent'
 import PredicateTreeItem from './PredicateTreeItem'
 import { focusedResourceUriSet } from '../settings/settingsSlice'
-import {computeIdentity, formatUri} from '../../common/rdf'
 
 const IriTreeItem = ({ nodeId, path, uri, ...props }) => {
   const dispatch = useDispatch()
@@ -30,7 +29,7 @@ const IriTreeItem = ({ nodeId, path, uri, ...props }) => {
         },
         labelIcon: Public,
         labelInfo: count.value,
-        labelText: `${computeIdentity(resource.identity)}   ${formatUri(uri)}`,
+        labelText: resource.label,
       }}
       nodeId={nodeId}
       TransitionComponent={TransitionComponent}

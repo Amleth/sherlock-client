@@ -111,3 +111,7 @@ export function computeIdentity(identity) {
   const chosenIdentity = identity.find(identity => identity.p && identity.p.value === CRM_BASE + "P1_is_identified_by");
   return chosenIdentity ? formatUri(chosenIdentity.o.value) : "";
 }
+
+export function computeResourceLabel(resourceIri, identity) {
+  return `${computeIdentity(identity)}   ${formatUri(resourceIri)}`
+}

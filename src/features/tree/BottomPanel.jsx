@@ -1,46 +1,58 @@
 /** @jsxImportSource @emotion/react */
 import {css} from '@emotion/react'
 import {useDispatch, useSelector} from "react-redux";
-import {selectResourceByUri} from "./treeSlice";
+import {selectAllResources, selectResourceByUri} from "./treeSlice";
 import {FixedSizeList} from 'react-window'
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {ListItem} from "@material-ui/core";
 import {focusedResourceUriSet} from "../settings/settingsSlice";
 import Box from "@material-ui/core/Box";
 import PublicIcon from "@material-ui/icons/Public";
-import LiteralTreeItem from "./LiteralTreeItem";
-import Typography from "@material-ui/core/Typography";
-import {formatUri} from "../../common/rdf";
 import TextField from "@material-ui/core/TextField";
-import IriTreeItem from "./IriTreeItem";
-import IriListItem from "./IriListItem";
+import Typography from "@material-ui/core/Typography";
 
-const BottomPanel = ({bottomPanelResources}) => {
-  const relatedResource = useSelector(state => selectResourceByUri(state, bottomPanelResources.relatedUri))
-  let predicate = null;
-  if (relatedResource) {
-    predicate = relatedResource.predicates.find(predicate => predicate.p.value === bottomPanelResources.p)
-  }
+const BottomPanel = ({relatedResourceUri, predicateUri}) => {
+  const dispatch = useDispatch();
+  const [filter, setFilter] = useState("");
+  const [resources, setResources] = useState([]);
+  const relatedResource = useSelector(state => selectResourceByUri(state, relatedResourceUri))
+  const allResources = useSelector(state => selectAllResources(state));
+  useEffect(() => {
+    console.log("useeffect")
+    const predicate = relatedResource.predicates.find(predicate => predicate.p.value === predicateUri)
+    if (predicate.resources) {
+      const tempResources = predicate.resources.map(resource => resource.r.value);
+      setResources(allResources.filter(resource => tempResources.includes(resource.id)));
+
+    }
+  }, [relatedResource]);
+  const filteredResources = resources.filter(resource => resource.label.includes(filter));
+  console.log(filteredResources)
   function renderRow(props) {
     const {index, style} = props
 
-    const resource = predicate.resources[index]
-    const component =
-      resource.r.type === 'uri' ? (
-        <IriListItem uri={resource.r.value}/>
-      ) : (<ListItem>
-          <LiteralTreeItem
-            literal={resource.r}
-          />
-        </ListItem>
-      )
+    const resource = filteredResources[index]
+    const component = <ListItem css={css`
+      padding-left: 2px;
+      padding: 5px 0px 0px 0px;
+    `}
+      onClick={() => {
+        dispatch(focusedResourceUriSet(resource.id))
+      }}
+    >
+      <div css={css`white-space: nowrap;`}>
+        {resource.label}
+      </div>
+    </ListItem>
     return (
       <ListItem button style={style} key={index}>
         {component}
       </ListItem>
     )
   }
-  return predicate && predicate.resources ?
+
+
+  return filteredResources ?
     <Box css={css`
     position: absolute;
     bottom: 0;
@@ -49,17 +61,24 @@ const BottomPanel = ({bottomPanelResources}) => {
     height:50vh;
             `}
     >
-      <TextField fullWidth css={css`
-    margin-bottom: 3vh;
-            `} placeholder="filtrer"/>
-      <FixedSizeList
-        height={Math.min(20 * predicate.c.value, 250)}
+      <TextField
+        fullWidth
+        css={css`margin-bottom: 3vh;`}
+        placeholder="filtrer"
+        value={filter}
+        onChange={(e) => setFilter(e.target.value)}
+      />
+      {filteredResources.length
+        ? <FixedSizeList
+        height={Math.min(20 * resources.length, 250)}
         itemSize={20}
-        itemCount={predicate.c.value}
+        itemCount={filteredResources.length}
         overscanCount={5}
       >
         {renderRow}
       </FixedSizeList>
+        : <Typography align="center">🙈</Typography>
+      }
     </Box> : <div/>
 }
 

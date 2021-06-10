@@ -35,10 +35,10 @@ const PredicateTreeItem = ({nodeId, path, predicate, relatedUri}) => {
         labelText: formatUri(predicate.p.value),
         onIconClick: e => {
           if (predicate.c.value < maxResourceUnfoldable) {
-            dispatch(getResourcesByPredicateAndLinkedResource({p: predicate, uri: relatedUri, count: true}))
+            dispatch(getResourcesByPredicateAndLinkedResource({p: predicate, uri: relatedUri, countLinkedResourceChildren: true}))
             dispatch(pathUnfoldStatusChanged(`${path}${predicate.p.value},${predicate.direction.value},`))
           } else {
-            dispatch(getResourcesByPredicateAndLinkedResource({p: predicate, uri: relatedUri, count: false}))
+            dispatch(getResourcesByPredicateAndLinkedResource({p: predicate, uri: relatedUri, countLinkedResourceChildren: false}))
             dispatch(bottomPanelDisplayedResourcesChanged({relatedUri, p: predicate.p.value}))
           }
         },
