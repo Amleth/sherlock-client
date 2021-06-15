@@ -18,7 +18,6 @@ const BottomPanel = ({relatedResourceUri, predicateUri}) => {
   const relatedResource = useSelector(state => selectResourceByUri(state, relatedResourceUri))
   const allResources = useSelector(state => selectAllResources(state));
   useEffect(() => {
-    console.log("useeffect")
     const predicate = relatedResource.predicates.find(predicate => predicate.p.value === predicateUri)
     if (predicate.resources) {
       const tempResources = predicate.resources.map(resource => resource.r.value);
@@ -27,7 +26,6 @@ const BottomPanel = ({relatedResourceUri, predicateUri}) => {
     }
   }, [relatedResource]);
   const filteredResources = resources.filter(resource => resource.label.includes(filter));
-  console.log(filteredResources)
   function renderRow(props) {
     const {index, style} = props
 

@@ -51,7 +51,7 @@ const IriTreeItem = ({ nodeId, path, uri, ...props }) => {
       {count && !resource.predicates && <CircularProgress />}
     </TreeItem>
   ) : (
-    <CircularProgress />
+    "🐌"
   )
 }
 
