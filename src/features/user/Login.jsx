@@ -2,7 +2,9 @@
 import {getUser} from "./userSlice";
 import {useDispatch, useSelector} from "react-redux";
 import React, {useState} from "react";
-import {input, submit} from "./User.css";
+import TextField from "@material-ui/core/TextField";
+import {css} from "@emotion/react";
+import Button from "@material-ui/core/Button";
 
 export const Login = () => {
   const user = useSelector(state => state.user)
@@ -12,21 +14,29 @@ export const Login = () => {
     password: '',
   });
   return (
-    <div>
+    <div css={css`
+  font-family: 'Fira Code';
+  font-size: 82%;
+  display: block;
+  margin: auto;
+  width: 75%;
+  margin-top: 5vh;
+  `}>
       {computeMessage(user)}
-      <input
-        css={input}
+      <TextField
         onChange={(e) => {
           setCredentials((values) => ({
             ...values,
             username: e.target.value
           }));
         }}
+        variant="filled"
+        fullWidth
         value={credentials.username}
-        placeholder={"username"}
+        label="username"
       />
-      <input
-        css={input}
+      <TextField
+        css={css`margin-top: 5vh`}
         onChange={(e) => {
           setCredentials((values) => ({
             ...values,
@@ -34,17 +44,19 @@ export const Login = () => {
           }));
         }}
         value={credentials.password}
-        placeholder={"password"}
+        variant="filled"
+        fullWidth
+        label="password"
       />
-      <input
-        css={submit}
-        type="submit"
-        value={user.status && user.status === "loading" ? "..." : "LOGIN"}
+      <Button
+        css={css`margin-top: 5vh`}
+        fullWidth
+        variant="contained"
         onClick={() => {
           if (credentials.username && credentials.password) {
             dispatch(getUser(credentials));
           }
-        }}/>
+        }}>{user.status && user.status === "loading" ? "..." : "LOGIN"}</Button>
     </div>
 
   )
@@ -55,6 +67,8 @@ function computeMessage(user) {
     return <span>Mauvais couple [username, password]</span>
   } else if (user.status === -1) {
     return <span>Impossible de joindre le serveur</span>
+  } else if (Number.isInteger(user.status)) {
+    return <span>Erreur {user.status}</span>
   }
   return null;
 }

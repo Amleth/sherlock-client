@@ -40,6 +40,7 @@ const userSlice = createSlice({
       state.status = 'loading';
     },
     [getUser.rejected]: (state, action) => {
+      console.log(action.payload)
       state.status = action.payload ? action.payload : -1;
     }
   }
