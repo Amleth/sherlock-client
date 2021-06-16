@@ -22,7 +22,9 @@ import {ANNOTATE as VIEW_ANNOTATE} from '../../common/viewerSelector'
 import BottomPanel from "../tree/BottomPanel";
 import Avatar from "@material-ui/core/Avatar";
 import {stringAvatar} from "../../common/utils";
+import AddE13 from "./addE13/AddE13";
 
+export const VIEW_ADD = 'add'
 export const VIEW_PO = 'po'
 export const VIEW_E13 = 'e13'
 export const VIEW_PS = 'ps'
@@ -106,14 +108,20 @@ export default function C({resourceUri, view}) {
             }
           `}
         >
+          <Box>
           <Button onClick={() => dispatch(isTreeDisplayedToggled())} variant="outlined">
             🌴
           </Button>
+          {user && user.access_token && <Button onClick={() => setSelectedView(VIEW_ADD)} variant="outlined">
+            +
+          </Button>}
           {viewers.map(v => (
             <Button key={v.to} onClick={() => history.push(v.to)} variant="outlined">
               {v.label}
             </Button>
           ))}
+          </Box>
+          <Box>
           {user && user.access_token ? <Avatar
               {...stringAvatar(user.username)}
               align="right"
@@ -133,6 +141,7 @@ export default function C({resourceUri, view}) {
 
             </Link>
           }
+          </Box>
         </Toolbar>
         <div
           css={css`
@@ -162,6 +171,7 @@ export default function C({resourceUri, view}) {
             height: 159px;
           `}
         />
+        {selectedView === VIEW_ADD && <AddE13 resourceUri={focusedResourceUri}/>}
         {selectedView === VIEW_PO && <Outgoing resourceUri={focusedResourceUri}/>}
         {selectedView === VIEW_E13 && <E13 resourceUri={focusedResourceUri}/>}
         {selectedView === VIEW_PS && <Incoming resourceUri={focusedResourceUri}/>}

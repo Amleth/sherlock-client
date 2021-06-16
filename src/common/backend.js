@@ -53,9 +53,11 @@ export const refreshToken = async (dispatch, refresh_token) => {
   return responseAsObject.access_token;
 }
 
-export const testPostResource = async (token, refresh_token, dispatch) => {
-  return await authenticatedRequest("/resource", "POST", JSON.stringify({
-    "rdf:type": "crm:E32_Authority_Document",
-    "crm:P1_is_identified_by": "instruments a cordes"
+export const postE13 = async (p140_assigned_attribute_to, p141_assigned, p177_assigned_property_type, p141_type, token, refresh_token, dispatch) => {
+  return await authenticatedRequest("/sherlock/api/e13", "POST", JSON.stringify({
+    "p140_assigned_attribute_to": p140_assigned_attribute_to,
+    "p177_assigned_property_type": p177_assigned_property_type,
+    "p141_type": p141_type,
+    "p141_assigned": p141_assigned,
   }), dispatch, token, refresh_token);
 }

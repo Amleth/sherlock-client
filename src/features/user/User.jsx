@@ -3,7 +3,7 @@ import {css} from '@emotion/react'
 import {useDispatch, useSelector} from "react-redux";
 import {userDisconnected} from "./userSlice";
 import Button from "@material-ui/core/Button";
-import {testPostResource} from "../../common/backend";
+import {postE13} from "../../common/backend";
 import React, {useState} from "react";
 import Avatar from "@material-ui/core/Avatar";
 import {stringAvatar} from "../../common/utils";
@@ -12,7 +12,6 @@ import Typography from "@material-ui/core/Typography";
 import { useHistory } from 'react-router-dom'
 
 export const User = () => {
-  const [resource, setResource] = useState(null);
   const user = useSelector(state => state.user)
   const history = useHistory();
   const dispatch = useDispatch();
@@ -36,17 +35,6 @@ export const User = () => {
             dispatch(userDisconnected())
           }}>Déconnexion</Button>
       </Paper>
-
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={async () => {
-          setResource(await testPostResource(user.access_token, user.refresh_token, dispatch))
-        }}>test post resource
-      </Button>
-      <pre>
-        {JSON.stringify(resource, null, 4)}
-      </pre>
     </React.Fragment>
 
   )
