@@ -34,7 +34,7 @@ export const authenticatedRequest = async (url, method, body, dispatch, token, r
     }
     response = await fetch(process.env.REACT_APP_SHERLOCK_BACKEND_ENDPOINT + url, request);
   }
-  return response.json();
+  return response.status === 200 ? response.json() : response;
 }
 
 export const refreshToken = async (dispatch, refresh_token) => {

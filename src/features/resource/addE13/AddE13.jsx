@@ -11,10 +11,11 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Box from "@material-ui/core/Box";
 import SyncAltIcon from '@material-ui/icons/SyncAlt';
+import Typography from "@material-ui/core/Typography";
 
 export const C = ({resourceUri}) => {
 
-  const [resource, setResource] = useState(null);
+  const [response, setResponse] = useState(null);
   const [inputs, setInputs] = useState({
     p140: resourceUri,
     p177: "",
@@ -27,12 +28,40 @@ export const C = ({resourceUri}) => {
 
   const exchangeP140AndP141 = () => {
     if (inputs.isUriP140) inputs.p141_type = "uri"
-    setInputs( inputs => ({...inputs, p140: inputs.p141, p141: inputs.p140, isUriP140: !inputs.isUriP140}))
+    setInputs(inputs => ({...inputs, p140: inputs.p141, p141: inputs.p140, isUriP140: !inputs.isUriP140}))
   }
 
-  return <React.Fragment>
+  function computeResponseMessage() {
+    if (!response) return null;
+    if (response.status && response.status === 401) {
+      return <Typography>
+        Erreur 401, veuillez vous reconnecter
+      </Typography>
+    } else if (response.status) {
+      return <Typography>
+        Erreur {response.status}
+      </Typography>
+    } else {
+      return <pre>
+        {JSON.stringify(response, null, 4)}
+      </pre>
+    }
+  }
+
+  return <form onSubmit={async (e) => {
+    e.preventDefault();
+    setResponse(await postE13(
+      inputs.p140,
+      inputs.p141,
+      inputs.p177,
+      inputs.p141_type,
+      user.access_token,
+      user.refresh_token,
+      dispatch))
+  }}>
     <Box display="flex" css={css`margin-bottom: 3vh;`}>
       <TextField
+        required
         fullWidth
         InputProps={{
           readOnly: inputs.isUriP140,
@@ -51,6 +80,7 @@ export const C = ({resourceUri}) => {
         </Button>
       </Box>
       <TextField
+        required
         fullWidth
         variant="outlined"
         InputProps={{
@@ -62,7 +92,7 @@ export const C = ({resourceUri}) => {
       />
     </Box>
     <Box display="flex">
-      <FormControl fullWidth variant="filled" css={css`margin-bottom: 3vh; border: none`}>
+      <FormControl fullWidth variant="filled" required css={css`margin-bottom: 3vh; border: none`}>
         <InputLabel>p177_assigned_property_type</InputLabel>
         <Select
           value={inputs.p177}
@@ -74,10 +104,10 @@ export const C = ({resourceUri}) => {
         </Select>
       </FormControl>
       <Box css={css`width: 20%;`}/>
-      <FormControl fullWidth variant="filled" css={css`margin-bottom: 3vh; border: none`}>
+      <FormControl fullWidth variant="filled" required css={css`margin-bottom: 3vh; border: none`}>
         <InputLabel>p141_type</InputLabel>
         <Select
-          disabled={! inputs.isUriP140}
+          disabled={!inputs.isUriP140}
           value={inputs.p141_type}
           onChange={(e) => setInputs(inputs => ({...inputs, p141_type: [e.target.value]}))}
         >
@@ -87,23 +117,14 @@ export const C = ({resourceUri}) => {
       </FormControl>
     </Box>
     <Button
+      align="center"
       variant="contained"
       color="primary"
-      onClick={async () => {
-        setResource(await postE13(
-          inputs.p140,
-          inputs.p141,
-          inputs.p177,
-          inputs.p141_type,
-          user.access_token,
-          user.refresh_token,
-          dispatch))
-      }}>test post resource
+      type="submit"
+    >Ajouter une E13
     </Button>
-    {resource && <pre>
-        {JSON.stringify(resource, null, 4)}
-    </pre>}
-  </React.Fragment>
+    {computeResponseMessage()}
+  </form>
 }
 
 export default C
