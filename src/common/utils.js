@@ -1,5 +1,9 @@
 export const maxResourceUnfoldable = 123;
 
+/*
+Source code
+https://next.material-ui.com/components/avatars/#BackgroundLetterAvatars.js
+ */
 export const stringToColor = (string) => {
   let hash = 0;
   let i;
