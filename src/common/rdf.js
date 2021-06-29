@@ -118,7 +118,10 @@ export function computeResourceLabel(resourceIri, identity) {
 
 /*
 
-A resource may have triples that represent its identity (see the white-list of predicates in the query). Objects of such predicates may be literal (like in "<RESOURCE_1> crm:P1_is_identified_by "Thomas") or linked resources. In this second case, we also want to get information about the linked resources, we want to get identity information about identity information of our resource(s).
+A resource may have triples that represent its identity (see the white-list of predicates in the query).
+ Objects of such predicates may be literal (like in "<RESOURCE_1> crm:P1_is_identified_by "Thomas") or linked resources.
+  In this second case, we also want to get information about the linked resources,
+  we want to get identity information about identity information of our resource(s).
 
 Let's now explicit graph variables names:
 
@@ -130,33 +133,71 @@ ir_ir_i_t_g -> "identity resource identity resource identity triples graph"
             -> the graph that contains triples that link label
 
 */
-export function makeIdentityQueryFragment(iri, getLinkedResourcesIdentity) {
-  return `${getLinkedResourcesIdentity === false
-    ? `BIND (<${iri}> AS ?resource)`
-    : `GRAPH ?lrg { <${iri}> ?plr ?resource }`
-    }
+export function makeIdentityQueryFragment(iri, getLinkedResourcesIdentity, linkingPredicate, isIriSubject, linkedResourcesCount) {
+  const linkingPredicateBinding = linkingPredicate ? `<${linkingPredicate}>` : "?lp";
+  const tripleStructure = isIriSubject
+    ? `<${iri}> ${linkingPredicateBinding} ?linked_resource`
+    : `?linked_resource ${linkingPredicateBinding} <${iri}>`
+  const resourceDeclaration = getLinkedResourcesIdentity === false
+    ? ""
+    : `GRAPH ?lrg {${tripleStructure}}`
+  const resource = getLinkedResourcesIdentity === false
+    ? `<${iri}>`
+    : "?linked_resource"
 
-OPTIONAL {
-  GRAPH ?r_i_t_g {
-    ?resource ?p_id ?id_resource .
-    FILTER (?p_id IN (rdf:type, crm:P2_has_type, crm:P1_is_identified_by, crm:P102_has_title, rdfs:label))
-    OPTIONAL {
-      GRAPH ?ir_i_t_g {
-        OPTIONAL { ?id_resource rdfs:label ?id_resource_label . }
-        OPTIONAL { 
-          ?id_resource ?id_resource_type_p ?id_resource_type .
-          FILTER (?id_resource_type_p IN (rdf:type, crm:P2_has_type))
+  const count = linkedResourcesCount ? `
+  UNION {
+    SELECT (COUNT(*) AS ?c_out) ${getLinkedResourcesIdentity ? "?linked_resource" : ""}
+    WHERE {
+      GRAPH ?_g1 {
+        ${resource} ?outgoing_predicate ?out .
+      }
+    }
+    GROUP BY ?c_out ${getLinkedResourcesIdentity ? "?linked_resource" : ""}
+  }
+  UNION {
+    SELECT (COUNT(*) AS ?c_in) ${getLinkedResourcesIdentity ? "?linked_resource" : ""}
+    WHERE {
+      GRAPH ?_g1 {
+       ?in ?outgoing_predicate ${resource} .
+      }
+    }
+    GROUP BY ?c_in ${getLinkedResourcesIdentity ? "?linked_resource" : ""}
+  }
+  ` : "";
+
+  return `
+  PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+  
+  SELECT *
+  WHERE {
+    ${resourceDeclaration}
+    {
+      OPTIONAL {
+        GRAPH ?r_i_t_g {
+          ${resource} ?p_id ?id_resource .
+          FILTER (?p_id IN (rdf:type, crm:P2_has_type, crm:P1_is_identified_by, crm:P102_has_title, rdfs:label))
           OPTIONAL {
-            GRAPH ?ir_ir_i_t_g {
-              ?id_resource_type ?id_resource_type_label_p ?id_resource_type_label .
-              FILTER (?id_resource_type_label_p IN (rdfs:label, crm:P1_is_identified_by))
+            GRAPH ?ir_i_t_g {
+              OPTIONAL { ?id_resource rdfs:label ?id_resource_label . }
+              OPTIONAL { 
+                ?id_resource ?id_resource_type_p ?id_resource_type .
+                FILTER (?id_resource_type_p IN (rdf:type, crm:P2_has_type))
+                OPTIONAL {
+                  GRAPH ?ir_ir_i_t_g {
+                    ?id_resource_type ?id_resource_type_label_p ?id_resource_type_label .
+                    FILTER (?id_resource_type_label_p IN (rdfs:label, crm:P1_is_identified_by))
+                  }
+                }
+              }
+              FILTER (!isLiteral(?id_resource))
             }
           }
         }
-        FILTER (!isLiteral(?id_resource))
       }
     }
-  }
-}
-  `
+    ${count}
+  }`
 }

@@ -14,10 +14,12 @@ import AuthenticatedRoute from './common/AuthenticatedRoute'
 import UnauthenticatedRouteOnly from './common/UnauthenticatedRouteOnly'
 import React from 'react'
 import theme from './SherlockMuiTheme'
+import TestComponent from "./TestComponent";
 
 const App = () => {
   return (
-    <React.Fragment>
+    <TestComponent/>
+    /*<React.Fragment>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Router basename={'/' + process.env.REACT_APP_BASENAME}>
@@ -33,7 +35,7 @@ const App = () => {
           <UnauthenticatedRouteOnly path="/login" component={Login} exact />
         </Router>
       </ThemeProvider>
-    </React.Fragment>
+    </React.Fragment>*/
   )
 }
 

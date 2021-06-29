@@ -26,6 +26,7 @@ export const fetchSparqlQuery = async query => {
 }
 
 export const sparqlEndpoint = async query => {
+  console.log(query)
   let res = await fetch(process.env.REACT_APP_SHEROCK_SPARQL_ENDPOINT, {
     method: 'POST',
     headers: {
