@@ -140,7 +140,7 @@ export function makeIdentityQueryFragment(iri, getLinkedResourcesIdentity, linki
     : `?linked_resource ${linkingPredicateBinding} <${iri}>`
   const resourceDeclaration = getLinkedResourcesIdentity === false
     ? ""
-    : `GRAPH ?lrg {${tripleStructure}}`
+    : `GRAPH ?lrg {${tripleStructure}`
   const resource = getLinkedResourcesIdentity === false
     ? `<${iri}>`
     : "?linked_resource"
@@ -199,5 +199,7 @@ export function makeIdentityQueryFragment(iri, getLinkedResourcesIdentity, linki
       }
     }
     ${count}
-  }`
+    ${getLinkedResourcesIdentity === false ? "" : "}"}
+  }
+`
 }
