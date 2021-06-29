@@ -101,8 +101,8 @@ export function getCode(uri) {
 }
 
 export function formatUri(uri) {
-  for (const [key,value] of Object.entries(RDF_PREFIXES)) {
-    uri = uri.replace(key, value !== "" ? value +":" : "");
+  for (const [key, value] of Object.entries(RDF_PREFIXES)) {
+    uri = uri.replace(key, value !== "" ? value + ":" : "");
   }
   return uri
 }
@@ -114,4 +114,49 @@ export function computeIdentity(identity) {
 
 export function computeResourceLabel(resourceIri, identity) {
   return `${computeIdentity(identity)}   ${formatUri(resourceIri)}`
+}
+
+/*
+
+A resource may have triples that represent its identity (see the white-list of predicates in the query). Objects of such predicates may be literal (like in "<RESOURCE_1> crm:P1_is_identified_by "Thomas") or linked resources. In this second case, we also want to get information about the linked resources, we want to get identity information about identity information of our resource(s).
+
+Let's now explicit graph variables names:
+
+    r_i_t_g -> "resource identity triples graph"
+            -> the graph that contains triples that link to identity resources
+   ir_i_t_g -> "identity resource identity triples graph"
+            -> the graph that contains triples that link identity resources to identity resources (label & type)
+ir_ir_i_t_g -> "identity resource identity resource identity triples graph"
+            -> the graph that contains triples that link label
+
+*/
+export function makeIdentityQueryFragment(iri, getLinkedResourcesIdentity) {
+  return `${getLinkedResourcesIdentity === false
+    ? `BIND (<${iri}> AS ?resource)`
+    : `GRAPH ?lrg { <${iri}> ?plr ?resource }`
+    }
+
+OPTIONAL {
+  GRAPH ?r_i_t_g {
+    ?resource ?p_id ?id_resource .
+    FILTER (?p_id IN (rdf:type, crm:P2_has_type, crm:P1_is_identified_by, crm:P102_has_title, rdfs:label))
+    OPTIONAL {
+      GRAPH ?ir_i_t_g {
+        OPTIONAL { ?id_resource rdfs:label ?id_resource_label . }
+        OPTIONAL { 
+          ?id_resource ?id_resource_type_p ?id_resource_type .
+          FILTER (?id_resource_type_p IN (rdf:type, crm:P2_has_type))
+          OPTIONAL {
+            GRAPH ?ir_ir_i_t_g {
+              ?id_resource_type ?id_resource_type_label_p ?id_resource_type_label .
+              FILTER (?id_resource_type_label_p IN (rdfs:label, crm:P1_is_identified_by))
+            }
+          }
+        }
+        FILTER (!isLiteral(?id_resource))
+      }
+    }
+  }
+}
+  `
 }

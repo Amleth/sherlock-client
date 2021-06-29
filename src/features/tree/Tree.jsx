@@ -24,7 +24,7 @@ const Tree = ({ uri }) => {
       css={css`
         user-select: none;
           overflow-y: auto;
-          overflow-x: hidden;
+          overflow-x: auto;
       `}
       defaultCollapseIcon={<ExpandMoreIcon />}
       defaultExpandIcon={<ChevronRightIcon />}
