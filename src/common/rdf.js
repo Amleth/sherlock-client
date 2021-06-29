@@ -138,33 +138,28 @@ export function makeIdentityQueryFragment(iri, getLinkedResourcesIdentity, linki
   const tripleStructure = isIriSubject
     ? `<${iri}> ${linkingPredicateBinding} ?linked_resource`
     : `?linked_resource ${linkingPredicateBinding} <${iri}>`
-  const resourceDeclaration = getLinkedResourcesIdentity === false
-    ? ""
-    : `GRAPH ?lrg {${tripleStructure}`
-  const resource = getLinkedResourcesIdentity === false
-    ? `<${iri}>`
-    : "?linked_resource"
+  const resourceDeclaration = getLinkedResourcesIdentity
+    ? `GRAPH ?lrg {
+      ${tripleStructure}`
+    : ''
+  const resource = getLinkedResourcesIdentity
+    ? '?linked_resource'
+    : `<${iri}>`
 
-  const count = linkedResourcesCount ? `
-  UNION {
-    SELECT (COUNT(*) AS ?c_out) ${getLinkedResourcesIdentity ? "?linked_resource" : ""}
-    WHERE {
-      GRAPH ?_g1 {
-        ${resource} ?outgoing_predicate ?out .
+  const count = linkedResourcesCount ? `UNION {
+        SELECT (COUNT(*) AS ?c_out) ${getLinkedResourcesIdentity ? "?linked_resource" : ""}
+        WHERE {
+          GRAPH ?_g1 { ${resource} ?outgoing_predicate ?out }
+        }
+        GROUP BY ?c_out ${getLinkedResourcesIdentity ? "?linked_resource" : ""}
       }
-    }
-    GROUP BY ?c_out ${getLinkedResourcesIdentity ? "?linked_resource" : ""}
-  }
-  UNION {
-    SELECT (COUNT(*) AS ?c_in) ${getLinkedResourcesIdentity ? "?linked_resource" : ""}
-    WHERE {
-      GRAPH ?_g1 {
-       ?in ?outgoing_predicate ${resource} .
-      }
-    }
-    GROUP BY ?c_in ${getLinkedResourcesIdentity ? "?linked_resource" : ""}
-  }
-  ` : "";
+      UNION {
+        SELECT (COUNT(*) AS ?c_in) ${getLinkedResourcesIdentity ? "?linked_resource" : ""}
+        WHERE {
+          GRAPH ?_g1 { ?in ?outgoing_predicate ${resource} }
+        }
+        GROUP BY ?c_in ${getLinkedResourcesIdentity ? "?linked_resource" : ""}
+      }` : '';
 
   return `
   PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
@@ -174,31 +169,31 @@ export function makeIdentityQueryFragment(iri, getLinkedResourcesIdentity, linki
   SELECT *
   WHERE {
     ${resourceDeclaration}
-    {
-      OPTIONAL {
-        GRAPH ?r_i_t_g {
-          ${resource} ?p_id ?id_resource .
-          FILTER (?p_id IN (rdf:type, crm:P2_has_type, crm:P1_is_identified_by, crm:P102_has_title, rdfs:label))
-          OPTIONAL {
-            GRAPH ?ir_i_t_g {
-              OPTIONAL { ?id_resource rdfs:label ?id_resource_label . }
-              OPTIONAL { 
-                ?id_resource ?id_resource_type_p ?id_resource_type .
-                FILTER (?id_resource_type_p IN (rdf:type, crm:P2_has_type))
-                OPTIONAL {
-                  GRAPH ?ir_ir_i_t_g {
-                    ?id_resource_type ?id_resource_type_label_p ?id_resource_type_label .
-                    FILTER (?id_resource_type_label_p IN (rdfs:label, crm:P1_is_identified_by))
+      {
+        OPTIONAL {
+          GRAPH ?r_i_t_g {
+            ${resource} ?p_id ?id_resource .
+            FILTER (?p_id IN (rdf:type, crm:P2_has_type, crm:P1_is_identified_by, crm:P102_has_title, rdfs:label))
+            OPTIONAL {
+              GRAPH ?ir_i_t_g {
+                OPTIONAL { ?id_resource rdfs:label ?id_resource_label . }
+                OPTIONAL { 
+                  ?id_resource ?id_resource_type_p ?id_resource_type .
+                  FILTER (?id_resource_type_p IN (rdf:type, crm:P2_has_type))
+                  OPTIONAL {
+                    GRAPH ?ir_ir_i_t_g {
+                      ?id_resource_type ?id_resource_type_label_p ?id_resource_type_label .
+                      FILTER (?id_resource_type_label_p IN (rdfs:label, crm:P1_is_identified_by))
+                    }
                   }
                 }
+                FILTER (!isLiteral(?id_resource))
               }
-              FILTER (!isLiteral(?id_resource))
             }
           }
         }
       }
-    }
-    ${count}
+      ${count}
     ${getLinkedResourcesIdentity === false ? "" : "}"}
   }
 `

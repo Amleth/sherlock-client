@@ -1,21 +1,30 @@
-import {useEffect, useState} from "react";
-import {makeIdentityQueryFragment} from "./common/rdf";
-import {sparqlEndpoint} from "./common/sparql";
+import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+
+import { makeIdentityQueryFragment } from './common/rdf'
+import { sparqlEndpoint } from './common/sparql'
 
 const C = () => {
-  const [response, setResponse] = useState();
+  const { id } = useParams()
+
+  const Q = makeIdentityQueryFragment('http://data-iremus.huma-num.fr/id/' + id, true, null, true, true)
+
+  const [response, setResponse] = useState()
+
   useEffect(() => {
-    sparqlEndpoint(makeIdentityQueryFragment(
-      "http://data-iremus.huma-num.fr/id/00012c9b-7527-4e82-901f-8ef1dac19180",
-      true,
-      null,
-      true,
-      true)).then(response => {
+    sparqlEndpoint(Q).then(response => {
       setResponse(response.results.bindings)
     })
   }, [])
 
-  return <pre>{JSON.stringify(response, null, 2)}</pre>
+  return (
+    <div style={{ display: 'flex' }}>
+      <pre style={{ margin: 0 }}>{Q}</pre>
+      <div>
+        <pre style={{ borderLeft: '1px solid hotpink', margin: 0 }}>{JSON.stringify(response, null, 2)}</pre>
+      </div>
+    </div>
+  )
 }
 
-export default C;
+export default C
