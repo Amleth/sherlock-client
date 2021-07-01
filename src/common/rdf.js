@@ -42,9 +42,7 @@ export const RDF_PREFIXES = {
   [IREMUS_GRAPH_BASE]: '',
 }
 
-export const PRIORITIZED_RDF_PREFIXES = Object.entries(RDF_PREFIXES).sort(
-  (a, b) => a[0].length < b[0].length,
-)
+export const PRIORITIZED_RDF_PREFIXES = Object.entries(RDF_PREFIXES).sort((a, b) => a[0].length < b[0].length)
 
 export const LABEL_PREDICATES = [
   CRM_BASE + 'P1_is_identified_by',
@@ -63,7 +61,7 @@ export const RESOURCE_IDENTITY_PREDICATES = [
   RDF_BASE + 'type',
   DCTERMS_BASE + 'creator',
   SKOS_BASE + 'inScheme',
-  RDFS_BASE + 'subClassOf'
+  RDFS_BASE + 'subClassOf',
 ]
 
 //
@@ -102,14 +100,14 @@ export function getCode(uri) {
 
 export function formatUri(uri) {
   for (const [key, value] of Object.entries(RDF_PREFIXES)) {
-    uri = uri.replace(key, value !== "" ? value + ":" : "");
+    uri = uri.replace(key, value !== '' ? value + ':' : '')
   }
   return uri
 }
 
 export function computeIdentity(identity) {
-  const chosenIdentity = identity.find(identity => identity.p && identity.p.value === CRM_BASE + "P1_is_identified_by");
-  return chosenIdentity ? formatUri(chosenIdentity.o.value) : "";
+  const chosenIdentity = identity.find(identity => identity.p && identity.p.value === CRM_BASE + 'P1_is_identified_by')
+  return chosenIdentity ? formatUri(chosenIdentity.o.value) : ''
 }
 
 export function computeResourceLabel(resourceIri, identity) {
@@ -117,84 +115,99 @@ export function computeResourceLabel(resourceIri, identity) {
 }
 
 /*
-
 A resource may have triples that represent its identity (see the white-list of predicates in the query).
- Objects of such predicates may be literal (like in "<RESOURCE_1> crm:P1_is_identified_by "Thomas") or linked resources.
-  In this second case, we also want to get information about the linked resources,
-  we want to get identity information about identity information of our resource(s).
+Objects of such predicates may be literal (like in "<RESOURCE_1> crm:P1_is_identified_by "Thomas") or linked resources.
+In this second case, we also want to get information about the linked resources,
+we want to get identity information about identity information of our resource(s).
 
 Let's now explicit graph variables names:
 
-    r_i_t_g -> "resource identity triples graph"
-            -> the graph that contains triples that link to identity resources
-   ir_i_t_g -> "identity resource identity triples graph"
-            -> the graph that contains triples that link identity resources to identity resources (label & type)
-ir_ir_i_t_g -> "identity resource identity resource identity triples graph"
-            -> the graph that contains triples that link label
+?lr_g
+  "linked resources graph"
+  the gaph that contains triples that link resources to the main IRI (all resources, not only identity resources)
+?ir_g
+    "identity resource graph"
+    the graph that contains triples that link to identity resources
+?ir_ir_g
+    "identity resources of identity resources graph"
+    the graph that contains triples that link identity resources to their identity resources (label & type)
+?l_ir_ir_g
+    "labels of identity resources of identity resources graph"
+    the graph that contains triples that link labels of identity resources of identity resources
 
+And other variables names:
+
+  ?id_p
+    "identity predicate"
+    prediate that links to an identity resource
+  ?id_resource
+    "identity resource"
+    resource which express a piece of knowledge related to a resource identity
 */
-export function makeIdentityQueryFragment(iri, getLinkedResourcesIdentity, linkingPredicate, isIriSubject, linkedResourcesCount) {
-  const linkingPredicateBinding = linkingPredicate ? `<${linkingPredicate}>` : "?lp";
+export function makeIdentityQueryFragment(
+  iri,
+  getLinkedResourcesIdentity,
+  linkingPredicate,
+  isIriSubject,
+  linkedResourcesCount
+) {
+  const linkingPredicateBinding = linkingPredicate ? `<${linkingPredicate}>` : '?lp'
   const tripleStructure = isIriSubject
     ? `<${iri}> ${linkingPredicateBinding} ?linked_resource`
     : `?linked_resource ${linkingPredicateBinding} <${iri}>`
   const resourceDeclaration = getLinkedResourcesIdentity
-    ? `GRAPH ?lrg {
-      ${tripleStructure}`
+    ? `GRAPH ?lr_g {
+    ${tripleStructure}`
     : ''
-  const resource = getLinkedResourcesIdentity
-    ? '?linked_resource'
-    : `<${iri}>`
+  const resource = getLinkedResourcesIdentity ? '?linked_resource' : `<${iri}>`
 
-  const count = linkedResourcesCount ? `UNION {
-        SELECT (COUNT(*) AS ?c_out) ${getLinkedResourcesIdentity ? "?linked_resource" : ""}
-        WHERE {
-          GRAPH ?_g1 { ${resource} ?outgoing_predicate ?out }
-        }
-        GROUP BY ?c_out ${getLinkedResourcesIdentity ? "?linked_resource" : ""}
-      }
-      UNION {
-        SELECT (COUNT(*) AS ?c_in) ${getLinkedResourcesIdentity ? "?linked_resource" : ""}
-        WHERE {
-          GRAPH ?_g1 { ?in ?outgoing_predicate ${resource} }
-        }
-        GROUP BY ?c_in ${getLinkedResourcesIdentity ? "?linked_resource" : ""}
-      }` : '';
+  const count = linkedResourcesCount
+    ? `UNION {
+      SELECT (COUNT(*) AS ?c_out) ${getLinkedResourcesIdentity ? '?linked_resource' : ''}
+      WHERE { GRAPH ?g_out { ${resource} ?p_out ?r_out } }
+      GROUP BY ?c_out ${getLinkedResourcesIdentity ? '?linked_resource' : ''}
+    }
+    UNION {
+      SELECT (COUNT(*) AS ?c_in) ${getLinkedResourcesIdentity ? '?linked_resource' : ''}
+      WHERE { GRAPH ?g_in { ?r_in ?p_in ${resource} } }
+      GROUP BY ?c_in ${getLinkedResourcesIdentity ? '?linked_resource' : ''}
+    }`
+    : ''
 
   return `
-  PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
-  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-  
-  SELECT *
-  WHERE {
-    ${resourceDeclaration}
-      {
-        OPTIONAL {
-          GRAPH ?r_i_t_g {
-            ${resource} ?p_id ?id_resource .
-            FILTER (?p_id IN (rdf:type, crm:P2_has_type, crm:P1_is_identified_by, crm:P102_has_title, rdfs:label))
-            OPTIONAL {
-              GRAPH ?ir_i_t_g {
-                OPTIONAL { ?id_resource rdfs:label ?id_resource_label . }
-                OPTIONAL { 
-                  ?id_resource ?id_resource_type_p ?id_resource_type .
-                  FILTER (?id_resource_type_p IN (rdf:type, crm:P2_has_type))
-                  OPTIONAL {
-                    GRAPH ?ir_ir_i_t_g {
-                      ?id_resource_type ?id_resource_type_label_p ?id_resource_type_label .
-                      FILTER (?id_resource_type_label_p IN (rdfs:label, crm:P1_is_identified_by))
-                    }
+PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT *
+WHERE {
+  ${resourceDeclaration}
+    {
+      OPTIONAL {
+        GRAPH ?ir_g {
+          ${resource} ?id_p ?id_resource .
+          FILTER (?id_p IN (rdf:type, crm:P2_has_type, crm:P1_is_identified_by, crm:P102_has_title, rdfs:label))
+          OPTIONAL {
+            GRAPH ?ir_ir_g {
+              OPTIONAL { ?id_resource rdfs:label ?id_resource_label . }
+              OPTIONAL { 
+                ?id_resource ?id_resource_type_p ?id_resource_type .
+                FILTER (?id_resource_type_p IN (rdf:type, crm:P2_has_type))
+                OPTIONAL {
+                  GRAPH ?ir_ir_ir_g {
+                    ?id_resource_type ?id_resource_type_label_p ?id_resource_type_label .
+                    FILTER (?id_resource_type_label_p IN (rdfs:label, crm:P1_is_identified_by))
                   }
                 }
-                FILTER (!isLiteral(?id_resource))
               }
+              FILTER (!isLiteral(?id_resource))
             }
           }
         }
       }
-      ${count}
-    ${getLinkedResourcesIdentity === false ? "" : "}"}
-  }
+    }
+    ${count}
+  ${getLinkedResourcesIdentity === false ? '' : '}'}
+}
 `
 }

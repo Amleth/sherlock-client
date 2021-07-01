@@ -1,13 +1,17 @@
+import queryString from 'query-string'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { makeIdentityQueryFragment } from './common/rdf'
 import { sparqlEndpoint } from './common/sparql'
 
-const C = () => {
+const C = ({ location }) => {
   const { id } = useParams()
+  const qp = queryString.parse(location.search)
+  const count = parseInt(qp.count) ? true : false
+  const lr = parseInt(qp.lr) ? true : false
 
-  const Q = makeIdentityQueryFragment('http://data-iremus.huma-num.fr/id/' + id, true, null, true, true)
+  const Q = makeIdentityQueryFragment('http://data-iremus.huma-num.fr/id/' + id, lr, null, true, count)
 
   const [response, setResponse] = useState()
 
@@ -20,9 +24,9 @@ const C = () => {
   return (
     <div style={{ display: 'flex' }}>
       <pre style={{ margin: 0 }}>{Q}</pre>
-      <div>
-        <pre style={{ borderLeft: '1px solid hotpink', margin: 0 }}>{JSON.stringify(response, null, 2)}</pre>
-      </div>
+      <pre style={{ backgroundColor: 'aquamarine', color: 'black', margin: 0 }}>
+        {JSON.stringify(response, null, 2)}
+      </pre>
     </div>
   )
 }
