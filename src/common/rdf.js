@@ -124,7 +124,22 @@ Identity resources may be linked:
   1) to the base IRI (getLinkedResourcesIdentity=false)
   2) to each and every linked resource of the base IRI (getLinkedResourcesIdentity=true)
 
-Let's now explicit graph variables names:
+Variables names (non graph, see later):
+
+  ?l_r
+    "linked resource"
+    resource that is linked to the base IRI
+  ?l_p
+    "linking predicate"
+    predicate that links a linked resource to the base IRI
+  ?id_p
+    "identity predicate"
+    predicate that links to an identity resource
+  ?id_r
+    "identity resource"
+    resource which express a piece of knowledge related to a resource identity
+
+Graph variables names:
 
 ?lr_g
   "linked resources graph"
@@ -139,20 +154,6 @@ Let's now explicit graph variables names:
     "labels of identity resources of identity resources graph"
     the graph that contains triples that link labels of identity resources of identity resources
 
-And other variables names:
-
-  ?l_r
-    "linked resource"
-    resource that is linked to the base IRI
-  ?l_p
-    "linking predicate"
-    predicate that links a linked resource to the base IRI
-  ?id_p
-    "identity predicate"
-    predicate that links to an identity resource
-  ?id_r
-    "identity resource"
-    resource which express a piece of knowledge related to a resource identity
 */
 export function makeIdentityQueryFragment(
   iri,
