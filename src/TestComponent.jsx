@@ -11,7 +11,7 @@ const C = ({ location }) => {
   const count = parseInt(qp.count) ? true : false
   const lr = parseInt(qp.lr) ? true : false
 
-  const Q = makeIdentityQueryFragment('http://data-iremus.huma-num.fr/id/' + id, lr, null, true, count)
+  const Q = makeIdentityQueryFragment('http://data-iremus.huma-num.fr/id/' + id, lr, "http://www.cidoc-crm.org/lrmoo/R3_is_realised_in", true, count)
 
   const [response, setResponse] = useState()
 

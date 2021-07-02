@@ -194,27 +194,35 @@ SELECT *
 WHERE {
   ${resourceDeclaration}
     {
-      OPTIONAL {
-        GRAPH ?ir_g {
-          ${resource} ?id_p ?id_r .
-          FILTER (?id_p IN (rdf:type, crm:P2_has_type, crm:P1_is_identified_by, crm:P102_has_title, rdfs:label))
-          OPTIONAL {
-            GRAPH ?ir_ir_g {
-              OPTIONAL { ?id_r rdfs:label ?id_r_label . }
-              OPTIONAL { 
-                ?id_r ?id_r_type_p ?id_r_type .
-                FILTER (?id_r_type_p IN (rdf:type, crm:P2_has_type))
-                OPTIONAL {
-                  GRAPH ?ir_ir_ir_g {
-                    ?id_r_type ?id_r_type_label_p ?id_r_type_label .
-                    FILTER (?id_r_type_label_p IN (rdfs:label, crm:P1_is_identified_by))
-                  }
-                }
-              }
-              FILTER (!isLiteral(?id_r))
-            }
+      GRAPH ?ir_g {
+        ${resource} ?id_p ?id_r .
+        FILTER (?id_p IN (rdf:type, crm:P2_has_type, crm:P1_is_identified_by, crm:P102_has_title, rdfs:label))
+
+        # E41 is an entity and not a literal
+        OPTIONAL {
+          GRAPH ?ir_e41_label_g {
+            ?id_r rdf:type ?e41_type .
+            FILTER (?e41_type IN (crm:E41_Appellation, crm:E42_Identifier))
+            ?id_r rdfs:label ?id_r_label .
           }
         }
+
+        #OPTIONAL {
+        #  GRAPH ?ir_ir_g {
+        #    OPTIONAL { ?id_r rdfs:label ?id_r_label . }
+        #    OPTIONAL { 
+        #      ?id_r ?id_r_type_p ?id_r_type .
+        #      FILTER (?id_r_type_p IN (rdf:type, crm:P2_has_type))
+        #      OPTIONAL {
+        #        GRAPH ?ir_ir_ir_g {
+        #          ?id_r_type ?id_r_type_label_p ?id_r_type_label .
+        #          FILTER (?id_r_type_label_p IN (rdfs:label, crm:P1_is_identified_by))
+        #        }
+        #      }
+        #    }
+        #    FILTER (!isLiteral(?id_r))
+        #  }
+        #}
       }
     }
     ${count}
