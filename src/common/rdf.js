@@ -120,11 +120,15 @@ Objects of such predicates may be literal (like in "<RESOURCE_1> crm:P1_is_ident
 In this second case, we also want to get information about the linked resources,
 we want to get identity information about identity information of our resource(s).
 
+Identity resources may be linked:
+  1) to the base IRI (getLinkedResourcesIdentity=false)
+  2) to each and every linked resource of the base IRI (getLinkedResourcesIdentity=true)
+
 Let's now explicit graph variables names:
 
 ?lr_g
   "linked resources graph"
-  the gaph that contains triples that link resources to the main IRI (all resources, not only identity resources)
+  the gaph that contains triples that link resources to the base IRI (all resources, not only identity resources)
 ?ir_g
     "identity resource graph"
     the graph that contains triples that link to identity resources
@@ -137,9 +141,15 @@ Let's now explicit graph variables names:
 
 And other variables names:
 
+  ?l_r
+    "linked resource"
+    resource that is linked to the base IRI
+  ?l_p
+    "linking predicate"
+    predicate that links a linked resource to the base IRI
   ?id_p
     "identity predicate"
-    prediate that links to an identity resource
+    predicate that links to an identity resource
   ?id_r
     "identity resource"
     resource which express a piece of knowledge related to a resource identity
