@@ -153,24 +153,24 @@ export function makeIdentityQueryFragment(
 ) {
   const linkingPredicateBinding = linkingPredicate ? `<${linkingPredicate}>` : '?l_p'
   const tripleStructure = isIriSubject
-    ? `<${iri}> ${linkingPredicateBinding} ?linked_resource`
-    : `?linked_resource ${linkingPredicateBinding} <${iri}>`
+    ? `<${iri}> ${linkingPredicateBinding} ?l_r`
+    : `?l_r ${linkingPredicateBinding} <${iri}>`
   const resourceDeclaration = getLinkedResourcesIdentity
     ? `GRAPH ?lr_g {
     ${tripleStructure}`
     : ''
-  const resource = getLinkedResourcesIdentity ? '?linked_resource' : `<${iri}>`
+  const resource = getLinkedResourcesIdentity ? '?l_r' : `<${iri}>`
 
   const count = linkedResourcesCount
     ? `UNION {
-      SELECT (COUNT(*) AS ?c_out) ${getLinkedResourcesIdentity ? '?linked_resource' : ''}
+      SELECT (COUNT(*) AS ?c_out) ${getLinkedResourcesIdentity ? '?l_r' : ''}
       WHERE { GRAPH ?g_out { ${resource} ?p_out ?r_out } }
-      GROUP BY ?c_out ${getLinkedResourcesIdentity ? '?linked_resource' : ''}
+      GROUP BY ?c_out ${getLinkedResourcesIdentity ? '?l_r' : ''}
     }
     UNION {
-      SELECT (COUNT(*) AS ?c_in) ${getLinkedResourcesIdentity ? '?linked_resource' : ''}
+      SELECT (COUNT(*) AS ?c_in) ${getLinkedResourcesIdentity ? '?l_r' : ''}
       WHERE { GRAPH ?g_in { ?r_in ?p_in ${resource} } }
-      GROUP BY ?c_in ${getLinkedResourcesIdentity ? '?linked_resource' : ''}
+      GROUP BY ?c_in ${getLinkedResourcesIdentity ? '?l_r' : ''}
     }`
     : ''
 
