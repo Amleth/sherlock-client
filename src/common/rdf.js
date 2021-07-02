@@ -207,6 +207,14 @@ WHERE {
           }
         }
 
+        # Label of a crm:E55_Type
+        OPTIONAL {
+          GRAPH ?ir_e55_label_g {
+            ?id_r rdf:type crm:E55_Type .
+            ?id_r crm:P1_is_identified_by ?id_r_label .
+          }
+        }
+
         #OPTIONAL {
         #  GRAPH ?ir_ir_g {
         #    OPTIONAL { ?id_r rdfs:label ?id_r_label . }
