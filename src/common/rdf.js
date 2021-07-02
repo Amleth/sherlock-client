@@ -140,7 +140,7 @@ And other variables names:
   ?id_p
     "identity predicate"
     prediate that links to an identity resource
-  ?id_resource
+  ?id_r
     "identity resource"
     resource which express a piece of knowledge related to a resource identity
 */
@@ -151,7 +151,7 @@ export function makeIdentityQueryFragment(
   isIriSubject,
   linkedResourcesCount
 ) {
-  const linkingPredicateBinding = linkingPredicate ? `<${linkingPredicate}>` : '?lp'
+  const linkingPredicateBinding = linkingPredicate ? `<${linkingPredicate}>` : '?l_p'
   const tripleStructure = isIriSubject
     ? `<${iri}> ${linkingPredicateBinding} ?linked_resource`
     : `?linked_resource ${linkingPredicateBinding} <${iri}>`
@@ -185,22 +185,22 @@ WHERE {
     {
       OPTIONAL {
         GRAPH ?ir_g {
-          ${resource} ?id_p ?id_resource .
+          ${resource} ?id_p ?id_r .
           FILTER (?id_p IN (rdf:type, crm:P2_has_type, crm:P1_is_identified_by, crm:P102_has_title, rdfs:label))
           OPTIONAL {
             GRAPH ?ir_ir_g {
-              OPTIONAL { ?id_resource rdfs:label ?id_resource_label . }
+              OPTIONAL { ?id_r rdfs:label ?id_r_label . }
               OPTIONAL { 
-                ?id_resource ?id_resource_type_p ?id_resource_type .
-                FILTER (?id_resource_type_p IN (rdf:type, crm:P2_has_type))
+                ?id_r ?id_r_type_p ?id_r_type .
+                FILTER (?id_r_type_p IN (rdf:type, crm:P2_has_type))
                 OPTIONAL {
                   GRAPH ?ir_ir_ir_g {
-                    ?id_resource_type ?id_resource_type_label_p ?id_resource_type_label .
-                    FILTER (?id_resource_type_label_p IN (rdfs:label, crm:P1_is_identified_by))
+                    ?id_r_type ?id_r_type_label_p ?id_r_type_label .
+                    FILTER (?id_r_type_label_p IN (rdfs:label, crm:P1_is_identified_by))
                   }
                 }
               }
-              FILTER (!isLiteral(?id_resource))
+              FILTER (!isLiteral(?id_r))
             }
           }
         }
