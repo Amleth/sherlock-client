@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
-import { formatSection } from '../helpers_view'
-import { getCode, RDF_BASE } from '../../../common/rdf'
 import { useSelector } from 'react-redux'
-import { getIdentity } from '../helpers_rdf'
+
+import { makeTable } from '../helpers_view'
+import { header } from '../Resource.css'
 
 const C = ({ resourceUri }) => {
   const outgoing = useSelector(state => state.outgoing.entities[resourceUri])
@@ -10,21 +10,13 @@ const C = ({ resourceUri }) => {
   if (!outgoing) {
     return <div style={{ fontFamily: 'monospace' }}>🐌</div>
   } else {
-    const identity = getIdentity(outgoing.data)
     return (
       <>
-        {Object.entries(identity).length > 0 &&
-          formatSection(
-            'Identité de la ressource',
-            'prédicat',
-            'objet',
-            'graphe',
-            identity,
-            'o',
-            identity[RDF_BASE + 'type'] ? Object.keys(identity[RDF_BASE + 'type']).map(getCode) : []
-          )}
-        {Object.entries(outgoing.data).length > 0 &&
-          formatSection('Triplets sortants', 'prédicat', 'objet', 'graphe', outgoing.data, 'o')}
+        <header css={header}>
+          <h2>OUTGOING PREDICATES</h2>
+        </header>
+        {/* <pre>{JSON.stringify(outgoing, null, 4)}</pre> */}
+        {makeTable(outgoing.data)}
       </>
     )
   }

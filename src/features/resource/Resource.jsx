@@ -1,35 +1,35 @@
 /** @jsxImportSource @emotion/react */
-import {css} from '@emotion/react'
-import {useDispatch, useSelector} from 'react-redux'
-import {useHistory} from 'react-router-dom'
-import {useEffect, useState} from 'react'
-import {experimentalStyled as styled, useTheme} from '@material-ui/core/styles'
-import {AppBar as MuiAppBar, Box, Button, Drawer, Toolbar, Typography} from '@material-ui/core'
-import {Link, useLocation} from 'react-router-dom'
+import { css } from '@emotion/react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useHistory } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { experimentalStyled as styled, useTheme } from '@material-ui/core/styles'
+import { AppBar as MuiAppBar, Box, Button, Drawer, Toolbar, Typography } from '@material-ui/core'
+import { Link, useLocation } from 'react-router-dom'
 
 // import { renderBar } from './bar'
 import E13 from './e13/E13'
 import Incoming from './incoming/Incoming'
-import {fetchOutgoing} from './outgoing/outgoingSlice'
-import {isTreeDisplayedToggled} from '../settings/settingsSlice'
+import { fetchOutgoing } from './outgoing/outgoingSlice'
+import { isTreeDisplayedToggled } from '../settings/settingsSlice'
 import Outgoing from './outgoing/Outgoing'
 import Tree from '../tree/Tree'
 import Tweet from '../twitter/Tweet'
 
-import {drawerStyle, DRAWER_WIDTH, triplesTableStyle} from './Resource.css'
-import {findViewers} from '../../common/viewerSelector'
-import {ANNOTATE as VIEW_ANNOTATE} from '../../common/viewerSelector'
-import BottomPanel from "../tree/BottomPanel";
-import Avatar from "@material-ui/core/Avatar";
-import {stringAvatar} from "../../common/utils";
-import AddE13 from "./addE13/AddE13";
+import { drawerStyle, DRAWER_WIDTH, triplesTableStyle } from './Resource.css'
+import { findViewers } from '../../common/viewerSelector'
+import { ANNOTATE as VIEW_ANNOTATE } from '../../common/viewerSelector'
+import BottomPanel from '../tree/BottomPanel'
+import Avatar from '@material-ui/core/Avatar'
+import { stringAvatar } from '../../common/utils'
+import AddE13 from './addE13/AddE13'
 
 export const VIEW_ADD = 'add'
 export const VIEW_PO = 'po'
 export const VIEW_E13 = 'e13'
 export const VIEW_PS = 'ps'
 
-const Main = styled('main', {shouldForwardProp: prop => prop !== 'open'})(({theme, open}) => ({
+const Main = styled('main', { shouldForwardProp: prop => prop !== 'open' })(({ theme, open }) => ({
   flexGrow: 1,
   padding: theme.spacing(3),
   transition: theme.transitions.create('margin', {
@@ -48,7 +48,7 @@ const Main = styled('main', {shouldForwardProp: prop => prop !== 'open'})(({them
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: prop => prop !== 'open',
-})(({theme, open}) => ({
+})(({ theme, open }) => ({
   transition: theme.transitions.create(['margin', 'width'], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
@@ -63,16 +63,16 @@ const AppBar = styled(MuiAppBar, {
   }),
 }))
 
-const Offset = styled('div')(({theme}) => theme.mixins.toolbar)
+const Offset = styled('div')(({ theme }) => theme.mixins.toolbar)
 
-export default function C({resourceUri, view}) {
+export default function C({ resourceUri, view }) {
   const dispatch = useDispatch()
   const history = useHistory()
   const theme = useTheme()
-  const location = useLocation();
+  const location = useLocation()
 
   const focusedResourceUri = useSelector(state => state.settings.focusedResourceUri) || resourceUri
-  const tree = useSelector(state => state.settings.isTreeDisplayed)
+  const tree = false //useSelector(state => state.settings.isTreeDisplayed)
   const user = useSelector(state => state.user)
   const bottomPanelResources = useSelector(state => state.tree.bottomPanelResources)
   const [selectedView, setSelectedView] = useState(view || VIEW_PO)
@@ -85,8 +85,8 @@ export default function C({resourceUri, view}) {
   if (outgoing) viewers = findViewers(resourceUri, outgoing.data)
 
   return (
-    <Box sx={{display: 'flex'}}>
-      <AppBar position="fixed" open={tree} style={{background: theme.palette.background.default}} elevation={0}>
+    <Box sx={{ display: 'flex' }}>
+      <AppBar position="fixed" open={tree} style={{ background: theme.palette.background.default }} elevation={0}>
         <Toolbar>
           <Typography
             component="h1"
@@ -109,38 +109,44 @@ export default function C({resourceUri, view}) {
           `}
         >
           <Box>
-          <Button onClick={() => dispatch(isTreeDisplayedToggled())} variant="outlined">
-            🌴
-          </Button>
-          {user && user.access_token && <Button onClick={() => setSelectedView(VIEW_ADD)} variant="outlined">
-            +
-          </Button>}
-          {viewers.map(v => (
-            <Button key={v.to} onClick={() => history.push(v.to)} variant="outlined">
-              {v.label}
+            <Button onClick={() => dispatch(isTreeDisplayedToggled())} variant="outlined">
+              🌴
             </Button>
-          ))}
+            {user && user.access_token && (
+              <Button onClick={() => setSelectedView(VIEW_ADD)} variant="outlined">
+                +
+              </Button>
+            )}
+            {viewers.map(v => (
+              <Button key={v.to} onClick={() => history.push(v.to)} variant="outlined">
+                {v.label}
+              </Button>
+            ))}
           </Box>
           <Box>
-          {user && user.access_token ? <Avatar
-              {...stringAvatar(user.username)}
-              align="right"
-              css={css`
-                &:hover {
-                  cursor: pointer;
-                }
-              `}
-              onClick={() => history.push('/me/')}
-            />
-            : <Link to={{
-              pathname: '/login',
-              query: {nextURL: location.pathname}
-            }}><Button align="right" onClick={() => history.push('/login')}>
-              🔒 Login
-            </Button>
-
-            </Link>
-          }
+            {user && user.access_token ? (
+              <Avatar
+                {...stringAvatar(user.username)}
+                align="right"
+                css={css`
+                  &:hover {
+                    cursor: pointer;
+                  }
+                `}
+                onClick={() => history.push('/me/')}
+              />
+            ) : (
+              <Link
+                to={{
+                  pathname: '/login',
+                  query: { nextURL: location.pathname },
+                }}
+              >
+                <Button align="right" onClick={() => history.push('/login')}>
+                  🔒 Login
+                </Button>
+              </Link>
+            )}
           </Box>
         </Toolbar>
         <div
@@ -152,18 +158,20 @@ export default function C({resourceUri, view}) {
         />
       </AppBar>
       <Drawer sx={drawerStyle(theme)} variant="persistent" anchor="left" open={tree}>
-        <Tree uri={resourceUri}/>
-        {bottomPanelResources.p !== null && bottomPanelResources.relatedUri !== null && <Box css={css`
-            height: 50vh;
-            border-top: 1px solid #033;
-            flex-shrink: 0;
-            width: 100%;
-          `}
-        >
-          <BottomPanel relatedResourceUri={bottomPanelResources.relatedUri} predicateUri={bottomPanelResources.p}/>
-        </Box>}
+        <Tree uri={resourceUri} />
+        {bottomPanelResources.p !== null && bottomPanelResources.relatedUri !== null && (
+          <Box
+            css={css`
+              height: 50vh;
+              border-top: 1px solid #033;
+              flex-shrink: 0;
+              width: 100%;
+            `}
+          >
+            <BottomPanel relatedResourceUri={bottomPanelResources.relatedUri} predicateUri={bottomPanelResources.p} />
+          </Box>
+        )}
       </Drawer>
-
 
       <Main open={tree} css={triplesTableStyle}>
         <Offset
@@ -171,12 +179,12 @@ export default function C({resourceUri, view}) {
             height: 159px;
           `}
         />
-        {selectedView === VIEW_ADD && <AddE13 resourceUri={focusedResourceUri}/>}
-        {selectedView === VIEW_PO && <Outgoing resourceUri={focusedResourceUri}/>}
-        {selectedView === VIEW_E13 && <E13 resourceUri={focusedResourceUri}/>}
-        {selectedView === VIEW_PS && <Incoming resourceUri={focusedResourceUri}/>}
+        {selectedView === VIEW_ADD && <AddE13 resourceUri={focusedResourceUri} />}
+        {selectedView === VIEW_PO && <Outgoing resourceUri={focusedResourceUri} />}
+        {selectedView === VIEW_E13 && <E13 resourceUri={focusedResourceUri} />}
+        {selectedView === VIEW_PS && <Incoming resourceUri={focusedResourceUri} />}
         {focusedResourceUri.startsWith('https://twitter.com/') && selectedView === VIEW_ANNOTATE && (
-          <Tweet resourceUri={focusedResourceUri}/>
+          <Tweet resourceUri={focusedResourceUri} />
         )}
       </Main>
     </Box>

@@ -26,18 +26,19 @@ const C = ({ location }) => {
     sparqlEndpoint(Q).then(response => {
       setResponse(response.results.bindings)
     })
-  }, [])
+  }, [Q])
 
   let headers = []
   if (response) {
-    for (const [k, v] of Object.entries(response)) {
-      headers.push(...Object.keys(v))
+    for (const v of Object.entries(response)) {
+      headers.push(...Object.keys(v[1]))
     }
   }
   headers = Array.from(new Set(headers))
 
   return (
     <>
+      <pre style={{ margin: 0 }}>{Q}</pre>
       <TableContainer>
         <Table size="small">
           <TableHead>
@@ -60,7 +61,7 @@ const C = ({ location }) => {
           </TableBody>
         </Table>
       </TableContainer>
-      <pre style={{ margin: 0 }}>{Q}</pre>
+      {/* <pre>{JSON.stringify(response, null, 4)}</pre> */}
     </>
   )
 }

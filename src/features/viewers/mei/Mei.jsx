@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { createVerovio, getNodeNote, load } from './verovioHelpers'
 import { annotationsPanelStyle, containerStyle, mainAreaStyle, verovioStyle } from './mei.css'
-import Basket from './Basket'
-import ModeSelector from './ModeSelector'
+// import Basket from './Basket'
+// import ModeSelector from './ModeSelector'
 import NoteInspector from './NoteInspector'
 import { getSherlockIriFromMeiNoteXmlId } from './verovio2sherlock'
 
@@ -53,13 +53,13 @@ const Mei = () => {
     }
   }
 
-  const removeFromBasket = n => {
-    const b = { ...basket }
-    delete b[n.noteNode.id]
-    document.getElementById(n.noteNode.id) && document.getElementById(n.noteNode.id).classList.remove('selected')
-    document.getElementById(n.noteNode.id) && document.getElementById(n.noteNode.id).classList.remove('focused')
-    setBasket(b)
-  }
+  // const removeFromBasket = n => {
+  //   const b = { ...basket }
+  //   delete b[n.noteNode.id]
+  //   document.getElementById(n.noteNode.id) && document.getElementById(n.noteNode.id).classList.remove('selected')
+  //   document.getElementById(n.noteNode.id) && document.getElementById(n.noteNode.id).classList.remove('focused')
+  //   setBasket(b)
+  // }
 
   return (
     <div

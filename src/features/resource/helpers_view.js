@@ -15,6 +15,25 @@ const APP_BASE_URI =
     process.env.REACT_APP_BASENAME +
     '/'
 
+export function makeTable(bindings) {
+    return <table>
+        <thead>
+            <tr>
+                <th>predicate</th>
+                <th>linked resource</th>
+                <th>graph</th>
+            </tr>
+        </thead>
+        <tbody>
+            {bindings.map(b => <tr>
+                <td>{formatBinding(b.l_p)}</td>
+                <td>{formatBinding(b.l_r)}</td>
+                <td>{formatBinding(b.lr_g)}</td>
+            </tr>)}
+        </tbody>
+    </table>
+}
+
 export function formatSection(title, col1, col2, col3, results, key, codes) {
     return (
         <section >

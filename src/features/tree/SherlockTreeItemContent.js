@@ -1,9 +1,9 @@
 /** @jsxImportSource @emotion/react */
-import {css} from '@emotion/react'
+import { css } from '@emotion/react'
 import clsx from 'clsx'
 import Typography from '@material-ui/core/Typography'
-import {ArrowLeft, ArrowRight} from '@material-ui/icons'
-import {useTreeItem} from '@material-ui/lab/TreeItem'
+import { ArrowLeft, ArrowRight } from '@material-ui/icons'
+import { useTreeItem } from '@material-ui/lab/TreeItem'
 import React from 'react'
 
 //TODO ou bien https://material-ui.com/api/typography/ ?
@@ -23,7 +23,7 @@ function computeLabelIcon(LabelIcon) {
       ←
     </Typography>
   }
-  return <LabelIcon color="inherit"/>
+  return <LabelIcon color="inherit" />
 }
 
 // On doit s'inspirer, pour le comportement du clic, de :
@@ -63,7 +63,7 @@ export default React.forwardRef((props, ref) => {
 
   const handleMouseDown = preventSelection
   const handleExpansionClick = handleExpansion
-  const handleSelectionClick = handleSelection
+  // const handleSelectionClick = handleSelection
 
   return (
     <div className={clsx(className, {
@@ -75,8 +75,8 @@ export default React.forwardRef((props, ref) => {
       [classes.root]: root,
       [classes.selected]: selected,
     })}
-         onMouseDown={handleMouseDown}
-         ref={ref}
+      onMouseDown={handleMouseDown}
+      ref={ref}
     >
       <div className={classes.iconContainer} onClick={e => {
         handleExpansionClick(e)
@@ -95,7 +95,7 @@ export default React.forwardRef((props, ref) => {
                 `}>
         {computeLabelIcon(LabelIcon)}
 
-        <Typography color="inherit" component="div" variant="caption" css={ theme => css`
+        <Typography color="inherit" component="div" variant="caption" css={theme => css`
                     width: 40px;
                     min-width: 40px;
                     font-family: ${theme.typography.fontFamilyMonospaced};

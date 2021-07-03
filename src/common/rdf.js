@@ -163,29 +163,16 @@ export function makeIdentityQueryFragment(
   linkedResourcesCount
 ) {
   const linkingPredicateBinding = linkingPredicate ? `<${linkingPredicate}>` : '?l_p'
-  const tripleStructure = isIriSubject
+  const direction = isIriSubject
     ? `<${iri}> ${linkingPredicateBinding} ?l_r`
     : `?l_r ${linkingPredicateBinding} <${iri}>`
   const resourceDeclaration = getLinkedResourcesIdentity
     ? `GRAPH ?lr_g {
-    ${tripleStructure}`
+    ${direction}`
     : ''
   const resource = getLinkedResourcesIdentity ? '?l_r' : `<${iri}>`
   const labelPredicates = 'crm:P1_is_identified_by, crm:P102_has_title, rdfs:label'
   const typePredicates = 'rdf:type, crm:P2_has_type'
-
-  const count = linkedResourcesCount
-    ? `UNION {
-      SELECT (COUNT(*) AS ?c_out) ${getLinkedResourcesIdentity ? '?l_r' : ''}
-      WHERE { GRAPH ?g_out { ${resource} ?p_out ?r_out } }
-      GROUP BY ?c_out ${getLinkedResourcesIdentity ? '?l_r' : ''}
-    }
-    UNION {
-      SELECT (COUNT(*) AS ?c_in) ${getLinkedResourcesIdentity ? '?l_r' : ''}
-      WHERE { GRAPH ?g_in { ?r_in ?p_in ${resource} } }
-      GROUP BY ?c_in ${getLinkedResourcesIdentity ? '?l_r' : ''}
-    }`
-    : ''
 
   return `
 PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
@@ -195,53 +182,46 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 SELECT *
 WHERE {
   ${resourceDeclaration}
-    {
+    ${getLinkedResourcesIdentity ? 'OPTIONAL {' : ''}
       GRAPH ?ir_g {
-        # Match identity resources
-        ${resource} ?id_p ?id_r .
-        FILTER (?id_p IN (${typePredicates}, ${labelPredicates}))
-
-        # Bind literal labels
-        BIND (IF(isLiteral(?id_r) && ?id_p IN (${labelPredicates}), ?id_r, "") AS ?literal_label)
-
-        # When crm:P1_is_identified_by links a crm:E41_Appellation (and not a literal)
-        OPTIONAL {
+        {
+          VALUES ?id_p { crm:P1_is_identified_by crm:P102_has_title rdfs:label }
+          ${resource} ?id_p ?label .
+          FILTER(isLiteral(?label)) .
+        }
+        UNION
+        {
+          VALUES ?id_p { crm:P1_is_identified_by crm:P102_has_title }
+          ${resource} ?id_p ?id_r .
           GRAPH ?ir_e41_label_g {
+            VALUES ?e41_type { crm:E41_Appellation crm:E42_Identifier }
             ?id_r rdf:type ?e41_type .
-            FILTER (?e41_type IN (crm:E41_Appellation, crm:E42_Identifier))
-            ?id_r rdfs:label ?e41_label .
+            ?id_r rdfs:label ?label .
           }
         }
-        BIND(IF(?literal_label, ?literal_label, IF(?e41_label, ?e41_label, "")) AS ?label)
-
-        # Label of a crm:E55_Type
-        OPTIONAL {
-          GRAPH ?ir_e55_label_g {
-            ?id_r rdf:type crm:E55_Type .
-            ?id_r crm:P1_is_identified_by ?id_r_label .
-          }
+        UNION
+        {
+          VALUES ?id_p { crm:P2_has_type rdf:type }
+          ${resource} ?id_p ?id_r .
         }
-
-        #OPTIONAL {
-        #  GRAPH ?ir_ir_g {
-        #    OPTIONAL { ?id_r rdfs:label ?id_r_label . }
-        #    OPTIONAL { 
-        #      ?id_r ?id_r_type_p ?id_r_type .
-        #      FILTER (?id_r_type_p IN (rdf:type, crm:P2_has_type))
-        #      OPTIONAL {
-        #        GRAPH ?ir_ir_ir_g {
-        #          ?id_r_type ?id_r_type_label_p ?id_r_type_label .
-        #          FILTER (?id_r_type_label_p IN (rdfs:label, crm:P1_is_identified_by))
-        #        }
-        #      }
-        #    }
-        #    FILTER (!isLiteral(?id_r))
-        #  }
-        #}
+        ${linkedResourcesCount
+      ? `UNION {
+          SELECT (COUNT(*) AS ?c_out) ${getLinkedResourcesIdentity ? '?l_r' : ''}
+          WHERE { GRAPH ?g_out { ${resource} ?p_out ?r_out } }
+          GROUP BY ?c_out ${getLinkedResourcesIdentity ? '?l_r' : ''}
+        }
+        UNION {
+          SELECT (COUNT(*) AS ?c_in) ${getLinkedResourcesIdentity ? '?l_r' : ''}
+          WHERE { GRAPH ?g_in { ?r_in ?p_in ${resource} } }
+          GROUP BY ?c_in ${getLinkedResourcesIdentity ? '?l_r' : ''}
+        }`
+      : ''}
       }
-    }
-    ${count}
+    ${getLinkedResourcesIdentity ? '}' : ''}
   ${getLinkedResourcesIdentity === false ? '' : '}'}
 }
 `
 }
+
+// http://localhost:3000/sherlock/test/4f44d797-910c-4e8e-a56f-745320d6bdde?lr=1&count=1
+// http://data-iremus.huma-num.fr/id/b62ee871-18f7-4309-b773-dba9b5fdf4ef

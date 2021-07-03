@@ -1,10 +1,8 @@
 /** @jsxImportSource @emotion/react */
-import {css} from '@emotion/react'
 import SherlockTreeItemContent from './SherlockTreeItemContent'
-import React from 'react'
 import TreeItem from '@material-ui/lab/TreeItem'
-import {ArrowLeft, ArrowRight, Visibility} from '@material-ui/icons'
-import {useDispatch, useSelector} from 'react-redux'
+import { ArrowLeft, ArrowRight, Visibility } from '@material-ui/icons'
+import { useDispatch, useSelector } from 'react-redux'
 
 import TransitionComponent from './TransitionComponent'
 import {
@@ -14,20 +12,21 @@ import {
 } from './treeSlice'
 import IriTreeItem from './IriTreeItem'
 import LiteralTreeItem from './LiteralTreeItem'
-import {formatUri} from '../../common/rdf'
-import {maxResourceUnfoldable} from "../../common/utils";
+import { formatUri } from '../../common/rdf'
+import { maxResourceUnfoldable } from '../../common/utils'
 
-const PredicateTreeItem = ({nodeId, path, predicate, relatedUri}) => {
+const PredicateTreeItem = ({ nodeId, path, predicate, relatedUri }) => {
   const dispatch = useDispatch()
   const unfoldedPaths = useSelector(state => state.tree.unfoldedPaths)
   const bottomPanelResources = useSelector(state => state.tree.bottomPanelResources)
-  const highlightPredicate = bottomPanelResources.relatedUri === relatedUri && bottomPanelResources.p === predicate.p.value
+  const highlightPredicate =
+    bottomPanelResources.relatedUri === relatedUri && bottomPanelResources.p === predicate.p.value
 
   return (
     <TreeItem
       ContentComponent={SherlockTreeItemContent}
-      expandIcon= {predicate.c.value < maxResourceUnfoldable ? null : <Visibility/>}
-      collapseIcon = {predicate.c.value < maxResourceUnfoldable ? null : <Visibility/>}
+      expandIcon={predicate.c.value < maxResourceUnfoldable ? null : <Visibility />}
+      collapseIcon={predicate.c.value < maxResourceUnfoldable ? null : <Visibility />}
       ContentProps={{
         highlightText: highlightPredicate,
         labelIcon: computeLabelIcon(predicate),
@@ -35,11 +34,23 @@ const PredicateTreeItem = ({nodeId, path, predicate, relatedUri}) => {
         labelText: formatUri(predicate.p.value),
         onIconClick: e => {
           if (predicate.c.value < maxResourceUnfoldable) {
-            dispatch(getResourcesByPredicateAndLinkedResource({p: predicate, uri: relatedUri, countLinkedResourceChildren: true}))
+            dispatch(
+              getResourcesByPredicateAndLinkedResource({
+                p: predicate,
+                uri: relatedUri,
+                countLinkedResourceChildren: true,
+              })
+            )
             dispatch(pathUnfoldStatusChanged(`${path}${predicate.p.value},${predicate.direction.value},`))
           } else {
-            dispatch(getResourcesByPredicateAndLinkedResource({p: predicate, uri: relatedUri, countLinkedResourceChildren: false}))
-            dispatch(bottomPanelDisplayedResourcesChanged({relatedUri, p: predicate.p.value}))
+            dispatch(
+              getResourcesByPredicateAndLinkedResource({
+                p: predicate,
+                uri: relatedUri,
+                countLinkedResourceChildren: false,
+              })
+            )
+            dispatch(bottomPanelDisplayedResourcesChanged({ relatedUri, p: predicate.p.value }))
           }
         },
         onLabelClick: e => {
@@ -70,7 +81,9 @@ const PredicateTreeItem = ({nodeId, path, predicate, relatedUri}) => {
               />
             )
           })
-        ) : (<div/>)
+        ) : (
+          <div />
+        )
       ) : (
         '⏳'
       )}

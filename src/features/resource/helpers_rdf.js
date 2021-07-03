@@ -29,43 +29,42 @@ export function separateOutgoingE13Results(bindings) {
   return { s, e13 }
 }
 
-/**
- * Restructure SPARQL bindings by sorting & grouping them.
- */
 export function restructureSparqlResults(results, key) {
-  // sort bindings by p.value, object lang, <key>_label, key.value
+
   const sortFn = (b1, b2) => {
-    const predicateCompare = b1.p.value.localeCompare(b2.p.value)
-    if (predicateCompare !== 0) return predicateCompare
+    const predicateCompare = b1.l_p.value.localeCompare(b2.l_p.value)
+    return predicateCompare
 
-    if (b1[key]['xml:lang'] && b2[key]['xml:lang'])
-      return b1[key]['xml:lang'].localeCompare(b2[key]['xml:lang'])
+    // if (predicateCompare !== 0) return predicateCompare
+    // sort bindings by p.value, object lang, <key>_label, key.value
+    // if (b1[key]['xml:lang'] && b2[key]['xml:lang'])
+    //   return b1[key]['xml:lang'].localeCompare(b2[key]['xml:lang'])
 
-    const keyCompare = b1[key].value.localeCompare(b2[key].value)
-    if (keyCompare !== 0) return keyCompare
+    // const keyCompare = b1[key].value.localeCompare(b2[key].value)
+    // if (keyCompare !== 0) return keyCompare
 
-    if (
-      b1.hasOwnProperty(key + '_label') &&
-      b1[key + '_label']['xml:lang'] &&
-      b2.hasOwnProperty(key + '_label') &&
-      b2[key + '_label']['xml:lang']
-    )
-      return b1[key + '_label']['xml:lang'].localeCompare(
-        b2[key + '_label']['xml:lang'],
-      )
+    // if (
+    //   b1.hasOwnProperty(key + '_label') &&
+    //   b1[key + '_label']['xml:lang'] &&
+    //   b2.hasOwnProperty(key + '_label') &&
+    //   b2[key + '_label']['xml:lang']
+    // )
+    //   return b1[key + '_label']['xml:lang'].localeCompare(
+    //     b2[key + '_label']['xml:lang'],
+    //   )
 
-    if (b1.hasOwnProperty(key + '_label') && b2.hasOwnProperty(key + '_label'))
-      return b1[key + '_label'].value.localeCompare(b2[key + '_label'].value)
-    if (b1.hasOwnProperty(key + '_label') && !b2.hasOwnProperty(key + '_label'))
-      return -1
-    if (!b1.hasOwnProperty(key + '_label') && b2.hasOwnProperty(key + '_label'))
-      return 1
+    // if (b1.hasOwnProperty(key + '_label') && b2.hasOwnProperty(key + '_label'))
+    //   return b1[key + '_label'].value.localeCompare(b2[key + '_label'].value)
+    // if (b1.hasOwnProperty(key + '_label') && !b2.hasOwnProperty(key + '_label'))
+    //   return -1
+    // if (!b1.hasOwnProperty(key + '_label') && b2.hasOwnProperty(key + '_label'))
+    //   return 1
   }
 
   return lodash(results)
     .sort(sortFn)
-    .groupBy('p.value')
-    .mapValues(b => lodash.groupBy(b, key + '.value'))
+    // .groupBy('id_p.value')
+    // .mapValues(b => lodash.groupBy(b, 'id_r.value'))
     .value()
 }
 

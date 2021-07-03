@@ -1,9 +1,9 @@
 /** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react'
+// import { css } from '@emotion/react'
 import { Box, Typography } from '@material-ui/core'
-import { useSelector } from 'react-redux'
+// import { useSelector } from 'react-redux'
 
-const C = ({noteIri}) => {
+const C = ({ noteIri }) => {
   console.log(noteIri)
   // const data = useSelector(state => state.notesOffsets.entities[noteIri])
 
