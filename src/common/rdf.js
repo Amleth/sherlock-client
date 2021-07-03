@@ -171,6 +171,8 @@ export function makeIdentityQueryFragment(
     ${tripleStructure}`
     : ''
   const resource = getLinkedResourcesIdentity ? '?l_r' : `<${iri}>`
+  const labelPredicates = 'crm:P1_is_identified_by, crm:P102_has_title, rdfs:label'
+  const typePredicates = 'rdf:type, crm:P2_has_type'
 
   const count = linkedResourcesCount
     ? `UNION {
@@ -195,10 +197,14 @@ WHERE {
   ${resourceDeclaration}
     {
       GRAPH ?ir_g {
+        # Match identity resources
         ${resource} ?id_p ?id_r .
-        FILTER (?id_p IN (rdf:type, crm:P2_has_type, crm:P1_is_identified_by, crm:P102_has_title, rdfs:label))
+        FILTER (?id_p IN (${typePredicates}, ${labelPredicates}))
 
-        # E41 is an entity and not a literal
+        # Bind literal labels
+        BIND (IF(isLiteral(?id_r) && ?id_p IN (${labelPredicates}), ?id_r, "") AS ?label)
+
+        # When crm:P1_is_identified_by links a crm:E41_Appellation (and not a literal)
         OPTIONAL {
           GRAPH ?ir_e41_label_g {
             ?id_r rdf:type ?e41_type .

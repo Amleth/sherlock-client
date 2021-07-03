@@ -16,6 +16,7 @@ export const fetchOutgoing = createAsyncThunk('outgoing/fetchOutgoing', async (u
     const response = await sparqlEndpoint(query(uri))
     console.log(response.results.bindings)
     const data = restructureSparqlResults(response.results.bindings, 'o')
+    console.log(data)
     return { id: uri, data }
 })
 
