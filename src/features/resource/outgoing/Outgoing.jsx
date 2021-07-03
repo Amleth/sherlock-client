@@ -15,7 +15,6 @@ const C = ({ resourceUri }) => {
         <header css={header}>
           <h2>OUTGOING PREDICATES</h2>
         </header>
-        {/* <pre>{JSON.stringify(outgoing, null, 4)}</pre> */}
         {makeTable(outgoing.data)}
       </>
     )

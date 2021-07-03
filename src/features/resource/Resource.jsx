@@ -72,7 +72,7 @@ export default function C({ resourceUri, view }) {
   const location = useLocation()
 
   const focusedResourceUri = useSelector(state => state.settings.focusedResourceUri) || resourceUri
-  const tree = false //useSelector(state => state.settings.isTreeDisplayed)
+  const tree = useSelector(state => state.settings.isTreeDisplayed)
   const user = useSelector(state => state.user)
   const bottomPanelResources = useSelector(state => state.tree.bottomPanelResources)
   const [selectedView, setSelectedView] = useState(view || VIEW_PO)
