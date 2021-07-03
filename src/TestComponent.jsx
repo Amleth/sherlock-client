@@ -1,8 +1,15 @@
+import Table from '@material-ui/core/Table'
+import TableBody from '@material-ui/core/TableBody'
+import TableCell from '@material-ui/core/TableCell'
+import TableContainer from '@material-ui/core/TableContainer'
+import TableHead from '@material-ui/core/TableHead'
+import TableRow from '@material-ui/core/TableRow'
+
 import queryString from 'query-string'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
-import { makeIdentityQueryFragment } from './common/rdf'
+import { formatUri, makeIdentityQueryFragment } from './common/rdf'
 import { sparqlEndpoint } from './common/sparql'
 
 const C = ({ location }) => {
@@ -13,7 +20,7 @@ const C = ({ location }) => {
 
   const Q = makeIdentityQueryFragment('http://data-iremus.huma-num.fr/id/' + id, lr, null, true, count)
 
-  const [response, setResponse] = useState()
+  const [response, setResponse] = useState([])
 
   useEffect(() => {
     sparqlEndpoint(Q).then(response => {
@@ -21,13 +28,40 @@ const C = ({ location }) => {
     })
   }, [])
 
+  let headers = []
+  if (response) {
+    for (const [k, v] of Object.entries(response)) {
+      headers.push(...Object.keys(v))
+    }
+  }
+  headers = Array.from(new Set(headers))
+
   return (
-    <div style={{ display: 'flex' }}>
+    <>
+      <TableContainer>
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              {headers.map(h => (
+                <TableCell align="center" key={h} sx={{ fontWeight: 'bold', textTransform: 'uppercase' }}>
+                  {h}
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {response.map(r => (
+              <TableRow key={Math.random()}>
+                {headers.map(h => (
+                  <TableCell key={Math.random()}>{r.hasOwnProperty(h) ? formatUri(r[h].value) : '🦕'}</TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
       <pre style={{ margin: 0 }}>{Q}</pre>
-      <pre id="q" style={{ backgroundColor: 'aquamarine', color: 'black', margin: 0 }}>
-        {JSON.stringify(response ? response.map(_ => (_.label ? _.label.value : "")) : '🦕', null, 2)}
-      </pre>
-    </div>
+    </>
   )
 }
 

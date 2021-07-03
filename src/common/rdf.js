@@ -202,16 +202,17 @@ WHERE {
         FILTER (?id_p IN (${typePredicates}, ${labelPredicates}))
 
         # Bind literal labels
-        BIND (IF(isLiteral(?id_r) && ?id_p IN (${labelPredicates}), ?id_r, "") AS ?label)
+        BIND (IF(isLiteral(?id_r) && ?id_p IN (${labelPredicates}), ?id_r, "") AS ?literal_label)
 
         # When crm:P1_is_identified_by links a crm:E41_Appellation (and not a literal)
         OPTIONAL {
           GRAPH ?ir_e41_label_g {
             ?id_r rdf:type ?e41_type .
             FILTER (?e41_type IN (crm:E41_Appellation, crm:E42_Identifier))
-            ?id_r rdfs:label ?id_r_label .
+            ?id_r rdfs:label ?e41_label .
           }
         }
+        BIND(IF(?literal_label, ?literal_label, IF(?e41_label, ?e41_label, "")) AS ?label)
 
         # Label of a crm:E55_Type
         OPTIONAL {
