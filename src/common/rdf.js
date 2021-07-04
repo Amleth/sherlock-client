@@ -191,6 +191,12 @@ WHERE {
         }
         UNION
         {
+          VALUES ?id_p { rdfs:label }
+          ${resource} ?id_p ?label .
+          FILTER(!isLiteral(?label)) .
+        }
+        UNION
+        {
           VALUES ?id_p { crm:P1_is_identified_by crm:P102_has_title }
           ${resource} ?id_p ?id_r .
           GRAPH ?ir_e41_label_g {

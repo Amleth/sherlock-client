@@ -2,7 +2,6 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
     focusedResourceUri: null,
-    isTreeDisplayed: true
 }
 
 const settingsSlice = createSlice({
@@ -11,13 +10,10 @@ const settingsSlice = createSlice({
     reducers: {
         focusedResourceUriSet(state, action) {
             state.focusedResourceUri = action.payload
-        },
-        isTreeDisplayedToggled(state, action) {
-            state.isTreeDisplayed = !state.isTreeDisplayed
         }
     },
 })
 
-export const { focusedResourceUriSet, isTreeDisplayedToggled } = settingsSlice.actions
+export const { focusedResourceUriSet } = settingsSlice.actions
 
 export default settingsSlice.reducer

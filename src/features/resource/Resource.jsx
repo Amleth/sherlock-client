@@ -11,7 +11,6 @@ import { Link, useLocation } from 'react-router-dom'
 import E13 from './e13/E13'
 import Incoming from './incoming/Incoming'
 import { fetchOutgoing } from './outgoing/outgoingSlice'
-import { isTreeDisplayedToggled } from '../settings/settingsSlice'
 import Outgoing from './outgoing/Outgoing'
 import Tree from '../tree/Tree'
 import Tweet from '../twitter/Tweet'
@@ -72,10 +71,16 @@ export default function C({ resourceUri, view }) {
   const location = useLocation()
 
   const focusedResourceUri = useSelector(state => state.settings.focusedResourceUri) || resourceUri
-  const tree = useSelector(state => state.settings.isTreeDisplayed)
   const user = useSelector(state => state.user)
   const bottomPanelResources = useSelector(state => state.tree.bottomPanelResources)
+  const [treeDisplayed, setTreeDisplayed] = useState(localStorage.getItem('treeDisplayed') == 'true')
   const [selectedView, setSelectedView] = useState(view || VIEW_PO)
+
+  function _setTreeDisplayed() {
+    const _ = !(localStorage.getItem('treeDisplayed') == 'true')
+    localStorage.setItem('treeDisplayed', _)
+    setTreeDisplayed(_)
+  }
 
   useEffect(() => {
     dispatch(fetchOutgoing(focusedResourceUri))
@@ -86,7 +91,12 @@ export default function C({ resourceUri, view }) {
 
   return (
     <Box sx={{ display: 'flex' }}>
-      <AppBar position="fixed" open={tree} style={{ background: theme.palette.background.default }} elevation={0}>
+      <AppBar
+        position="fixed"
+        open={treeDisplayed}
+        style={{ background: theme.palette.background.default }}
+        elevation={0}
+      >
         <Toolbar>
           <Typography
             component="h1"
@@ -109,7 +119,7 @@ export default function C({ resourceUri, view }) {
           `}
         >
           <Box>
-            <Button onClick={() => dispatch(isTreeDisplayedToggled())} variant="outlined">
+            <Button onClick={() => _setTreeDisplayed()} variant="outlined">
               🌴
             </Button>
             &nbsp;
@@ -134,6 +144,14 @@ export default function C({ resourceUri, view }) {
               variant="outlined"
             >
               INCOMING
+            </Button>
+            &nbsp;
+            <Button
+              sx={{ color: theme => theme.palette.colors.MI_TEAL }}
+              onClick={() => setSelectedView(VIEW_E13)}
+              variant="outlined"
+            >
+              E13
             </Button>
             &nbsp;
             {user && user.access_token && (
@@ -182,7 +200,7 @@ export default function C({ resourceUri, view }) {
           `}
         />
       </AppBar>
-      <Drawer sx={drawerStyle(theme)} variant="persistent" anchor="left" open={tree}>
+      <Drawer sx={drawerStyle(theme)} variant="persistent" anchor="left" open={treeDisplayed}>
         <Tree uri={resourceUri} />
         {bottomPanelResources.p !== null && bottomPanelResources.relatedUri !== null && (
           <Box
@@ -198,7 +216,7 @@ export default function C({ resourceUri, view }) {
         )}
       </Drawer>
 
-      <Main open={tree} css={triplesTableStyle}>
+      <Main open={treeDisplayed} css={triplesTableStyle}>
         <Offset
           css={css`
             height: 159px;
