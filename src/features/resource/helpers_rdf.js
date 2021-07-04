@@ -29,7 +29,7 @@ export function separateOutgoingE13Results(bindings) {
   return { s, e13 }
 }
 
-export function restructureSparqlResults(results, key) {
+export function restructureSparqlResults(bindings) {
 
   const sortFn = (b1, b2) => {
     const predicateCompare = b1.l_p.value.localeCompare(b2.l_p.value)
@@ -59,13 +59,26 @@ export function restructureSparqlResults(results, key) {
     //   return -1
     // if (!b1.hasOwnProperty(key + '_label') && b2.hasOwnProperty(key + '_label'))
     //   return 1
+    // }
+
+    // return lodash(results)
+    //   .sort(sortFn)
+    //   .groupBy('id_p.value')
+    //   .mapValues(b => lodash.groupBy(b, 'id_r.value'))
+    //   .value()
   }
 
-  return lodash(results)
-    .sort(sortFn)
-    // .groupBy('id_p.value')
-    // .mapValues(b => lodash.groupBy(b, 'id_r.value'))
-    .value()
+  bindings = bindings.sort(sortFn)
+
+  let res = {}
+
+  for (const b of bindings) {
+    const l_p_l_r_key = b.l_p.value + b.l_r.value
+    if (!res[l_p_l_r_key]) res[l_p_l_r_key] = []
+    res[l_p_l_r_key][res[l_p_l_r_key].length] = b
+  }
+
+  return res
 }
 
 export function restructureSparqlE13Results(results) {

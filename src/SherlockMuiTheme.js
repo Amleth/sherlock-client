@@ -42,7 +42,7 @@ export default createTheme({
         borderRadius: 0,
     },
     typography: {
-        fontFamily: 'Jost',
+        fontFamily: 'futura-pt',
         fontFamilyMonospaced: 'Fira Code'
     }
 })

@@ -91,9 +91,9 @@ export const triplesTableStyle = theme => css`
   }
   th {
     color: #666;
-    font-family: Jost;
+    font-family: ${theme.typography.fontFamily};
     font-style: italic;
-    font-weight: normal;
+    font-weight: bold;
     letter-spacing: 3px;
     padding: ${RESOURCE_MARGIN};
     text-align: left;
@@ -132,6 +132,7 @@ export const triplesTableStyle = theme => css`
 
   .textValue {
     color: #eee;
+    font-family: ${theme.typography.fontFamily};
   }
   .label-separator {
     color: lightgray;

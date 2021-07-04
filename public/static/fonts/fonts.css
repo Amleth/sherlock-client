@@ -1,0 +1,18 @@
+@font-face {
+  font-family: 'futura-pt';
+  font-style: normal;
+  font-weight: normal;
+  src: url(./futura-pt-book.woff2);
+}
+@font-face {
+  font-family: 'futura-pt';
+  font-style: italic;
+  font-weight: normal;
+  src: url(./futura-pt-book-oblique.woff2);
+}
+@font-face {
+  font-family: 'futura-pt';
+  font-style: normal;
+  font-weight: bold;
+  src: url(./futura-pt-medium.woff2);
+}

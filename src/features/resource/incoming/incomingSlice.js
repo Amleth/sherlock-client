@@ -14,7 +14,7 @@ export const fetchIncoming = createAsyncThunk('incoming/fetchIncoming', async (u
     if (thunkAPI.getState().incoming.ids.includes(uri))
         return { id: uri, data: thunkAPI.getState().incoming.entities[uri] }
     const response = await sparqlEndpoint(query(uri))
-    const data = restructureSparqlResults(response.results.bindings, 's')
+    const data = restructureSparqlResults(response.results.bindings)
     return { id: uri, data }
 })
 

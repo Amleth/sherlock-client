@@ -16,6 +16,7 @@ const APP_BASE_URI =
     '/'
 
 export function makeTable(bindings) {
+    let i = 0
     return <table>
         <thead>
             <tr>
@@ -25,11 +26,18 @@ export function makeTable(bindings) {
             </tr>
         </thead>
         <tbody>
-            {bindings.map(b => <tr>
-                <td>{formatBinding(b.l_p)}</td>
-                <td>{formatBinding(b.l_r)}</td>
-                <td>{formatBinding(b.lr_g)}</td>
-            </tr>)}
+            {Object.values(bindings).map(bindings => {
+                return <tr key={i++}>
+                    <td>{formatBinding(bindings[0].l_p)}</td>
+                    <td>
+                        <div>
+                            <div>{formatBinding(bindings[0].l_r)}</div>
+                            <div>{bindings[0].label ? formatBinding(bindings[0].label) : ''}</div>
+                        </div>
+                    </td>
+                    <td>{formatBinding(bindings[0].lr_g)}</td>
+                </tr>
+            })}
         </tbody>
     </table>
 }

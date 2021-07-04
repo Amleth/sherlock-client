@@ -112,11 +112,36 @@ export default function C({ resourceUri, view }) {
             <Button onClick={() => dispatch(isTreeDisplayedToggled())} variant="outlined">
               🌴
             </Button>
+            &nbsp;
+            <Button
+              onClick={() => history.push('/describe/' + encodeURIComponent(focusedResourceUri))}
+              variant="outlined"
+            >
+              🪴
+            </Button>
+            &nbsp;
+            <Button
+              sx={{ color: theme => theme.palette.colors.MI_ORANGE }}
+              onClick={() => setSelectedView(VIEW_PO)}
+              variant="outlined"
+            >
+              OUTGOING
+            </Button>
+            &nbsp;
+            <Button
+              sx={{ color: theme => theme.palette.colors.MI_MAGENTA }}
+              onClick={() => setSelectedView(VIEW_PS)}
+              variant="outlined"
+            >
+              INCOMING
+            </Button>
+            &nbsp;
             {user && user.access_token && (
               <Button onClick={() => setSelectedView(VIEW_ADD)} variant="outlined">
                 +
               </Button>
             )}
+            &nbsp;
             {viewers.map(v => (
               <Button key={v.to} onClick={() => history.push(v.to)} variant="outlined">
                 {v.label}
