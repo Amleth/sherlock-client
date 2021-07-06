@@ -90,7 +90,7 @@ export const triplesTableStyle = theme => css`
     word-break: keep-all;
   }
   th {
-    color: #666;
+    color: ${TABLE_BORDER_COLOUR};
     font-family: ${theme.typography.fontFamily};
     font-style: italic;
     font-weight: bold;

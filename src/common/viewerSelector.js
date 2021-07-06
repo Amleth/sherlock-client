@@ -19,13 +19,17 @@ export function findViewers(resourceUri, outgoing) {
         })
     }
 
-    if (outgoing.hasOwnProperty(DCTERMS_BASE + 'format')) {
-        if (Object.keys(outgoing[DCTERMS_BASE + 'format']).includes('application/vnd.mei+xml')) {
-            viewers.push({
-                label: 'MEI',
-                to: '/mei/' + sherlockId,
-                type: MEI
-            })
+    for (const k in outgoing) {
+        for (const b of outgoing[k]) {
+            if (b.l_p.value === DCTERMS_BASE + 'format') {
+                if (b.l_r.value === 'application/vnd.mei+xml') {
+                    viewers.push({
+                        label: 'MEI',
+                        to: '/mei/' + sherlockId,
+                        type: MEI
+                    })
+                }
+            }
         }
     }
 

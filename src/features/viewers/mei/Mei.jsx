@@ -20,7 +20,6 @@ const Mei = () => {
   const [basket, setBasket] = useState({})
   const [viewState, setViewState] = useState(VIEW_STATE_READING)
   const [focusedNote, setFocusedNote] = useState(null)
-  console.log(focusedNote)
 
   useEffect(() => {
     createVerovio(meiUri) // github.com/rism-digital/verovio-app-react/blob/master/src/App.js
@@ -48,7 +47,6 @@ const Mei = () => {
     }
     if (n) {
       const noteIri = getSherlockIriFromMeiNoteXmlId(id, n.noteNode.id)
-      console.log(noteIri)
       setFocusedNote(noteIri)
     }
   }

@@ -11,32 +11,24 @@ PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 `
 
-export const fetchSparqlQuery = async query => {
-  const res = await fetch(SERVICE_BASE_URI() + 'sparql/', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-    },
-    mode: 'cors',
-    cache: 'no-cache',
-    redirect: 'follow',
-    body: `query=${encodeURIComponent(query)}`,
-  })
-  return await res.json()
-}
+export const makeBody = query => ({
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+  },
+  mode: 'cors',
+  cache: 'no-cache',
+  redirect: 'follow',
+  body: `query=${encodeURIComponent(query)}`
+})
+
+export const sparqlEndpointBody = query => ({
+  ...makeBody(query),
+  url: process.env.REACT_APP_SHEROCK_SPARQL_ENDPOINT
+})
 
 export const sparqlEndpoint = async query => {
-  // console.log(query)
-  let res = await fetch(process.env.REACT_APP_SHEROCK_SPARQL_ENDPOINT, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-    },
-    mode: 'cors',
-    cache: 'no-cache',
-    redirect: 'follow',
-    body: `query=${encodeURIComponent(query)}`,
-  })
+  let res = await fetch(process.env.REACT_APP_SHEROCK_SPARQL_ENDPOINT, makeBody(query))
   res = await res.json()
   return res
 }

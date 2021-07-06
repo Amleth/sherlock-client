@@ -1,15 +1,19 @@
 /** @jsxImportSource @emotion/react */
 // import { css } from '@emotion/react'
 import { Box, Typography } from '@material-ui/core'
-// import { useSelector } from 'react-redux'
+import { useGetNoteIdentityQuery } from '../../../services/mei'
+import { Link } from 'react-router-dom'
 
 const C = ({ noteIri }) => {
-  console.log(noteIri)
-  // const data = useSelector(state => state.notesOffsets.entities[noteIri])
+  const { data, error, isLoading } = useGetNoteIdentityQuery(noteIri)
+  const uuid = noteIri.split('/id/')[1]
+  console.log(noteIri, uuid)
 
   return (
     <Box>
-      <Typography>Coucou</Typography>
+      <Typography>
+        <Link to={'/id/' + uuid}>{noteIri}</Link>
+      </Typography>
     </Box>
   )
 }

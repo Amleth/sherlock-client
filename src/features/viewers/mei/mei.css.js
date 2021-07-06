@@ -3,7 +3,7 @@ import { css } from '@emotion/react'
 export const COLOR_FOCUS = 'turquoise'
 
 export const annotationsPanelStyle = theme => css`
-  backgorund-color: ${theme.palette.background.default};
+  background-color: ${theme.palette.background.default};
   height: 100vh;
   overflow-y: scroll;
   position: fixed;
@@ -12,7 +12,6 @@ export const annotationsPanelStyle = theme => css`
 `
 
 export const containerStyle = css`
-  color: black;
   display: flex;
 
   @keyframes condemed_blink_effect {
@@ -23,6 +22,7 @@ export const containerStyle = css`
 
 export const mainAreaStyle = css`
   background-color: white;
+  cursor: default;
   width: 66%;
 `
 

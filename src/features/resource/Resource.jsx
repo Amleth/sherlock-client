@@ -73,11 +73,11 @@ export default function C({ resourceUri, view }) {
   const focusedResourceUri = useSelector(state => state.settings.focusedResourceUri) || resourceUri
   const user = useSelector(state => state.user)
   const bottomPanelResources = useSelector(state => state.tree.bottomPanelResources)
-  const [treeDisplayed, setTreeDisplayed] = useState(localStorage.getItem('treeDisplayed') == 'true')
+  const [treeDisplayed, setTreeDisplayed] = useState(localStorage.getItem('treeDisplayed') === 'true')
   const [selectedView, setSelectedView] = useState(view || VIEW_PO)
 
   function _setTreeDisplayed() {
-    const _ = !(localStorage.getItem('treeDisplayed') == 'true')
+    const _ = !(localStorage.getItem('treeDisplayed') === 'true')
     localStorage.setItem('treeDisplayed', _)
     setTreeDisplayed(_)
   }
@@ -159,7 +159,6 @@ export default function C({ resourceUri, view }) {
                 +
               </Button>
             )}
-            &nbsp;
             {viewers.map(v => (
               <Button key={v.to} onClick={() => history.push(v.to)} variant="outlined">
                 {v.label}
