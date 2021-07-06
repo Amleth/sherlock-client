@@ -1,5 +1,5 @@
 import CircularProgress from '@material-ui/core/CircularProgress'
-import { Public } from '@material-ui/icons'
+import {ArrowLeft, ArrowRight, Public} from '@material-ui/icons'
 import TreeItem from '@material-ui/lab/TreeItem'
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -9,12 +9,17 @@ import { getResourcePredicates, pathUnfoldStatusChanged, selectResourceByUri } f
 import SherlockTreeItemContent from './SherlockTreeItemContent'
 import PredicateTreeItem from './PredicateTreeItem'
 import { focusedResourceUriSet } from '../settings/settingsSlice'
+import Typography from "@material-ui/core/Typography";
+import {Button} from "@material-ui/core";
+import Box from "@material-ui/core/Box";
 
 const IriTreeItem = ({ nodeId, path, uri, ...props }) => {
   const dispatch = useDispatch()
   const resource = useSelector(state => selectResourceByUri(state, uri))
   const unfoldedPaths = useSelector(state => state.tree.unfoldedPaths)
-  const count = getNumberOfChildren(resource)
+  const c_in = resource ? resource.identity.find(row => row.c_in) : null;
+  const c_out = resource ? resource.identity.find(row => row.c_out) : null;
+  console.log(c_in)
   return canShowItem(resource, unfoldedPaths, path) ? (
     <TreeItem
       ContentComponent={SherlockTreeItemContent}
@@ -28,7 +33,10 @@ const IriTreeItem = ({ nodeId, path, uri, ...props }) => {
           dispatch(focusedResourceUriSet(resource.id))
         },
         labelIcon: Public,
-        labelInfo: count.value,
+        labelInfo: <React.Fragment>
+          <Typography fontWeight="bold" sx={{ color: theme => theme.palette.colors.MI_MAGENTA }} display="inline" noWrap>{c_in ? c_in.c_in.value : 0} </Typography>-
+          <Typography fontWeight="bold" sx={{ color: theme => theme.palette.colors.MI_ORANGE }} display="inline" noWrap> {c_out ? c_out.c_out.value : 0}</Typography>
+        </React.Fragment>,
         labelText: resource.label,
       }}
       nodeId={nodeId}
@@ -48,7 +56,7 @@ const IriTreeItem = ({ nodeId, path, uri, ...props }) => {
             />
           )
         })}
-      {count && !resource.predicates && <CircularProgress />}
+      {(c_in || c_out) && !resource.predicates && <CircularProgress />}
     </TreeItem>
   ) : (
     "🐌"

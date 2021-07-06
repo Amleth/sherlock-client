@@ -64,13 +64,14 @@ const PredicateTreeItem = ({ nodeId, path, predicate, relatedUri }) => {
       {unfoldedPaths.includes(path) && predicate.resources ? (
         predicate.c.value < maxResourceUnfoldable ? (
           predicate.resources.map(resource => {
-            const id = `${path}${predicate.p.value},${predicate.direction.value},${resource.r.value},`
-            return resource.r.type === 'uri' ? (
+            console.log(resource)
+            const id = `${path}${predicate.p.value},${predicate.direction.value},${resource.value},`
+            return resource.type === 'uri' ? (
               <IriTreeItem
                 key={id}
                 nodeId={id}
                 path={`${path}${predicate.p.value},${predicate.direction.value},`}
-                uri={resource.r.value}
+                uri={resource.value}
               />
             ) : (
               <LiteralTreeItem

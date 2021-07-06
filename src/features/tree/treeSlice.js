@@ -6,7 +6,7 @@ import {
   resourcesByPredicateAndObjectQuery,
   resourcesByPredicateAndSubjectQuery
 } from "./resourcesByPredicateAndResourceQuery";
-import { computeResourceLabel } from "../../common/rdf";
+import {computeResourceLabel, makeIdentityQueryFragment} from "../../common/rdf";
 
 const adapter = createEntityAdapter()
 const initialState = adapter.getInitialState({
@@ -23,7 +23,7 @@ export const getResourceIdentity = createAsyncThunk('tree/fetchResourceIdentity'
   const identity = thunkAPI.getState().tree.ids[uri];
   if (identity)
     return identity
-  const response = await sparqlEndpoint(Q(uri));
+  const response = await sparqlEndpoint(makeIdentityQueryFragment(uri, false, null, true, true));
   return { id: uri, identity: response.results.bindings, label: computeResourceLabel(uri, response.results.bindings) };
 })
 
@@ -45,28 +45,42 @@ export const getResourcesByPredicateAndLinkedResource = createAsyncThunk('tree/f
       resources: predicate.resources
     };
   }
-  const response = predicate.direction.value === "o"
-    ? await sparqlEndpoint(resourcesByPredicateAndSubjectQuery(payload.p.p.value, payload.uri))
-    : await sparqlEndpoint(resourcesByPredicateAndObjectQuery(payload.p.p.value, payload.uri));
-  const identities = payload.countLinkedResourceChildren
-    ? await sparqlEndpoint(getIdentities(response.results.bindings))
-    : await sparqlEndpoint(getIdentitiesWithoutCount(response.results.bindings));
-  const entities = response.results.bindings.map(resource => {
-    const identity = identities.results.bindings.filter(identity => identity.id.value === resource.r.value);
-    return {
-      id: resource.r.value,
-      identity: identity,
-      label: computeResourceLabel(resource.r.value, identity)
+  const response = await sparqlEndpoint(makeIdentityQueryFragment(
+    payload.uri,
+    true,
+    payload.p.p.value,
+    predicate.direction.value === "o",
+    payload.countLinkedResourceChildren
+  ))
+
+  //ajouter au store toutes les ressources en tant qu'entités
+
+  const linkedResourcesAsEntities = [];
+  const linkedResources = [];
+  response.results.bindings.forEach(row => {
+    const linked_resource = linkedResourcesAsEntities.find(linked_resource => linked_resource.id === row.l_r.value);
+    if (linked_resource) {
+      linked_resource.identity.push(row)
+    } else {
+      linkedResourcesAsEntities.push({id: row.l_r.value, identity: [row]})
+      linkedResources.push(row.l_r)
     }
-  })
-  //TODO commentaire
-  thunkAPI.dispatch(resourcesAdded(entities));
-  //TODO commentaire
+  });
+
+  console.log(linkedResourcesAsEntities)
+  thunkAPI.dispatch(resourcesAdded(
+    linkedResourcesAsEntities.map(
+      linkedResourceAsEntity => {
+        return {...linkedResourceAsEntity, label: computeResourceLabel(linkedResourceAsEntity.id, linkedResourceAsEntity.identity) }
+      })));
+
+
+  //ajouter ces ressources en tant qu'enfants de la ressource fetch
   return {
     id: payload.uri,
     p: payload.p.p.value,
     direction: predicate.direction.value,
-    resources: response.results.bindings
+    resources: linkedResources
   };
 })
 
