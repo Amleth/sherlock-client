@@ -96,7 +96,6 @@ export default React.forwardRef((props, ref) => {
         {computeLabelIcon(LabelIcon)}
 
         <Typography color="inherit" component="div" variant="caption" css={theme => css`
-                    width: 40px;
                     min-width: 40px;
                     font-family: ${theme.typography.fontFamilyMonospaced};
                     color:lightgrey;
@@ -107,6 +106,7 @@ export default React.forwardRef((props, ref) => {
         </Typography>
         <Typography component="span" variant="body2" css={css`
                     white-space: nowrap;
+                    flex: 0.5
                 `}>
           {labelText}
         </Typography>

@@ -43,6 +43,6 @@ export default createTheme({
     },
     typography: {
         fontFamily: 'futura-pt',
-        fontFamilyMonospaced: 'Fira Code'
+        fontFamilyMonospaced: 'Fira Code',
     }
 })
