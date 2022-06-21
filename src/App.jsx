@@ -1,5 +1,4 @@
-import { BrowserRouter as Router, Route } from 'react-router-dom'
-import { CssBaseline, ThemeProvider } from '@material-ui/core'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 import Home from './Home'
 import About from './About'
@@ -7,36 +6,32 @@ import DescribeSherlockId from './features/navigation/SherlockId'
 import DescribeUri from './features/navigation/Uri'
 import DescribeTweet from './features/navigation/Tweet'
 import YasguiC from './features/yasgui/YasguiC'
-import Mei from './features/viewers/mei/Mei'
 import { User } from './features/user/User'
 import { Login } from './features/user/Login'
 import AuthenticatedRoute from './common/AuthenticatedRoute'
 import UnauthenticatedRouteOnly from './common/UnauthenticatedRouteOnly'
 import React from 'react'
-import theme from './SherlockMuiTheme'
 import TestComponent from './TestComponent'
 
 const App = () => {
   return (
-    <React.Fragment>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Router basename={'/' + process.env.REACT_APP_BASENAME}>
-          <Route path="/" component={Home} exact />
-          <Route path="/about" component={About} exact />
-          <Route path="/id/:id/:view?" component={DescribeSherlockId} exact />
-          <Route path="/describe/:uri/:view?" component={DescribeUri} exact />
-          <Route path="/tweet/:userScreenName/:statusId/:view?" component={DescribeTweet} exact />
-          <Route path="/yasgui" component={YasguiC} exact />
-          <Route path="/mei/:id" component={Mei} exact />
-          <Route path="/mei" component={Mei} exact />
-          <Route path="/test/:id" component={TestComponent} exact />
-          <AuthenticatedRoute path="/me" component={User} exact />
-          <UnauthenticatedRouteOnly path="/login" component={Login} exact />
-        </Router>
-      </ThemeProvider>
-    </React.Fragment>
+    <BrowserRouter basename={'/' + process.env.REACT_APP_BASENAME}>
+      <Routes>
+        <Route index element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/id/:id/:view?" element={<DescribeSherlockId />} />
+        <Route path="/describe/:uri/:view?" element={<DescribeUri />} />
+        <Route path="/tweet/:userScreenName/:statusId/:view?" element={<DescribeTweet />} />
+        <Route path="/yasgui" element={<YasguiC />} />
+        <Route path="/test/:id" element={<TestComponent />} />
+        {/* <AuthenticatedRoute path="/me" element={User} /> */}
+        {/* <UnauthenticatedRouteOnly path="/login" element={Login} /> */}
+      </Routes>
+    </BrowserRouter>
   )
 }
 
 export default App
+
+//TODO https://reactrouter.com/docs/en/v6/upgrading/v5
+//TODO https://reactrouter.com/docs/en/v6/examples/auth

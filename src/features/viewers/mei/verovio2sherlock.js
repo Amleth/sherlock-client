@@ -1,1 +1,0 @@
-export const getSherlockIriFromMeiNoteXmlId = (scoreId, meiNodeId) => `http://data-iremus.huma-num.fr/id/${scoreId}_${meiNodeId}`

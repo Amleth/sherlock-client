@@ -60,7 +60,6 @@ export default React.forwardRef((props, ref) => {
   } = useTreeItem(nodeId)
 
   const icon = iconProp || expansionIcon || displayIcon
-
   const handleMouseDown = preventSelection
   const handleExpansionClick = handleExpansion
   // const handleSelectionClick = handleSelection

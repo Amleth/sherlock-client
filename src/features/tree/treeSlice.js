@@ -6,7 +6,7 @@ import {
   resourcesByPredicateAndObjectQuery,
   resourcesByPredicateAndSubjectQuery
 } from "./resourcesByPredicateAndResourceQuery";
-import {computeResourceLabel, makeIdentityQueryFragment} from "../../common/rdf";
+import { computeResourceLabel, makeIdentityQueryFragment } from "../../common/rdf";
 
 const adapter = createEntityAdapter()
 const initialState = adapter.getInitialState({
@@ -53,7 +53,7 @@ export const getResourcesByPredicateAndLinkedResource = createAsyncThunk('tree/f
     payload.countLinkedResourceChildren
   ))
 
-  //ajouter au store toutes les ressources en tant qu'entités
+  //ajouter au store toutes les ressources liées en tant qu'entités
 
   const linkedResourcesAsEntities = [];
   const linkedResources = [];
@@ -62,7 +62,7 @@ export const getResourcesByPredicateAndLinkedResource = createAsyncThunk('tree/f
     if (linked_resource) {
       linked_resource.identity.push(row)
     } else {
-      linkedResourcesAsEntities.push({id: row.l_r.value, identity: [row]})
+      linkedResourcesAsEntities.push({ id: row.l_r.value, identity: [row] })
       linkedResources.push(row.l_r)
     }
   });
@@ -71,7 +71,7 @@ export const getResourcesByPredicateAndLinkedResource = createAsyncThunk('tree/f
   thunkAPI.dispatch(resourcesAdded(
     linkedResourcesAsEntities.map(
       linkedResourceAsEntity => {
-        return {...linkedResourceAsEntity, label: computeResourceLabel(linkedResourceAsEntity.id, linkedResourceAsEntity.identity) }
+        return { ...linkedResourceAsEntity, label: computeResourceLabel(linkedResourceAsEntity.id, linkedResourceAsEntity.identity) }
       })));
 
 
@@ -125,7 +125,8 @@ export const treeSlice = createSlice({
     },
 
     [getResourcesByPredicateAndLinkedResource.fulfilled]: (state, action) => {
-      state.entities[action.payload.id].predicates.find(predicate => predicate.p.value === action.payload.p && predicate.direction.value === action.payload.direction)
+      state.entities[action.payload.id].predicates
+        .find(predicate => predicate.p.value === action.payload.p && predicate.direction.value === action.payload.direction)
         .resources = action.payload.resources;
       state.status = 'idle';
     },

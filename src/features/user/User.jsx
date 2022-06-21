@@ -9,11 +9,11 @@ import Avatar from '@material-ui/core/Avatar'
 import { stringAvatar } from '../../common/utils'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 export const User = () => {
   const user = useSelector(state => state.user)
-  const history = useHistory()
+  const history = useNavigate()
   const dispatch = useDispatch()
   return (
     <React.Fragment>

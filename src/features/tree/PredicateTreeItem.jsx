@@ -78,7 +78,7 @@ const PredicateTreeItem = ({ nodeId, path, predicate, relatedUri }) => {
                 key={id}
                 nodeId={id}
                 path={`${path}${predicate.p.value},${predicate.direction.value},`}
-                literal={resource.r}
+                literal={resource}
               />
             )
           })

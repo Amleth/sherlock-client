@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { experimentalStyled as styled, useTheme } from '@material-ui/core/styles'
 import { AppBar as MuiAppBar, Box, Button, Drawer, Toolbar, Typography } from '@material-ui/core'
@@ -66,7 +66,7 @@ const Offset = styled('div')(({ theme }) => theme.mixins.toolbar)
 
 export default function C({ resourceUri, view }) {
   const dispatch = useDispatch()
-  const history = useHistory()
+  const history = useNavigate()
   const theme = useTheme()
   const location = useLocation()
 

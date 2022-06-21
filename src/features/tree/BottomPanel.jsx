@@ -20,7 +20,7 @@ const BottomPanel = ({ relatedResourceUri, predicateUri }) => {
   useEffect(() => {
     const predicate = relatedResource.predicates.find(predicate => predicate.p.value === predicateUri)
     if (predicate.resources) {
-      const tempResources = predicate.resources.map(resource => resource.r.value)
+      const tempResources = predicate.resources.map(resource => resource.value)
       setResources(allResources.filter(resource => tempResources.includes(resource.id)))
     }
   }, [allResources, predicateUri, relatedResource])

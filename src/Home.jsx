@@ -3,12 +3,12 @@ import { css } from '@emotion/react'
 import { Box, Button, TextField, Typography } from '@material-ui/core'
 import ArrowForwardIosSharpIcon from '@material-ui/icons/ArrowForwardIosSharp'
 import { useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { parse } from 'uuid'
 import { getTweetUserAndId } from './features/twitter/twitter'
 
 const Home = () => {
-  const history = useHistory()
+  const history = useNavigate()
   const [uri, setUri] = useState('https://twitter.com/tubbutec/status/1391311620786229248')
 
   return (

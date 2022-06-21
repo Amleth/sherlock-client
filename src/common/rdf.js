@@ -106,8 +106,8 @@ export function formatUri(uri) {
 }
 
 export function computeIdentity(identity) {
-  const chosenIdentity = identity.find(identity => identity.id_p && identity.id_p.value === CRM_BASE + 'P1_is_identified_by')
-  return chosenIdentity ? formatUri(chosenIdentity.label.value) : ''
+  const label = identity.find(identity => identity.label)
+  return label ? label.label.value : ''
 }
 
 export function computeResourceLabel(resourceIri, identity) {
@@ -192,7 +192,7 @@ WHERE {
           VALUES ?id_p { crm:P1_is_identified_by crm:P102_has_title }
           ${resource} ?id_p ?id_r .
           GRAPH ?ir_e41_label_g {
-            VALUES ?e41_type { crm:E41_Appellation crm:E42_Identifier }
+            VALUES ?e41_type { crm:E35_Title crm:E41_Appellation crm:E42_Identifier }
             ?id_r rdf:type ?e41_type .
             ?id_r rdfs:label ?label .
           }
